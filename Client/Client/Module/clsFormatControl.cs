@@ -1462,7 +1462,7 @@ namespace Client.Module
             return JsonConvert.DeserializeObject<T>(serialized);
         }
 
-        public static List<T> Clone<T>(this List<T> source)
+        public static List<T> Clone<T>(this List<T> source) 
         {
             var serialized = JsonConvert.SerializeObject(
                 source,
@@ -1474,7 +1474,7 @@ namespace Client.Module
             return JsonConvert.DeserializeObject<List<T>>(serialized);
         }
 
-        public static string SerializeJSON<T>(this T source)
+        public static string SerializeToString<T>(this T source)
         {
             var serialized = JsonConvert.SerializeObject(
                 source,
@@ -1486,10 +1486,28 @@ namespace Client.Module
             return serialized;
         }
 
-        public static T DeserializeJSON<T>(this string source) where T : new()
+        public static string SerializeToString<T>(this List<T> source)
+        {
+            var serialized = JsonConvert.SerializeObject(
+                source,
+                Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+            return serialized;
+        }
+
+        public static T DeserializeToObject<T>(this string source) where T : new()
         {
             try { return JsonConvert.DeserializeObject<T>(source); }
             catch { return new T(); }
+        }
+
+        public static List<T> DeserializeToList<T>(this string source)
+        {
+            try { return JsonConvert.DeserializeObject<List<T>>(source); }
+            catch { return new List<T>(); }
         }
     }
 

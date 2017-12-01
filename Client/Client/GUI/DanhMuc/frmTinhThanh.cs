@@ -1,5 +1,7 @@
-﻿using Client.GUI.Common;
+﻿using Client.BLL.Common;
+using Client.GUI.Common;
 using DevExpress.XtraEditors;
+using EntityModel.DataModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +19,8 @@ namespace Client.GUI.DanhMuc
         public frmTinhThanh()
         {
             InitializeComponent();
+
+            clsFunction.GetAll<eTienTe>("tiente");
         }
     }
 }

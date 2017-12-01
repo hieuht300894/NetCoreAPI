@@ -20,11 +20,11 @@ namespace Client.Module
                 {
                     if (type.BaseType == typeof(frmBase))
                     {
-                        ModuleHelper.ListFormItem.Add(new FormItem() { xForm = (XtraForm)Activator.CreateInstance(type), Name = type.Name });
+                        ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
                     }
                     if (type.BaseType == typeof(XtraForm))
                     {
-                        ModuleHelper.ListFormItem.Add(new FormItem() { xForm = (XtraForm)Activator.CreateInstance(type), Name = type.Name });
+                        ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
                     }
                 }
             }
