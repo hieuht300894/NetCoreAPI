@@ -13,6 +13,7 @@ using DevExpress.XtraLayout.Utils;
 using DevExpress.XtraTreeList;
 using DevExpress.XtraTreeList.Columns;
 using DevExpress.XtraTreeList.Nodes;
+using EntityModel.DataModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -366,24 +367,21 @@ namespace Client.Module
         #endregion
 
         #region Format GridControl
-        public static void Format(this GridControl gctMain, bool allowNewRow = false, bool showIndicator = true, bool ColumnAuto = true, bool ShowLines = false)
+        public static void Format(this GridControl gctMain, bool showIndicator = true, bool ColumnAuto = true, bool ShowLines = false)
         {
             try
             {
                 gctMain.ForceInitialize();
                 gctMain.UseEmbeddedNavigator = false;
 
-                //gctMain.LookAndFeel.UseDefaultLookAndFeel = false;
-                //gctMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
-
                 GridView grvMain = gctMain.MainView as GridView;
-                grvMain.Format(allowNewRow, showIndicator, ColumnAuto, ShowLines);
+                grvMain.Format( showIndicator, ColumnAuto, ShowLines);
             }
             catch { }
 
         }
 
-        public static void Format(this GridView grvMain, bool allowNewRow, bool showIndicator, bool ColumnAuto, bool ShowLines = false)
+        public static void Format(this GridView grvMain, bool showIndicator, bool ColumnAuto, bool ShowLines = false)
         {
             grvMain.RestoreLayout((XtraForm)grvMain.GridControl.FindForm());
 
@@ -437,26 +435,6 @@ namespace Client.Module
             grvMain.Appearance.FocusedCell.ForeColor = MyColor.ForeColorEditing;
             grvMain.Appearance.FocusedCell.Font = new Font(grvMain.Appearance.FocusedCell.Font, FontStyle.Bold);
 
-            //if (allowNewRow)
-            //{
-            //    //grvMain.GridControl.UseEmbeddedNavigator = false;
-
-            //    //grvMain.OptionsView.NewItemRowPosition = NewItemRowPosition.Bottom;
-            //    //grvMain.Appearance.FocusedRow.BackColor = grvMain.Appearance.FocusedRow.BackColor2 = MyColor.GridEditRow;
-            //    //grvMain.Appearance.HideSelectionRow.BackColor = grvMain.Appearance.HideSelectionRow.BackColor2 = MyColor.GridEditRow;
-            //    //grvMain.Appearance.FocusedRow.ForeColor = MyColor.GridForeRow;
-
-            //    grvMain.ShowingEditor -= (sender, e) => grvMain_ShowingEditor(sender, e, allowNewRow);
-            //    grvMain.ShowingEditor += (sender, e) => grvMain_ShowingEditor(sender, e, allowNewRow);
-
-            //    grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown -= realColumnEdit_KeyDown);
-            //    grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown += realColumnEdit_KeyDown);
-            //}
-            //else
-            //{
-            //    grvMain.InvalidRowException -= grvMain_InvalidRowException;
-            //    grvMain.InvalidRowException += grvMain_InvalidRowException;
-            //}
             if (ShowLines)
             {
                 grvMain.OptionsView.ShowHorizontalLines = DefaultBoolean.True;
@@ -508,73 +486,73 @@ namespace Client.Module
 
         public static void SaveLayout(this GridView grvMain, XtraForm frmMain)
         {
-            //if (string.IsNullOrEmpty(frmMain.Name)) return;
-            //try
-            //{
-            //    string dir = @"Layout\GridLayout";
-            //    if (!Directory.Exists(dir))
-            //        Directory.CreateDirectory(dir);
+            if (string.IsNullOrEmpty(frmMain.Name)) return;
+            try
+            {
+                string dir = @"Layout\GridLayout";
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
 
-            //    string path = dir + @"\" + frmMain + "_" + grvMain.Name + ".xml";
-            //    if (!File.Exists(path))
-            //        File.Create(path).Close();
+                string path = dir + @"\" + frmMain + "_" + grvMain.Name + ".xml";
+                if (!File.Exists(path))
+                    File.Create(path).Close();
 
-            //    List<xDisplay> lstDisplays = new List<xDisplay>();
-            //    foreach (GridColumn col in grvMain.Columns)
-            //    {
-            //        xDisplay dis = new xDisplay();
-            //        dis.ParentName = frmMain.Name;
-            //        dis.Group = string.Empty;
-            //        dis.Showing = col.Visible;
-            //        dis.ColumnName = col.Name;
-            //        dis.FieldName = col.FieldName;
-            //        dis.EnableEdit = col.OptionsColumn.AllowEdit;
-            //        dis.VisibleIndex = col.VisibleIndex;
-            //        dis.Caption = col.Caption;
-            //        lstDisplays.Add(dis);
-            //    }
+                List<xDisplay> lstDisplays = new List<xDisplay>();
+                foreach (GridColumn col in grvMain.Columns)
+                {
+                    xDisplay dis = new xDisplay();
+                    dis.ParentName = frmMain.Name;
+                    dis.Group = string.Empty;
+                    dis.Showing = col.Visible;
+                    dis.ColumnName = col.Name;
+                    dis.FieldName = col.FieldName;
+                    dis.EnableEdit = col.OptionsColumn.AllowEdit;
+                    dis.VisibleIndex = col.VisibleIndex;
+                    dis.Caption = col.Caption;
+                    lstDisplays.Add(dis);
+                }
 
-            //    StreamWriter sw = new StreamWriter(path);
-            //    sw.Write(lstDisplays.SerializeXML());
-            //    sw.Close();
-            //}
-            //catch { }
+                StreamWriter sw = new StreamWriter(path);
+                sw.Write(lstDisplays.SerializeXML());
+                sw.Close();
+            }
+            catch { }
         }
 
         static void RestoreLayout(this GridView grvMain, XtraForm frmMain)
         {
-            //if (frmMain == null) return;
-            //if (string.IsNullOrEmpty(frmMain.Name)) return;
-            //try
-            //{
-            //    string dir = @"Layout\GridLayout";
-            //    string path = dir + @"\" + frmMain.Name + "_" + grvMain.Name + ".xml";
-            //    if (File.Exists(path))
-            //    {
-            //        using (StreamReader sr = new StreamReader(path))
-            //        {
-            //            grvMain.BeginUpdate();
-            //            List<xDisplay> lstDisplays = sr.ReadToEnd().DeserializeXML<xDisplay>().OrderByDescending(x => x.VisibleIndex).ToList();
+            if (frmMain == null) return;
+            if (string.IsNullOrEmpty(frmMain.Name)) return;
+            try
+            {
+                string dir = @"Layout\GridLayout";
+                string path = dir + @"\" + frmMain.Name + "_" + grvMain.Name + ".xml";
+                if (File.Exists(path))
+                {
+                    using (StreamReader sr = new StreamReader(path))
+                    {
+                        grvMain.BeginUpdate();
+                        List<xDisplay> lstDisplays = sr.ReadToEnd().DeserializeXML<xDisplay>().OrderByDescending(x => x.VisibleIndex).ToList();
 
-            //            foreach (GridColumn col in grvMain.Columns)
-            //            {
-            //                xDisplay dis = lstDisplays.Find(x => x.ColumnName.Equals(col.Name)) ?? new xDisplay() { Showing = false };
-            //                col.Visible = dis.Showing;
-            //            }
+                        foreach (GridColumn col in grvMain.Columns)
+                        {
+                            xDisplay dis = lstDisplays.Find(x => x.ColumnName.Equals(col.Name)) ?? new xDisplay() { Showing = false };
+                            col.Visible = dis.Showing;
+                        }
 
-            //            List<xDisplay> lstVisibles = lstDisplays.Where(x => x.VisibleIndex >= 0).OrderBy(x => x.VisibleIndex).ToList();
+                        List<xDisplay> lstVisibles = lstDisplays.Where(x => x.VisibleIndex >= 0).OrderBy(x => x.VisibleIndex).ToList();
 
-            //            foreach (xDisplay dis in lstVisibles)
-            //            {
-            //                GridColumn col = grvMain.Columns.FirstOrDefault(x => x.Name.Equals(dis.ColumnName));
-            //                col.VisibleIndex = dis.VisibleIndex;
-            //            }
+                        foreach (xDisplay dis in lstVisibles)
+                        {
+                            GridColumn col = grvMain.Columns.FirstOrDefault(x => x.Name.Equals(dis.ColumnName));
+                            col.VisibleIndex = dis.VisibleIndex;
+                        }
 
-            //            grvMain.EndUpdate();
-            //        }
-            //    }
-            //}
-            //catch { }
+                        grvMain.EndUpdate();
+                    }
+                }
+            }
+            catch { }
         }
 
         public static void ShowFooter(this GridView grvMain)
@@ -770,9 +748,6 @@ namespace Client.Module
 
         public static void Format(this TreeList trlMain, bool Autowidth = false, bool ShowColumnHeader = true)
         {
-            //trlMain.LookAndFeel.UseDefaultLookAndFeel = false;
-            //trlMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
-
             trlMain.OptionsView.ShowCheckBoxes = true;
             trlMain.OptionsView.ShowColumns = ShowColumnHeader;
             trlMain.OptionsView.EnableAppearanceOddRow = true;
@@ -820,31 +795,6 @@ namespace Client.Module
         {
             TreeList view = sender as TreeList;
             e.NodeHeight = view.Appearance.HeaderPanel.FontHeight;
-        }
-
-        static void trlMain_NodeCellStyle(object sender, GetCustomNodeCellStyleEventArgs e)
-        {
-            TreeList trl = (TreeList)sender;
-            TreeListColumn colKeyID = trl.Columns.FirstOrDefault(x => x.Name.Equals("colKeyID") || x.Name.Equals("col_KeyID"));
-            TreeListColumn colIsEnable = trl.Columns.FirstOrDefault(x => x.Name.Equals("colIsEnable") || x.Name.Equals("col_IsEnable"));
-            if (colKeyID != null && colIsEnable != null)
-            {
-                var idTemp = e.Node.GetValue(colKeyID);
-                int id = idTemp != null ? Convert.ToInt32(idTemp) : 0;
-
-                var isEnbaleTemp = e.Node.GetValue(colIsEnable);
-
-                if (id > 0 && isEnbaleTemp != null && !((bool)isEnbaleTemp))
-                    e.Appearance.ForeColor = Color.Red;
-            }
-        }
-
-        static void trlMain_NodeChanged(object sender, NodeChangedEventArgs e)
-        {
-            if (e.ChangeType != NodeChangeTypeEnum.CheckedState)
-                return;
-
-            checkedNode(e.Node);
         }
 
         static void checkedNode(TreeListNode node)
@@ -1403,7 +1353,7 @@ namespace Client.Module
             slokMain.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
             slokMain.Properties.LookAndFeel.Style = LookAndFeelStyle.Office2003;
 
-            slokMain.Properties.View.Format(false, showIndicator, ColumnAuto, false);
+            slokMain.Properties.View.Format( showIndicator, ColumnAuto, false);
             slokMain.Properties.View.OptionsView.ShowColumnHeaders = showHeader;
             slokMain.Properties.View.OptionsSelection.MultiSelect = false;
 

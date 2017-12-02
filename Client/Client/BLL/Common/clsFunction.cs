@@ -15,17 +15,17 @@ namespace Client.BLL.Common
         /// Lấy dữ liệu
         /// </summary>
         /// <returns></returns>
-        public static IList<T> GetAll<T>(String api) where T : class, new()
+        public async static Task<IList<T>> GetAll<T>(String api) where T : class, new()
         {
             try
             {
-                IRestClient client = new RestClient(ModuleHelper.Url + "/" + api);
+                IRestClient client = new RestClient(ModuleHelper.Url + "/" + api.TrimStart('/'));
                 IRestRequest request = new RestRequest(Method.GET);
-                IRestResponse response = client.Execute(request);
+                IRestResponse response = await client.ExecuteTaskAsync(request);
                 IList<T> lstResult = response.Content.DeserializeToList<T>();
                 return lstResult;
             }
-            catch(Exception ex) { return new List<T>(); }
+            catch (Exception ex) { return new List<T>(); }
         }
 
         /// <summary>

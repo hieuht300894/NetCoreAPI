@@ -29,8 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.rcMain = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.bhiNhanVien = new DevExpress.XtraBars.BarHeaderItem();
+            this.frmTinhThanh = new DevExpress.XtraBars.BarButtonItem();
             this.rpTaiKhoan = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rpThietLap = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -42,7 +44,6 @@
             this.rsbBottom = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
-            this.frmTinhThanh = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.rcMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -77,6 +78,12 @@
             this.bhiNhanVien.Caption = "Nhân viên";
             this.bhiNhanVien.Id = 5;
             this.bhiNhanVien.Name = "bhiNhanVien";
+            // 
+            // frmTinhThanh
+            // 
+            this.frmTinhThanh.Caption = "Tỉnh thành";
+            this.frmTinhThanh.Id = 11;
+            this.frmTinhThanh.Name = "frmTinhThanh";
             // 
             // rpTaiKhoan
             // 
@@ -146,12 +153,6 @@
             // 
             this.tbvMain.RootContainer.Element = null;
             // 
-            // frmTinhThanh
-            // 
-            this.frmTinhThanh.Caption = "Tỉnh thành";
-            this.frmTinhThanh.Id = 11;
-            this.frmTinhThanh.Name = "frmTinhThanh";
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -159,10 +160,11 @@
             this.ClientSize = new System.Drawing.Size(884, 411);
             this.Controls.Add(this.rsbBottom);
             this.Controls.Add(this.rcMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmMain";
+            this.Text = "Phần mềm demo";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.rcMain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).EndInit();
