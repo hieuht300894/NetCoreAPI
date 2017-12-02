@@ -1,6 +1,6 @@
 ﻿namespace EntityModel.DataModel
 {
-    public class eSanPham
+    public class eNhomNhaCungCap
     {
         public int KeyID { get; set; }
 
