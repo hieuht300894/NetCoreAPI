@@ -44,6 +44,7 @@
             this.rsbBottom = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
+            this.frmKho = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.rcMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -55,9 +56,10 @@
             this.rcMain.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.rcMain.ExpandCollapseItem,
             this.bhiNhanVien,
-            this.frmTinhThanh});
+            this.frmTinhThanh,
+            this.frmKho});
             this.rcMain.Location = new System.Drawing.Point(0, 0);
-            this.rcMain.MaxItemId = 12;
+            this.rcMain.MaxItemId = 13;
             this.rcMain.Name = "rcMain";
             this.rcMain.PageHeaderItemLinks.Add(this.bhiNhanVien);
             this.rcMain.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
@@ -119,6 +121,7 @@
             // ribbonPageGroup3
             // 
             this.ribbonPageGroup3.ItemLinks.Add(this.frmTinhThanh);
+            this.ribbonPageGroup3.ItemLinks.Add(this.frmKho);
             this.ribbonPageGroup3.Name = "ribbonPageGroup3";
             this.ribbonPageGroup3.Text = "ribbonPageGroup3";
             // 
@@ -152,6 +155,12 @@
             // tbvMain
             // 
             this.tbvMain.RootContainer.Element = null;
+            // 
+            // frmKho
+            // 
+            this.frmKho.Caption = "Kho";
+            this.frmKho.Id = 12;
+            this.frmKho.Name = "frmKho";
             // 
             // frmMain
             // 
@@ -190,5 +199,6 @@
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView tbvMain;
         private DevExpress.XtraBars.Ribbon.RibbonStatusBar rsbBottom;
         private DevExpress.XtraBars.BarButtonItem frmTinhThanh;
+        private DevExpress.XtraBars.BarButtonItem frmKho;
     }
 }

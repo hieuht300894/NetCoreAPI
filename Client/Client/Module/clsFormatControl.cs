@@ -1395,11 +1395,11 @@ namespace Client.Module
     public static class ObjectCopier
     {
         /// <summary>
-        /// Perform a deep Copy of the object.
+        /// Clone a object
         /// </summary>
-        /// <typeparam name="T">The type of object being copied.</typeparam>
-        /// <param name="source">The object instance to copy.</param>
-        /// <returns>The copied object.</returns>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static T Clone<T>(this T source)
         {
             var serialized = JsonConvert.SerializeObject(
@@ -1412,6 +1412,12 @@ namespace Client.Module
             return JsonConvert.DeserializeObject<T>(serialized);
         }
 
+        /// <summary>
+        /// Clone a list object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static List<T> Clone<T>(this List<T> source) 
         {
             var serialized = JsonConvert.SerializeObject(
@@ -1424,6 +1430,12 @@ namespace Client.Module
             return JsonConvert.DeserializeObject<List<T>>(serialized);
         }
 
+        /// <summary>
+        /// Object to json
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static string SerializeToString<T>(this T source)
         {
             var serialized = JsonConvert.SerializeObject(
@@ -1436,6 +1448,12 @@ namespace Client.Module
             return serialized;
         }
 
+        /// <summary>
+        /// List object to json
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static string SerializeToString<T>(this List<T> source)
         {
             var serialized = JsonConvert.SerializeObject(
@@ -1448,12 +1466,24 @@ namespace Client.Module
             return serialized;
         }
 
+        /// <summary>
+        /// Json to object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static T DeserializeToObject<T>(this string source) where T : new()
         {
             try { return JsonConvert.DeserializeObject<T>(source); }
             catch { return new T(); }
         }
 
+        /// <summary>
+        /// Json to list object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static List<T> DeserializeToList<T>(this string source)
         {
             try { return JsonConvert.DeserializeObject<List<T>>(source); }

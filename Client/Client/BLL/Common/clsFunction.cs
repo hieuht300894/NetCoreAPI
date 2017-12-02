@@ -20,7 +20,8 @@ namespace Client.BLL.Common
             try
             {
                 IRestClient client = new RestClient(ModuleHelper.Url + "/" + api.TrimStart('/'));
-                IRestRequest request = new RestRequest(Method.GET);
+                IRestRequest request = new RestRequest();
+                request.Method = Method.GET;
                 IRestResponse response = await client.ExecuteTaskAsync(request);
                 IList<T> lstResult = response.Content.DeserializeToList<T>();
                 return lstResult;
@@ -31,6 +32,7 @@ namespace Client.BLL.Common
         /// <summary>
         /// Tìm kiếm dữ liệu
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="KeyID"></param>
         /// <returns></returns>
         public static T GetByID<T>(object KeyID) where T : class, new()
@@ -40,35 +42,140 @@ namespace Client.BLL.Common
         }
 
         /// <summary>
-        /// Thêm mới hoặc cập nhật dữ liệu
+        /// Thêm mới dữ liệu
         /// </summary>
-        /// <param name="entry"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="api"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public static bool AddOrUpdate<T>(T entry) where T : class, new()
+        public static async Task<bool> Post<T>(String api, T entity) where T : class, new()
         {
-            try { return true; }
+            try
+            {
+                IRestClient client = new RestClient(ModuleHelper.Url + "/" + api.TrimStart('/'));
+                IRestRequest request = new RestRequest();
+                request.Method = Method.POST;
+                request.AddHeader("Accept", "application/json");
+                request.Parameters.Clear();
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                IRestResponse response = await client.ExecuteTaskAsync(request);
+                return response.StatusCode == System.Net.HttpStatusCode.OK;
+            }
             catch { return false; }
         }
 
         /// <summary>
-        /// Thêm mới hoặc cập nhật nhiều dữ liệu
+        /// Thêm mới dữ liệu
         /// </summary>
-        /// <param name="entry"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="api"></param>
+        /// <param name="entries"></param>
         /// <returns></returns>
-        public static bool AddOrUpdate<T>(List<T> entries) where T : class, new()
+        public static async Task<bool> Post<T>(String api, List<T> entries) where T : class, new()
         {
-            try { return true; }
+            try
+            {
+                IRestClient client = new RestClient(ModuleHelper.Url + "/" + api.TrimStart('/'));
+                IRestRequest request = new RestRequest();
+                request.Method = Method.POST;
+                request.AddHeader("Accept", "application/json");
+                request.Parameters.Clear();
+                request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
+                IRestResponse response = await client.ExecuteTaskAsync(request);
+                return response.StatusCode == System.Net.HttpStatusCode.OK;
+            }
+            catch { return false; }
+        }
+
+        /// <summary>
+        /// Cập nhật dữ liệu
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="api"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static async Task<bool> Put<T>(String api, T entity) where T : class, new()
+        {
+            try
+            {
+                IRestClient client = new RestClient(ModuleHelper.Url + "/" + api.TrimStart('/'));
+                IRestRequest request = new RestRequest();
+                request.Method = Method.PUT;
+                request.AddHeader("Accept", "application/json");
+                request.Parameters.Clear();
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                IRestResponse response = await client.ExecuteTaskAsync(request);
+                return response.StatusCode == System.Net.HttpStatusCode.OK;
+            }
+            catch { return false; }
+        }
+
+        /// <summary>
+        /// Cập nhật dữ liệu
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="api"></param>
+        /// <param name="entries"></param>
+        /// <returns></returns>
+        public static async Task<bool> Put<T>(String api, List<T> entries) where T : class, new()
+        {
+            try
+            {
+                IRestClient client = new RestClient(ModuleHelper.Url + "/" + api.TrimStart('/'));
+                IRestRequest request = new RestRequest();
+                request.Method = Method.PUT;
+                request.AddHeader("Accept", "application/json");
+                request.Parameters.Clear();
+                request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
+                IRestResponse response = await client.ExecuteTaskAsync(request);
+                return response.StatusCode == System.Net.HttpStatusCode.OK;
+            }
             catch { return false; }
         }
 
         /// <summary>
         /// Xóa dữ liệu
         /// </summary>
-        /// <param name="entry"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="api"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public virtual bool DeleteEntry<T>(T entry) where T : class, new()
+        public static async Task<bool> Delete<T>(String api, T entity) where T : class, new()
         {
-            try { return true; }
+            try
+            {
+                IRestClient client = new RestClient(ModuleHelper.Url + "/" + api.TrimStart('/'));
+                IRestRequest request = new RestRequest();
+                request.Method = Method.DELETE;
+                request.AddHeader("Accept", "application/json");
+                request.Parameters.Clear();
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                IRestResponse response = await client.ExecuteTaskAsync(request);
+                return response.StatusCode == System.Net.HttpStatusCode.NoContent;
+            }
+            catch { return false; }
+        }
+
+        /// <summary>
+        /// Xóa dữ liệu
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="api"></param>
+        /// <param name="entries"></param>
+        /// <returns></returns>
+        public static async Task<bool> Delete<T>(String api, List<T> entries) where T : class, new()
+        {
+            try
+            {
+                IRestClient client = new RestClient(ModuleHelper.Url + "/" + api.TrimStart('/'));
+                IRestRequest request = new RestRequest();
+                request.Method = Method.DELETE;
+                request.AddHeader("Accept", "application/json");
+                request.Parameters.Clear();
+                request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
+                IRestResponse response = await client.ExecuteTaskAsync(request);
+                return response.StatusCode == System.Net.HttpStatusCode.NoContent;
+            }
             catch { return false; }
         }
         #endregion
