@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Server.Model;
 using Server.Utils;
 using System;
@@ -63,6 +64,7 @@ namespace Server.Service
             try
             {
                 Context = new zModel();
+                Items = Items ?? new T[] { };
                 await Context.Database.BeginTransactionAsync();
                 await Context.Set<T>().AddRangeAsync(Items);
                 await Context.SaveChangesAsync();
@@ -99,6 +101,7 @@ namespace Server.Service
             try
             {
                 Context = new zModel();
+                Items = Items ?? new T[] { };
                 await Context.Database.BeginTransactionAsync();
                 Context.Set<T>().UpdateRange(Items);
                 await Context.SaveChangesAsync();
@@ -155,6 +158,7 @@ namespace Server.Service
             try
             {
                 Context = new zModel();
+                ids = ids ?? new object[] { };
                 await Context.Database.BeginTransactionAsync();
                 foreach (object id in ids)
                 {
@@ -177,6 +181,7 @@ namespace Server.Service
             try
             {
                 Context = new zModel();
+                Items = Items ?? new T[] { };
                 await Context.Database.BeginTransactionAsync();
                 foreach (T Item in Items)
                 {
