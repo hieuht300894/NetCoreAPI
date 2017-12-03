@@ -53,8 +53,6 @@ namespace Client.GUI.Common
             btnPrintPreview.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
             btnExportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
 
-            btnAdd.Visibility = clsGeneral.curUserFeature.IsAdd ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-
             //btnAdd.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             //btnEdit.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             //btnDelete.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
@@ -454,78 +452,98 @@ namespace Client.GUI.Common
 
         #region Method Base
         #region ShowGridPopup
+        //protected virtual void ShowGridPopup(object sender, MouseEventArgs e,
+        //    bool IsAdd = false, bool IsEdit = false, bool IsDelete = false,
+        //    bool IsSave = false, bool IsPrintPreview = false, bool IsExportExcel = false)
+        //{
+        //    if (e.Button == MouseButtons.Right)
+        //    {
+        //        GridControl gctMain = (GridControl)sender;
+        //        GridView grvMain = (GridView)gctMain.DefaultView;
+        //        GridHitInfo hi = grvMain.CalcHitInfo(e.Location);
+
+        //        if (hi.RowHandle >= 0 && (hi.InRow || hi.InRowCell))
+        //        {
+        //            foreach (eFormType _fType in fTypes)
+        //            {
+        //                if (_fType == eFormType.Default)
+        //                {
+        //                    bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
+        //                    bbpEdit.Enabled = clsGeneral.curUserFeature.IsEdit && IsEdit;
+        //                    bbpDelete.Enabled = clsGeneral.curUserFeature.IsDelete && IsDelete;
+        //                    bbpRefresh.Enabled = true;
+        //                }
+        //                if (_fType == eFormType.Add || _fType == eFormType.Edit)
+        //                {
+        //                    if (_fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
+        //                    {
+        //                        bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+        //                        bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+        //                    }
+        //                    if (_fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
+        //                    {
+        //                        bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+        //                        bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
+        //                    }
+        //                    bbpCancel.Enabled = true;
+        //                }
+        //                if (_fType == eFormType.Print)
+        //                {
+        //                    bbpPrintPreview.Enabled = clsGeneral.curUserFeature.IsPrintPreview && IsPrintPreview;
+        //                    bbpExportExcel.Enabled = clsGeneral.curUserFeature.IsExportExcel && IsExportExcel;
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            foreach (eFormType _fType in fTypes)
+        //            {
+        //                if (_fType == eFormType.Default)
+        //                    bbpRefresh.Enabled = true;
+        //                if (_fType == eFormType.Add)
+        //                    bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
+        //            }
+        //            bbpEdit.Enabled = false;
+        //            bbpDelete.Enabled = false;
+        //            bbpSave.Enabled = false;
+        //            bbpSaveAndAdd.Enabled = false;
+        //            bbpCancel.Enabled = false;
+        //            bbpPrintPreview.Enabled = false;
+        //            bbpExportExcel.Enabled = false;
+        //        }
+
+        //        bbpAdd.Visibility = bbpAdd.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+        //        bbpEdit.Visibility = bbpEdit.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+        //        bbpDelete.Visibility = bbpDelete.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+        //        bbpRefresh.Visibility = bbpRefresh.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+        //        bbpSave.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+        //        bbpSaveAndAdd.Visibility = bbpSaveAndAdd.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+        //        bbpCancel.Visibility = bbpCancel.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+        //        bbpPrintPreview.Visibility = bbpPrintPreview.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+        //        bbpExportExcel.Visibility = bbpExportExcel.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
+
+        //        popGridMenu.ShowPopup(MousePosition);
+        //    }
+        //}
+
         protected virtual void ShowGridPopup(object sender, MouseEventArgs e,
             bool IsAdd = false, bool IsEdit = false, bool IsDelete = false,
             bool IsSave = false, bool IsPrintPreview = false, bool IsExportExcel = false)
         {
-            //if (e.Button == MouseButtons.Right)
-            //{
-            //    GridControl gctMain = (GridControl)sender;
-            //    GridView grvMain = (GridView)gctMain.DefaultView;
-            //    GridHitInfo hi = grvMain.CalcHitInfo(e.Location);
+            if (e.Button == MouseButtons.Right)
+            {
+                bbpAdd.Enabled = true;
+                bbpEdit.Enabled = true;
+                bbpDelete.Enabled = true;
+                bbpRefresh.Enabled = true;
+                bbpSave.Enabled = true;
+                bbpSaveAndAdd.Enabled = true;
+                bbpCancel.Enabled = true;
+                bbpPrintPreview.Enabled = true;
+                bbpExportExcel.Enabled = true;
 
-            //    if (hi.RowHandle >= 0 && (hi.InRow || hi.InRowCell))
-            //    {
-            //        foreach (eFormType _fType in fTypes)
-            //        {
-            //            if (_fType == eFormType.Default)
-            //            {
-            //                bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
-            //                bbpEdit.Enabled = clsGeneral.curUserFeature.IsEdit && IsEdit;
-            //                bbpDelete.Enabled = clsGeneral.curUserFeature.IsDelete && IsDelete;
-            //                bbpRefresh.Enabled = true;
-            //            }
-            //            if (_fType == eFormType.Add || _fType == eFormType.Edit)
-            //            {
-            //                if (_fType == eFormType.Add && clsGeneral.curUserFeature.IsAdd && clsGeneral.curUserFeature.IsSave)
-            //                {
-            //                    bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-            //                    bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-            //                }
-            //                if (_fType == eFormType.Edit && clsGeneral.curUserFeature.IsEdit && clsGeneral.curUserFeature.IsSave)
-            //                {
-            //                    bbpSave.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-            //                    bbpSaveAndAdd.Enabled = clsGeneral.curUserFeature.IsSave && IsSave;
-            //                }
-            //                bbpCancel.Enabled = true;
-            //            }
-            //            if (_fType == eFormType.Print)
-            //            {
-            //                bbpPrintPreview.Enabled = clsGeneral.curUserFeature.IsPrintPreview && IsPrintPreview;
-            //                bbpExportExcel.Enabled = clsGeneral.curUserFeature.IsExportExcel && IsExportExcel;
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        foreach (eFormType _fType in fTypes)
-            //        {
-            //            if (_fType == eFormType.Default)
-            //                bbpRefresh.Enabled = true;
-            //            if (_fType == eFormType.Add)
-            //                bbpAdd.Enabled = clsGeneral.curUserFeature.IsAdd && IsAdd;
-            //        }
-            //        bbpEdit.Enabled = false;
-            //        bbpDelete.Enabled = false;
-            //        bbpSave.Enabled = false;
-            //        bbpSaveAndAdd.Enabled = false;
-            //        bbpCancel.Enabled = false;
-            //        bbpPrintPreview.Enabled = false;
-            //        bbpExportExcel.Enabled = false;
-            //    }
-
-            //    bbpAdd.Visibility = bbpAdd.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-            //    bbpEdit.Visibility = bbpEdit.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-            //    bbpDelete.Visibility = bbpDelete.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-            //    bbpRefresh.Visibility = bbpRefresh.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-            //    bbpSave.Visibility = bbpSave.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-            //    bbpSaveAndAdd.Visibility = bbpSaveAndAdd.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-            //    bbpCancel.Visibility = bbpCancel.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-            //    bbpPrintPreview.Visibility = bbpPrintPreview.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-            //    bbpExportExcel.Visibility = bbpExportExcel.Enabled ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-
-            //    popGridMenu.ShowPopup(MousePosition);
-            //}
+                popGridMenu.ShowPopup(MousePosition);
+            }
         }
         #endregion
 

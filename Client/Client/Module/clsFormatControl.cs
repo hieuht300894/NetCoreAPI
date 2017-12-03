@@ -27,6 +27,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Client.Module
@@ -375,7 +376,7 @@ namespace Client.Module
                 gctMain.UseEmbeddedNavigator = false;
 
                 GridView grvMain = gctMain.MainView as GridView;
-                grvMain.Format( showIndicator, ColumnAuto, ShowLines);
+                grvMain.Format(showIndicator, ColumnAuto, ShowLines);
             }
             catch { }
 
@@ -519,7 +520,7 @@ namespace Client.Module
             catch { }
         }
 
-        static void RestoreLayout(this GridView grvMain, XtraForm frmMain)
+        public static void RestoreLayout(this GridView grvMain, XtraForm frmMain)
         {
             if (frmMain == null) return;
             if (string.IsNullOrEmpty(frmMain.Name)) return;
@@ -575,6 +576,28 @@ namespace Client.Module
             catch { }
             finally { grvMain.EndSummaryUpdate(); }
 
+        }
+
+        public static async Task<IList<T>> GetItems<T>(this GridView grvMain)
+        {
+            try
+            {
+                return await Task.Factory.StartNew(() =>
+                {
+                    IList<T> lstResult = new List<T>();
+                    int[] indexes = grvMain.GetSelectedRows();
+                    for (int i = indexes.Length - 1; i >= 0; i--)
+                    {
+                        if (indexes[i] >= 0)
+                        {
+                            lstResult.Add((T)grvMain.GetRow(indexes[i]));
+                            grvMain.GridControl.Invoke(new Action(() => { grvMain.DeleteRow(indexes[i]); }));
+                        }
+                    }
+                    return lstResult;
+                });
+            }
+            catch { return new List<T>(); }
         }
 
         static void grvMain_RowCountChanged(object sender, EventArgs e)
@@ -1353,7 +1376,7 @@ namespace Client.Module
             slokMain.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
             slokMain.Properties.LookAndFeel.Style = LookAndFeelStyle.Office2003;
 
-            slokMain.Properties.View.Format( showIndicator, ColumnAuto, false);
+            slokMain.Properties.View.Format(showIndicator, ColumnAuto, false);
             slokMain.Properties.View.OptionsView.ShowColumnHeaders = showHeader;
             slokMain.Properties.View.OptionsSelection.MultiSelect = false;
 
@@ -1418,7 +1441,7 @@ namespace Client.Module
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static List<T> Clone<T>(this List<T> source) 
+        public static List<T> Clone<T>(this List<T> source)
         {
             var serialized = JsonConvert.SerializeObject(
                 source,

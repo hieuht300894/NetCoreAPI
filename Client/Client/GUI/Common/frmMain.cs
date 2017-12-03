@@ -44,8 +44,9 @@ namespace Client.GUI.Common
         }
         private void AddDocument(XtraForm _xtrForm)
         {
-            clsGeneral.CallWaitForm(this);
-            BaseDocument document = docManager.GetDocument(_xtrForm);
+            // BaseDocument document = docManager.GetDocument(_xtrForm);
+            BaseDocument document = tbvMain.Documents.FirstOrDefault(x => x.Control.Name.Equals(_xtrForm.Name));
+
             if (document != null)
                 tbvMain.Controller.Activate(document);
             else
@@ -54,7 +55,6 @@ namespace Client.GUI.Common
                 _xtrForm.MdiParent = this;
                 _xtrForm.Show();
             }
-            clsGeneral.CloseWaitForm();
         }
         private async void AddItemClick()
         {
@@ -95,11 +95,13 @@ namespace Client.GUI.Common
         {
             try
             {
+                clsGeneral.CallWaitForm(this);
                 FormItem fi = clsCallForm.CreateNewForm(e.Item.Name);
                 if (fi != null)
                     AddDocument(fi.xForm);
+                clsGeneral.CloseWaitForm();
             }
-            catch { }
+            catch { clsGeneral.CloseWaitForm(); }
         }
         #endregion
     }
