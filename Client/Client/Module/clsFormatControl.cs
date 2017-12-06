@@ -1334,13 +1334,26 @@ namespace Client.Module
         {
             if (IsCurrentDate)
                 dteMain.DateTime = DateTime.Now.ServerNow();
-            dteMain.Properties.EditMask = fText;
+
+            dteMain.Properties.AllowNullInput = DefaultBoolean.True;
             dteMain.Properties.DisplayFormat.FormatString = fText;
-            dteMain.Properties.MinValue = new DateTime(1900, 1, 1);
+            dteMain.Properties.DisplayFormat.FormatType = FormatType.DateTime;
+
+            dteMain.Properties.EditFormat.FormatString = fText;
+            dteMain.Properties.EditFormat.FormatType = FormatType.DateTime;
+
+            dteMain.Properties.EditMask = fText;
+
+            //dteMain.Properties.Mask.EditMask = "(0[1-9]|[1-2][0-9]|3[0-1])(\\/)(0[1-9]|1[1-2])(\\/)(19|20)\\d\\d";
+            //dteMain.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
+            //dteMain.Properties.Mask.ShowPlaceHolders = false;
+            //dteMain.Properties.Mask.UseMaskAsDisplayFormat = true;
+
+            dteMain.Properties.MinValue = new DateTime(1900, 1, 1, 0, 0, 0);
             dteMain.Properties.MaxValue = DateTime.Now.ServerNow();
 
-            dteMain.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
-            dteMain.Properties.LookAndFeel.Style = LookAndFeelStyle.Office2003;
+            dteMain.LookAndFeel.UseDefaultLookAndFeel = false;
+            dteMain.LookAndFeel.Style = LookAndFeelStyle.Office2003;
         }
         #endregion
 
@@ -1348,9 +1361,17 @@ namespace Client.Module
         public static void Format(this RepositoryItemDateEdit rdteMain, string fText = "dd/MM/yyyy")
         {
             rdteMain.AllowNullInput = DefaultBoolean.True;
-            rdteMain.EditMask = fText;
             rdteMain.DisplayFormat.FormatString = fText;
-            rdteMain.MinValue = new DateTime(1900, 1, 1);
+            rdteMain.DisplayFormat.FormatType = FormatType.DateTime;
+
+            rdteMain.EditFormat.FormatString = fText;
+            rdteMain.EditFormat.FormatType = FormatType.DateTime;
+
+            //rdteMain.Mask.EditMask = "(0[1-9]|[1-2][0-9]|3[0-1])(\\/)(0[1-9]|1[1-2])(\\/)(19|20)\\d\\d";
+            //rdteMain.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
+            //rdteMain.Mask.ShowPlaceHolders = false;
+
+            rdteMain.MinValue = new DateTime(1900, 1, 1, 0, 0, 0);
             rdteMain.MaxValue = DateTime.Now.ServerNow();
 
             rdteMain.LookAndFeel.UseDefaultLookAndFeel = false;
