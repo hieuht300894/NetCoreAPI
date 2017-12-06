@@ -35,8 +35,9 @@ namespace Client.BLL.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="KeyID"></param>
         /// <returns></returns>
-        public static T GetByID<T>(object KeyID) where T : class, new()
+        public static async  Task<T> GetByID<T>(object KeyID) where T : class, new()
         {
+            await Task.Factory.StartNew(() => { });
             try { return new T(); }
             catch { return new T(); }
         }
