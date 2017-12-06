@@ -13,6 +13,7 @@ using Server.Model;
 using Microsoft.EntityFrameworkCore;
 using Server.Utils;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Server.Middleware;
 
 namespace Server
 {
@@ -47,6 +48,7 @@ namespace Server
 
             GetPrimaryKey();
 
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseStaticFiles();
             app.UseMvc();
         }

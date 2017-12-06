@@ -11,7 +11,7 @@ namespace EntityModel.DataModel
 
         public string Ten { get; set; }
 
-        public bool KichHoat { get; set; }
+        public int TrangThai { get; set; }
 
         public string GhiChu { get; set; }
     }
