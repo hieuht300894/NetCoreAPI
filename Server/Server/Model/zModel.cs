@@ -132,6 +132,8 @@ namespace Server.Model
             modelBuilder.Entity<eNhapHangNhaCungCap>().HasKey(x => x.KeyID);
             modelBuilder.Entity<eNhapHangNhaCungCapChiTiet>().HasKey(x => x.KeyID);
             modelBuilder.Entity<eTonKho>().HasKey(x => x.KeyID);
+
+            modelBuilder.Entity<eNhapHangNhaCungCap>().Ignore(x => x.eNhapHangNhaCungCapChiTiet);
             #endregion
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
