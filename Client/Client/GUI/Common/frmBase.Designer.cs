@@ -251,7 +251,6 @@
             this.betPercent.EditWidth = 0;
             this.betPercent.Id = 20;
             this.betPercent.Name = "betPercent";
-            this.betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // rpbPercent
             // 
