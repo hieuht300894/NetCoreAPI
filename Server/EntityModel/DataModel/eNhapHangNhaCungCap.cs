@@ -1,4 +1,7 @@
 ﻿
+using System.Collections;
+using System.Collections.Generic;
+
 namespace EntityModel.DataModel
 {
 
@@ -34,5 +37,7 @@ namespace EntityModel.DataModel
         public decimal TongTien { get; set; }
 
         public string GhiChu { get; set; }
+
+        public virtual ICollection<eNhapHangNhaCungCapChiTiet> eNhapHangNhaCungCapChiTiet { get; set; } = new HashSet<eNhapHangNhaCungCapChiTiet>();
     }
 }
