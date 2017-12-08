@@ -8,6 +8,7 @@ using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraLayout;
 using DevExpress.XtraLayout.Utils;
 using DevExpress.XtraTreeList;
@@ -377,13 +378,25 @@ namespace Client.Module
 
                 GridView grvMain = gctMain.MainView as GridView;
                 grvMain.Format(showIndicator, ColumnAuto, ShowLines);
+
+                gctMain.ProcessGridKey -= GctMain_ProcessGridKey;
+                gctMain.ProcessGridKey += GctMain_ProcessGridKey;
             }
-            catch { }
+            catch (Exception ex) { }
 
         }
 
         public static void Format(this GridView grvMain, bool showIndicator, bool ColumnAuto, bool ShowLines = false)
         {
+            grvMain.CustomDrawRowIndicator -= CustomDrawRowIndicator;
+            grvMain.KeyDown -= grvMain_KeyDown;
+            grvMain.RowCountChanged -= grvMain_RowCountChanged;
+            grvMain.DataSourceChanged -= grvMain_DataSourceChanged;
+            grvMain.CalcRowHeight -= grvMain_CalcRowHeight;
+            grvMain.ShowingEditor -= (sender, e) => grvMain_ShowingEditor(sender, e);
+            grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown -= realColumnEdit_KeyDown);
+            grvMain.InvalidRowException -= grvMain_InvalidRowException;
+
             grvMain.RestoreLayout((XtraForm)grvMain.GridControl.FindForm());
 
             grvMain.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Never;
@@ -395,7 +408,7 @@ namespace Client.Module
             grvMain.OptionsCustomization.AllowSort = true;
             //grvMain.OptionsView.ShowAutoFilterRow = true;
             grvMain.OptionsSelection.MultiSelect = true;
-            grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
+            grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.CellSelect;
             grvMain.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = true;
             grvMain.OptionsFilter.ColumnFilterPopupMode = DevExpress.XtraGrid.Columns.ColumnFilterPopupMode.Excel;
             //grvMain.OptionsFind.AlwaysVisible = true;
@@ -407,7 +420,6 @@ namespace Client.Module
             if (showIndicator)
             {
                 grvMain.IndicatorWidth = -1;
-                grvMain.CustomDrawRowIndicator -= CustomDrawRowIndicator;
                 grvMain.CustomDrawRowIndicator += CustomDrawRowIndicator;
             }
 
@@ -469,21 +481,22 @@ namespace Client.Module
 
             grvMain.FormatColumn();
 
-            grvMain.KeyDown -= grvMain_KeyDown;
+
             grvMain.KeyDown += grvMain_KeyDown;
-            grvMain.RowCountChanged -= grvMain_RowCountChanged;
             grvMain.RowCountChanged += grvMain_RowCountChanged;
-            grvMain.DataSourceChanged -= grvMain_DataSourceChanged;
             grvMain.DataSourceChanged += grvMain_DataSourceChanged;
-            grvMain.CalcRowHeight -= grvMain_CalcRowHeight;
             grvMain.CalcRowHeight += grvMain_CalcRowHeight;
-            grvMain.ShowingEditor -= (sender, e) => grvMain_ShowingEditor(sender, e);
             grvMain.ShowingEditor += (sender, e) => grvMain_ShowingEditor(sender, e);
-            grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown -= realColumnEdit_KeyDown);
             grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown += realColumnEdit_KeyDown);
-            grvMain.InvalidRowException -= grvMain_InvalidRowException;
             grvMain.InvalidRowException += grvMain_InvalidRowException;
+
+            EventInfo eInfo = grvMain.GetType().GetEvent("CellValueChanged");
+            Delegate delRemove = Delegate.CreateDelegate(eInfo.EventHandlerType, eInfo.GetRemoveMethod());
+            Delegate delAdd = Delegate.CreateDelegate(typeof(CellValueChangedEventHandler), eInfo.AddMethod);
+
+            eInfo.RemoveEventHandler(grvMain, delRemove);
         }
+
 
         public static void SaveLayout(this GridView grvMain, XtraForm frmMain)
         {
@@ -600,6 +613,126 @@ namespace Client.Module
             catch { return new List<T>(); }
         }
 
+        public static void AddNewItemRow(this GridView grvMain, int Total = 0)
+        {
+            grvMain.TopRowChanged -= grv_TopRowChanged;
+
+            int RemainRowCount = Total - grvMain.GetRowCount();
+
+            for (int i = 0; i < RemainRowCount; i++) { grvMain.AddNewRow(); }
+
+            grvMain.RefreshData();
+            grvMain.BestFitColumns();
+
+            grvMain.TopRowChanged += grv_TopRowChanged;
+        }
+
+        static void Copy(this GridView grvMain)
+        {
+            XtraForm frmMain = (XtraForm)grvMain.GridControl.FindForm();
+
+            List<MyGridCell> cells = new List<MyGridCell>();
+            grvMain.GetSelectedCells().ToList().ForEach(x =>
+            {
+                cells.Add(new MyGridCell()
+                {
+                    frmMain = frmMain,
+                    grvMain = grvMain,
+                    Cell = x,
+                    Value = grvMain.GetRowCellValue(x.RowHandle, x.Column)
+                });
+            });
+
+            Clipboard.Clear();
+            TempHelper.ListCell.AddRange(cells);
+        }
+
+        static void Paste(this GridView grvMain)
+        {
+            XtraForm frmMain = (XtraForm)grvMain.GridControl.FindForm();
+
+            List<MyGridCell> cells = new List<MyGridCell>(TempHelper.ListCell.Where(x => x.frmMain.Name.Equals(frmMain.Name) && x.grvMain.Name.Equals(grvMain.Name)));
+            cells.ForEach(x => TempHelper.ListCell.Remove(x));
+
+            var qColumn = cells.
+                 GroupBy(x => new
+                 {
+                     ColumnName = x.Cell.Column.Name
+                 }).
+                 Select(x => new
+                 {
+                     ColumnName = x.Key.ColumnName,
+                     Cells = x.ToList(),
+                     Start = x.Select(y => y.Cell.RowHandle).DefaultIfEmpty().Min(),
+                     Total = x.Select(y => y.Cell.RowHandle).Count()
+                 });
+
+            int CurrentRow = grvMain.FocusedRowHandle > 0 ? grvMain.FocusedRowHandle : grvMain.GetRowCount();
+            int MinRow = cells.Select(y => y.Cell.RowHandle).DefaultIfEmpty().Min();
+            int MaxRow = cells.Select(y => y.Cell.RowHandle).DefaultIfEmpty().Max();
+            int TotalRow = MaxRow - MinRow + 1;
+            grvMain.AddNewItemRow(CurrentRow + TotalRow);
+            grvMain.FocusedRowHandle = CurrentRow;
+
+            foreach (var r in qColumn)
+            {
+                foreach (MyGridCell cell in r.Cells)
+                {
+                    int rowHandle = CurrentRow + cell.Cell.RowHandle - MinRow;
+                    grvMain.SetRowCellValue(rowHandle, cell.Cell.Column, cell.Value);//Hiện tại + vị trí bắt đầu cửa cell - vị trí bắt đầu của row
+                    grvMain.SelectCell(rowHandle, cell.Cell.Column);
+                }
+            }
+        }
+
+        public static int GetLastRow(this GridView grvMain)
+        {
+            GridViewInfo vi = grvMain.GetViewInfo() as GridViewInfo;
+            List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
+            for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
+            {
+                if (grvMain.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || grvMain.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
+                    lstRowsInfo.RemoveAt(i);
+            }
+            return lstRowsInfo.Select(x => x.VisibleIndex).ToList().DefaultIfEmpty().Max() + 1;
+        }
+
+        public static int GetRowCount(this GridView grvMain)
+        {
+            if (grvMain.OptionsView.NewItemRowPosition == NewItemRowPosition.None)
+                return grvMain.RowCount;
+            return grvMain.RowCount - 1;
+        }
+
+        private static void GctMain_ProcessGridKey(object sender, KeyEventArgs e)
+        {
+            GridControl gctMain = (GridControl)sender;
+            GridView grvMain = (GridView)gctMain.FocusedView;
+            if (e.KeyData == (Keys.Control | Keys.C))
+                grvMain.Copy();
+            if (e.KeyData == (Keys.Control | Keys.V))
+                grvMain.Paste();
+        }
+
+        static void grv_TopRowChanged(object sender, EventArgs e)
+        {
+            GridView view = sender as GridView;
+            GridViewInfo vi = view.GetViewInfo() as GridViewInfo;
+            List<GridRowInfo> lstRowsInfo = new List<GridRowInfo>(vi.RowsInfo.Where(x => x.VisibleIndex != -1));
+            for (int i = lstRowsInfo.Count - 1; i >= 0; i--)
+            {
+                if (view.IsRowVisible(lstRowsInfo[i].VisibleIndex) != RowVisibleState.Visible || view.IsNewItemRow(lstRowsInfo[i].VisibleIndex))
+                    lstRowsInfo.RemoveAt(i);
+            }
+            int LastRow = view.GetLastRow();
+            int RowCount = view.GetRowCount();
+
+            if (LastRow == RowCount)
+            {
+                view.AddNewRow();
+            }
+        }
+
         static void grvMain_RowCountChanged(object sender, EventArgs e)
         {
             GridView view = sender as GridView;
@@ -626,7 +759,7 @@ namespace Client.Module
         static void grvMain_KeyDown(object sender, KeyEventArgs e)
         {
             GridView view = sender as GridView;
-            if (e.KeyCode == Keys.Delete)
+            if (e.KeyData == Keys.Delete)
             {
                 if (view.IsFilterRow(view.FocusedRowHandle))
                     view.ActiveFilter.Clear();
@@ -1344,10 +1477,10 @@ namespace Client.Module
 
             dteMain.Properties.EditMask = fText;
 
-            //dteMain.Properties.Mask.EditMask = "(0[1-9]|[1-2][0-9]|3[0-1])(\\/)(0[1-9]|1[1-2])(\\/)(19|20)\\d\\d";
-            //dteMain.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
-            //dteMain.Properties.Mask.ShowPlaceHolders = false;
-            //dteMain.Properties.Mask.UseMaskAsDisplayFormat = true;
+            dteMain.Properties.Mask.EditMask = fText;
+            dteMain.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTimeAdvancingCaret;
+            dteMain.Properties.Mask.ShowPlaceHolders = false;
+            dteMain.Properties.Mask.UseMaskAsDisplayFormat = true;
 
             dteMain.Properties.MinValue = new DateTime(1900, 1, 1, 0, 0, 0);
             dteMain.Properties.MaxValue = DateTime.Now.ServerNow();
@@ -1367,9 +1500,12 @@ namespace Client.Module
             rdteMain.EditFormat.FormatString = fText;
             rdteMain.EditFormat.FormatType = FormatType.DateTime;
 
-            //rdteMain.Mask.EditMask = "(0[1-9]|[1-2][0-9]|3[0-1])(\\/)(0[1-9]|1[1-2])(\\/)(19|20)\\d\\d";
-            //rdteMain.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
-            //rdteMain.Mask.ShowPlaceHolders = false;
+            rdteMain.EditMask = fText;
+
+            rdteMain.Mask.EditMask = fText;
+            rdteMain.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.DateTimeAdvancingCaret;
+            rdteMain.Mask.ShowPlaceHolders = false;
+            rdteMain.Mask.UseMaskAsDisplayFormat = true;
 
             rdteMain.MinValue = new DateTime(1900, 1, 1, 0, 0, 0);
             rdteMain.MaxValue = DateTime.Now.ServerNow();
