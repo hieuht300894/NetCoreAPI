@@ -29,7 +29,7 @@ namespace Client.GUI.DanhMuc
         public async override void LoadData(object KeyID)
         {
             lstEdited = new BindingList<eNhomDonViTinh>();
-            lstEntries = new BindingList<eNhomDonViTinh>(await clsFunction.GetAll<eNhomDonViTinh>(""));
+            lstEntries = new BindingList<eNhomDonViTinh>(await clsFunction.GetAll<eNhomDonViTinh>("nhomdonvitinh"));
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -41,7 +41,7 @@ namespace Client.GUI.DanhMuc
         public async override Task<bool> SaveData()
         {
             bool chk = false;
-            await RunMethodAsync(() => { return false; });
+            chk = await clsFunction.Post("nhomdonvitinh", lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()

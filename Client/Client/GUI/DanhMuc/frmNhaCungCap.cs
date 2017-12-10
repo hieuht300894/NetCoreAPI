@@ -30,13 +30,13 @@ namespace Client.GUI.DanhMuc
 
         async void LoadRepository()
         {
-            IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>(await clsFunction.GetAll<eTinhThanh>(""));
+            IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>(await clsFunction.GetAll<eTinhThanh>("tinhthanh"));
             await RunMethodAsync(() => { rlokTinhThanh.DataSource = lstTinhThanh; });
         }
         public async override void LoadData(object KeyID)
         {
             lstEdited = new BindingList<eNhaCungCap>();
-            lstEntries = new BindingList<eNhaCungCap>(await clsFunction.GetAll<eNhaCungCap>(""));
+            lstEntries = new BindingList<eNhaCungCap>(await clsFunction.GetAll<eNhaCungCap>("nhacungcap"));
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -50,12 +50,11 @@ namespace Client.GUI.DanhMuc
             lstEdited.ToList().ForEach(x =>
             {
                 eTinhThanh tinhThanh = (eTinhThanh)rlokTinhThanh.GetDataSourceRowByKeyValue(x.IDTinhThanh) ?? new eTinhThanh();
-
                 x.TinhThanh = tinhThanh.Ten;
             });
 
             bool chk = false;
-            await RunMethodAsync(() => { return false; });
+            chk = await clsFunction.Post("tinhthanh", lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()

@@ -34,6 +34,10 @@
             this.bhiNhanVien = new DevExpress.XtraBars.BarHeaderItem();
             this.frmTinhThanh = new DevExpress.XtraBars.BarButtonItem();
             this.frmKho = new DevExpress.XtraBars.BarButtonItem();
+            this.frmSoDuDauKyKhachHang = new DevExpress.XtraBars.BarButtonItem();
+            this.frmSoDuDauKyNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
+            this.frmTonKhoDauKy = new DevExpress.XtraBars.BarButtonItem();
+            this.frmNhapHangNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
             this.rpTaiKhoan = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rpThietLap = new DevExpress.XtraBars.Ribbon.RibbonPage();
@@ -42,14 +46,14 @@
             this.ribbonPageGroup3 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rpChucNang = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.rsbBottom = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.docManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tbvMain = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
-            this.frmSoDuDauKyKhachHang = new DevExpress.XtraBars.BarButtonItem();
-            this.frmSoDuDauKyNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
-            this.frmTonKhoDauKy = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonPageGroup5 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.frmNhapHangNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
+            this.frmDonViTinh = new DevExpress.XtraBars.BarButtonItem();
+            this.frmKhachHang = new DevExpress.XtraBars.BarButtonItem();
+            this.frmNhaCungCap = new DevExpress.XtraBars.BarButtonItem();
+            this.frmSanPham = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.rcMain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.docManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbvMain)).BeginInit();
@@ -66,9 +70,13 @@
             this.frmSoDuDauKyKhachHang,
             this.frmSoDuDauKyNhaCungCap,
             this.frmTonKhoDauKy,
-            this.frmNhapHangNhaCungCap});
+            this.frmNhapHangNhaCungCap,
+            this.frmDonViTinh,
+            this.frmKhachHang,
+            this.frmNhaCungCap,
+            this.frmSanPham});
             this.rcMain.Location = new System.Drawing.Point(0, 0);
-            this.rcMain.MaxItemId = 17;
+            this.rcMain.MaxItemId = 21;
             this.rcMain.Name = "rcMain";
             this.rcMain.PageHeaderItemLinks.Add(this.bhiNhanVien);
             this.rcMain.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
@@ -101,6 +109,30 @@
             this.frmKho.Caption = "Kho";
             this.frmKho.Id = 12;
             this.frmKho.Name = "frmKho";
+            // 
+            // frmSoDuDauKyKhachHang
+            // 
+            this.frmSoDuDauKyKhachHang.Caption = "Khách hàng";
+            this.frmSoDuDauKyKhachHang.Id = 13;
+            this.frmSoDuDauKyKhachHang.Name = "frmSoDuDauKyKhachHang";
+            // 
+            // frmSoDuDauKyNhaCungCap
+            // 
+            this.frmSoDuDauKyNhaCungCap.Caption = "Nhà cung cấp";
+            this.frmSoDuDauKyNhaCungCap.Id = 14;
+            this.frmSoDuDauKyNhaCungCap.Name = "frmSoDuDauKyNhaCungCap";
+            // 
+            // frmTonKhoDauKy
+            // 
+            this.frmTonKhoDauKy.Caption = "Tồn kho";
+            this.frmTonKhoDauKy.Id = 15;
+            this.frmTonKhoDauKy.Name = "frmTonKhoDauKy";
+            // 
+            // frmNhapHangNhaCungCap
+            // 
+            this.frmNhapHangNhaCungCap.Caption = "Nhà cung cấp";
+            this.frmNhapHangNhaCungCap.Id = 16;
+            this.frmNhapHangNhaCungCap.Name = "frmNhapHangNhaCungCap";
             // 
             // rpTaiKhoan
             // 
@@ -137,6 +169,10 @@
             // 
             this.ribbonPageGroup3.ItemLinks.Add(this.frmTinhThanh);
             this.ribbonPageGroup3.ItemLinks.Add(this.frmKho);
+            this.ribbonPageGroup3.ItemLinks.Add(this.frmDonViTinh);
+            this.ribbonPageGroup3.ItemLinks.Add(this.frmKhachHang);
+            this.ribbonPageGroup3.ItemLinks.Add(this.frmNhaCungCap);
+            this.ribbonPageGroup3.ItemLinks.Add(this.frmSanPham);
             this.ribbonPageGroup3.Name = "ribbonPageGroup3";
             this.ribbonPageGroup3.Text = "ribbonPageGroup3";
             // 
@@ -155,6 +191,12 @@
             this.ribbonPageGroup4.ItemLinks.Add(this.frmTonKhoDauKy);
             this.ribbonPageGroup4.Name = "ribbonPageGroup4";
             this.ribbonPageGroup4.Text = "Đầu kỳ";
+            // 
+            // ribbonPageGroup5
+            // 
+            this.ribbonPageGroup5.ItemLinks.Add(this.frmNhapHangNhaCungCap);
+            this.ribbonPageGroup5.Name = "ribbonPageGroup5";
+            this.ribbonPageGroup5.Text = "Nhập hàng";
             // 
             // rsbBottom
             // 
@@ -175,35 +217,29 @@
             // 
             this.tbvMain.RootContainer.Element = null;
             // 
-            // frmSoDuDauKyKhachHang
+            // frmDonViTinh
             // 
-            this.frmSoDuDauKyKhachHang.Caption = "Khách hàng";
-            this.frmSoDuDauKyKhachHang.Id = 13;
-            this.frmSoDuDauKyKhachHang.Name = "frmSoDuDauKyKhachHang";
+            this.frmDonViTinh.Caption = "ĐVT";
+            this.frmDonViTinh.Id = 17;
+            this.frmDonViTinh.Name = "frmDonViTinh";
             // 
-            // frmSoDuDauKyNhaCungCap
+            // frmKhachHang
             // 
-            this.frmSoDuDauKyNhaCungCap.Caption = "Nhà cung cấp";
-            this.frmSoDuDauKyNhaCungCap.Id = 14;
-            this.frmSoDuDauKyNhaCungCap.Name = "frmSoDuDauKyNhaCungCap";
+            this.frmKhachHang.Caption = "Khách hàng";
+            this.frmKhachHang.Id = 18;
+            this.frmKhachHang.Name = "frmKhachHang";
             // 
-            // frmTonKhoDauKy
+            // frmNhaCungCap
             // 
-            this.frmTonKhoDauKy.Caption = "Tồn kho";
-            this.frmTonKhoDauKy.Id = 15;
-            this.frmTonKhoDauKy.Name = "frmTonKhoDauKy";
+            this.frmNhaCungCap.Caption = "Nhà cung cấp";
+            this.frmNhaCungCap.Id = 19;
+            this.frmNhaCungCap.Name = "frmNhaCungCap";
             // 
-            // ribbonPageGroup5
+            // frmSanPham
             // 
-            this.ribbonPageGroup5.ItemLinks.Add(this.frmNhapHangNhaCungCap);
-            this.ribbonPageGroup5.Name = "ribbonPageGroup5";
-            this.ribbonPageGroup5.Text = "Nhập hàng";
-            // 
-            // frmNhapHangNhaCungCap
-            // 
-            this.frmNhapHangNhaCungCap.Caption = "Nhà cung cấp";
-            this.frmNhapHangNhaCungCap.Id = 16;
-            this.frmNhapHangNhaCungCap.Name = "frmNhapHangNhaCungCap";
+            this.frmSanPham.Caption = "Sản phẩm";
+            this.frmSanPham.Id = 20;
+            this.frmSanPham.Name = "frmSanPham";
             // 
             // frmMain
             // 
@@ -248,5 +284,9 @@
         private DevExpress.XtraBars.BarButtonItem frmTonKhoDauKy;
         private DevExpress.XtraBars.BarButtonItem frmNhapHangNhaCungCap;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup5;
+        private DevExpress.XtraBars.BarButtonItem frmDonViTinh;
+        private DevExpress.XtraBars.BarButtonItem frmKhachHang;
+        private DevExpress.XtraBars.BarButtonItem frmNhaCungCap;
+        private DevExpress.XtraBars.BarButtonItem frmSanPham;
     }
 }

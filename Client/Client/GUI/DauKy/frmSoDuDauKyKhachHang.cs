@@ -30,13 +30,13 @@ namespace Client.GUI.DauKy
 
         public async void LoadRepository()
         {
-            IList<eKhachHang> lstKhachHang = await clsFunction.GetAll<eKhachHang>("");
+            IList<eKhachHang> lstKhachHang = await clsFunction.GetAll<eKhachHang>("khachhang");
             await RunMethodAsync(() => { rlokKhachHang.DataSource = lstKhachHang; });
         }
         public async override void LoadData(object KeyID)
         {
             lstEdited = new BindingList<eSoDuDauKyKhachHang>();
-            lstEntries = new BindingList<eSoDuDauKyKhachHang>(await clsFunction.GetAll<eSoDuDauKyKhachHang>(""));
+            lstEntries = new BindingList<eSoDuDauKyKhachHang>(await clsFunction.GetAll<eSoDuDauKyKhachHang>("sodudaukykhachhang"));
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -55,7 +55,7 @@ namespace Client.GUI.DauKy
             });
 
             bool chk = false;
-            chk = await clsFunction.Post("", lstEdited.ToList());
+            chk = await clsFunction.Post("sodudaukykhachhang", lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()

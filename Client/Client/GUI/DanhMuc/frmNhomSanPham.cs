@@ -41,7 +41,7 @@ namespace Client.GUI.DanhMuc
         public async override Task<bool> SaveData()
         {
             bool chk = false;
-            await RunMethodAsync(() => { return false; });
+            chk = await clsFunction.Post("nhomsanpham", lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()

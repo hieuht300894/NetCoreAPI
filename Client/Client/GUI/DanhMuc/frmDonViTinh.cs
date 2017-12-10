@@ -42,7 +42,7 @@ namespace Client.GUI.DanhMuc
         {
             bool chk = false;
             await RunMethodAsync(() => { return false; });
-            //chk = await clsFunction.AddOrUpdate(lstEdited.ToList());
+            chk = await clsFunction.Post("donvitinh", lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()

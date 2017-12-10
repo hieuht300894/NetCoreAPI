@@ -21,7 +21,7 @@ namespace Client
             DevExpress.Skins.SkinManager.EnableFormSkins();
             //DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle(Properties.Settings.Default.SkinName);
             //DevExpress.Utils.AppearanceObject.DefaultFont = Properties.Settings.Default.FontFormat;
-            Application.Run(new Form1());
+            Application.Run(new frmMain());
         }
     }
 }

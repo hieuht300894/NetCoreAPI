@@ -490,11 +490,11 @@ namespace Client.Module
             grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown += realColumnEdit_KeyDown);
             grvMain.InvalidRowException += grvMain_InvalidRowException;
 
-            EventInfo eInfo = grvMain.GetType().GetEvent("CellValueChanged");
-            Delegate delRemove = Delegate.CreateDelegate(eInfo.EventHandlerType, eInfo.GetRemoveMethod());
-            Delegate delAdd = Delegate.CreateDelegate(typeof(CellValueChangedEventHandler), eInfo.AddMethod);
+            //EventInfo eInfo = grvMain.GetType().GetEvent("CellValueChanged");
+            //Delegate delRemove = Delegate.CreateDelegate(eInfo.EventHandlerType, eInfo.GetRemoveMethod());
+            //Delegate delAdd = Delegate.CreateDelegate(typeof(CellValueChangedEventHandler), eInfo.AddMethod);
 
-            eInfo.RemoveEventHandler(grvMain, delRemove);
+            //eInfo.RemoveEventHandler(grvMain, delRemove);
         }
 
 

@@ -31,13 +31,13 @@ namespace Client.GUI.DanhMuc
 
         async void LoadRepository()
         {
-            IList<eDonViTinh> lstDVT = await clsFunction.GetAll<eDonViTinh>("");
+            IList<eDonViTinh> lstDVT = await clsFunction.GetAll<eDonViTinh>("donvitinh");
             await RunMethodAsync(() => { rlokDVT.DataSource = lstDVT; });
         }
         public async override void LoadData(object KeyID)
         {
             lstEdited = new BindingList<eSanPham>();
-            lstEntries = new BindingList<eSanPham>(await clsFunction.GetAll<eSanPham>(""));
+            lstEntries = new BindingList<eSanPham>(await clsFunction.GetAll<eSanPham>("sanpham"));
        //     lstEntries.ToList().ForEach(x => { x.Color = Color.FromArgb(x.ColorHex); });
 
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
@@ -62,7 +62,7 @@ namespace Client.GUI.DanhMuc
 
 
             bool chk = false;
-            await RunMethodAsync(() => { return false; });
+            chk = await clsFunction.Post("sanpham", lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()

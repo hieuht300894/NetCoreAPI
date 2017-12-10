@@ -24,7 +24,7 @@ namespace Client.BLL.Common
                 request.Method = Method.GET;
                 IRestResponse response = await client.ExecuteTaskAsync(request);
                 IList<T> lstResult = response.Content.DeserializeToList<T>();
-                return lstResult;
+                return lstResult ?? new List<T>();
             }
             catch (Exception ex) { return new List<T>(); }
         }
@@ -35,7 +35,7 @@ namespace Client.BLL.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="KeyID"></param>
         /// <returns></returns>
-        public static async  Task<T> GetByID<T>(object KeyID) where T : class, new()
+        public static async Task<T> GetByID<T>(object KeyID) where T : class, new()
         {
             await Task.Factory.StartNew(() => { });
             try { return new T(); }
