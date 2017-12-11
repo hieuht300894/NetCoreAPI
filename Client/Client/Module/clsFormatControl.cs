@@ -1,4 +1,5 @@
-﻿using DevExpress.LookAndFeel;
+﻿using Client.BLL.Common;
+using DevExpress.LookAndFeel;
 using DevExpress.Utils;
 using DevExpress.Utils.Win;
 using DevExpress.XtraEditors;
@@ -16,6 +17,7 @@ using DevExpress.XtraTreeList.Columns;
 using DevExpress.XtraTreeList.Nodes;
 using EntityModel.DataModel;
 using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -236,13 +238,17 @@ namespace Client.Module
         #region DateTime Server
         public static DateTime ServerNow(this DateTime Now)
         {
-            DateTime dRe = DateTime.MinValue;
-            //using (aModel db = new aModel())
-            //{
-            //    var dateQuery = db.Database.SqlQuery<DateTime>("SELECT GETDATE()");
-            //    dRe = dateQuery.AsEnumerable().First();
-            //}
-            return dRe;
+            try
+            {
+                IRestClient client = new RestClient(ModuleHelper.Url + "/Module/TimeServer");
+                IRestRequest request = new RestRequest();
+                request.Method = Method.GET;
+                IRestResponse response = client.Execute(request);
+                IList<DateTime> lstResult = response.Content.DeserializeToList<DateTime>() ?? new List<DateTime>();
+                return lstResult.Count > 0 ? lstResult.Single() : DateTime.Now;
+            }
+            catch { return DateTime.Now; }
+
         }
         #endregion
 
