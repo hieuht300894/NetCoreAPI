@@ -34,13 +34,6 @@ namespace Server.Controllers
             return Ok(Item);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddEntry([FromBody] T Item)
-        //{
-        //    await Instance.AddEntry(Item);
-        //    return Ok(Item);
-        //}
-
         [HttpPost]
         public virtual async Task<IActionResult> AddEntries([FromBody] T[] Items)
         {
@@ -48,6 +41,7 @@ namespace Server.Controllers
             {
                 Instance.Context = new zModel();
                 Items = Items ?? new T[] { };
+
                 await Instance.Context.Database.BeginTransactionAsync();
                 await Instance.Context.Set<T>().AddRangeAsync(Items);
                 await Instance.Context.SaveChangesAsync();
@@ -60,13 +54,6 @@ namespace Server.Controllers
                 return BadRequest();
             }
         }
-
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateEntry([FromBody] T Item)
-        //{
-        //    await Instance.UpdateEntry(Item);
-        //    return Ok(Item);
-        //}
 
         [HttpPut]
         public virtual async Task<IActionResult> UpdateEntries([FromBody] T[] Items)
