@@ -8,9 +8,12 @@ namespace EntityModel.General
 {
     public class Master
     {
+        private static Int32 _keyID = 0;
+        public static Int32 _KeyID { get { return _keyID--; } }
+
         public Master()
         {
-            KeyID = -Convert.ToInt32(DateTime.Now.ToString("hhmmssttSSS"));
+            KeyID = _KeyID;
         }
 
         public Int32 KeyID { get; set; }
