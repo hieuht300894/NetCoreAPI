@@ -605,7 +605,7 @@ namespace Client.Module
             catch { return new List<T>(); }
         }
 
-        public static void AddNewItemRow(this GridView grvMain, int Total = 0)
+        static void AddNewItemRow(this GridView grvMain, int Total = 0)
         {
             grvMain.TopRowChanged -= grv_TopRowChanged;
 

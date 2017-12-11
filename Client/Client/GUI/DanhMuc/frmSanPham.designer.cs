@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.gctDanhSach = new DevExpress.XtraGrid.GridControl();
-            this.eSanPhamBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.grvDanhSach = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colKeyID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colMa = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -40,22 +39,21 @@
             this.rpclr = new DevExpress.XtraEditors.Repository.RepositoryItemColorPickEdit();
             this.colMauSon = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colKichThuoc = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.rspnKichThuoc = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.colIDDonViTinh = new DevExpress.XtraGrid.Columns.GridColumn();
             this.rlokDVT = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.colDonViTinh = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colGhiChu = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.rspnKichThuoc = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eSanPhamBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rpclr)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rspnKichThuoc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokDVT)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rspnKichThuoc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             this.SuspendLayout();
@@ -64,16 +62,15 @@
             // 
             this.layoutControl1.Controls.Add(this.gctDanhSach);
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutControl1.Location = new System.Drawing.Point(0, 26);
+            this.layoutControl1.Location = new System.Drawing.Point(0, 24);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.layoutControlGroup1;
-            this.layoutControl1.Size = new System.Drawing.Size(884, 358);
+            this.layoutControl1.Size = new System.Drawing.Size(884, 360);
             this.layoutControl1.TabIndex = 4;
             this.layoutControl1.Text = "layoutControl1";
             // 
             // gctDanhSach
             // 
-            this.gctDanhSach.DataSource = this.eSanPhamBindingSource;
             this.gctDanhSach.Location = new System.Drawing.Point(12, 12);
             this.gctDanhSach.MainView = this.grvDanhSach;
             this.gctDanhSach.MenuManager = this.barMenu;
@@ -82,14 +79,10 @@
             this.rpclr,
             this.rlokDVT,
             this.rspnKichThuoc});
-            this.gctDanhSach.Size = new System.Drawing.Size(860, 334);
+            this.gctDanhSach.Size = new System.Drawing.Size(860, 336);
             this.gctDanhSach.TabIndex = 4;
             this.gctDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvDanhSach});
-            // 
-            // eSanPhamBindingSource
-            // 
-            this.eSanPhamBindingSource.DataSource = typeof(EntityModel.DataModel.eSanPham);
             // 
             // grvDanhSach
             // 
@@ -134,8 +127,6 @@
             this.colIDMauSon.ColumnEdit = this.rpclr;
             this.colIDMauSon.FieldName = "Color";
             this.colIDMauSon.Name = "colIDMauSon";
-            this.colIDMauSon.Visible = true;
-            this.colIDMauSon.VisibleIndex = 2;
             // 
             // rpclr
             // 
@@ -157,13 +148,6 @@
             this.colKichThuoc.FieldName = "KichThuoc";
             this.colKichThuoc.Name = "colKichThuoc";
             // 
-            // rspnKichThuoc
-            // 
-            this.rspnKichThuoc.AutoHeight = false;
-            this.rspnKichThuoc.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.rspnKichThuoc.Name = "rspnKichThuoc";
-            // 
             // colIDDonViTinh
             // 
             this.colIDDonViTinh.Caption = "ĐVT";
@@ -171,7 +155,7 @@
             this.colIDDonViTinh.FieldName = "IDDonViTinh";
             this.colIDDonViTinh.Name = "colIDDonViTinh";
             this.colIDDonViTinh.Visible = true;
-            this.colIDDonViTinh.VisibleIndex = 3;
+            this.colIDDonViTinh.VisibleIndex = 2;
             // 
             // rlokDVT
             // 
@@ -193,7 +177,14 @@
             this.colGhiChu.FieldName = "GhiChu";
             this.colGhiChu.Name = "colGhiChu";
             this.colGhiChu.Visible = true;
-            this.colGhiChu.VisibleIndex = 4;
+            this.colGhiChu.VisibleIndex = 3;
+            // 
+            // rspnKichThuoc
+            // 
+            this.rspnKichThuoc.AutoHeight = false;
+            this.rspnKichThuoc.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.rspnKichThuoc.Name = "rspnKichThuoc";
             // 
             // layoutControlGroup1
             // 
@@ -203,7 +194,7 @@
             this.layoutControlItem1});
             this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup1.Name = "layoutControlGroup1";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(884, 358);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(884, 360);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // layoutControlItem1
@@ -211,7 +202,7 @@
             this.layoutControlItem1.Control = this.gctDanhSach;
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(864, 338);
+            this.layoutControlItem1.Size = new System.Drawing.Size(864, 340);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 
@@ -228,11 +219,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eSanPhamBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rpclr)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rspnKichThuoc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokDVT)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rspnKichThuoc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             this.ResumeLayout(false);
@@ -247,7 +237,6 @@
         private DevExpress.XtraGrid.GridControl gctDanhSach;
         private DevExpress.XtraGrid.Views.Grid.GridView grvDanhSach;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
-        private System.Windows.Forms.BindingSource eSanPhamBindingSource;
         private DevExpress.XtraGrid.Columns.GridColumn colKeyID;
         private DevExpress.XtraGrid.Columns.GridColumn colMa;
         private DevExpress.XtraGrid.Columns.GridColumn colTen;

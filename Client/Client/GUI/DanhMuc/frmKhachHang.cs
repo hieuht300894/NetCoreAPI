@@ -1,6 +1,7 @@
 ﻿using Client.BLL.Common;
 using Client.GUI.Common;
 using Client.Model;
+using Client.Module;
 using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
 using System;
@@ -25,7 +26,7 @@ namespace Client.GUI.DanhMuc
         {
             base.frmBase_Load(sender, e);
             LoadRepository();
-            LoadData(0);
+            LoadDataForm();
             CustomForm();
         }
 
@@ -36,7 +37,7 @@ namespace Client.GUI.DanhMuc
             IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>(await clsFunction.GetAll<eTinhThanh>("tinhthanh"));
             await RunMethodAsync(() => { rlokTinhThanh.DataSource = lstTinhThanh; });
         }
-        public async override void LoadData(object KeyID)
+        public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eKhachHang>();
             lstEntries = new BindingList<eKhachHang>(await clsFunction.GetAll<eKhachHang>("khachhang"));
@@ -50,6 +51,8 @@ namespace Client.GUI.DanhMuc
         }
         public async override Task<bool> SaveData()
         {
+            DateTime time = DateTime.Now.ServerNow();
+
             lstEdited.ToList().ForEach(x =>
             {
                 Loai gioiTinh = (Loai)rlokGioiTinh.GetDataSourceRowByKeyValue(x.IDGioiTinh) ?? new Loai();
@@ -57,6 +60,21 @@ namespace Client.GUI.DanhMuc
 
                 x.GioiTinh = gioiTinh.Ten;
                 x.TinhThanh = tinhThanh.Ten;
+
+                if (x.KeyID > 0)
+                {
+                    x.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
+                    x.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
+                    x.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
+                    x.NgayCapNhat = time;
+                }
+                else
+                {
+                    x.NguoiTao = clsGeneral.curPersonnel.KeyID;
+                    x.MaNguoiTao = clsGeneral.curPersonnel.Ma;
+                    x.TenNguoiTao = clsGeneral.curPersonnel.Ten;
+                    x.NgayTao = time;
+                }
             });
 
             bool chk = false;
@@ -74,14 +92,8 @@ namespace Client.GUI.DanhMuc
 
             gctDanhSach.MouseClick += gctDanhSach_MouseClick;
             grvDanhSach.RowUpdated += grvDanhSach_RowUpdated;
-            grvDanhSach.InitNewRow += grvDanhSach_InitNewRow;
         }
 
-        private void grvDanhSach_InitNewRow(object sender, DevExpress.XtraGrid.Views.Grid.InitNewRowEventArgs e)
-        {
-            GridView view = (GridView)sender;
-            view.SetRowCellValue(e.RowHandle, colKeyID, -lstEdited.Count);
-        }
         private void gctDanhSach_MouseClick(object sender, MouseEventArgs e)
         {
             ShowGridPopup(sender, e, true, false, true, true, true, true);

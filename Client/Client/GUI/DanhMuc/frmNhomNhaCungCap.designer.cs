@@ -29,48 +29,43 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNhomNhaCungCap));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.gctDanhSach = new DevExpress.XtraGrid.GridControl();
             this.grvDanhSach = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
-            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.eNhomNhaCungCapBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.colKeyID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colMa = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colTen = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colKichHoat = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colGhiChu = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
+            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eNhomNhaCungCapBindingSource)).BeginInit();
             this.SuspendLayout();
-         // 
+            // 
             // layoutControl1
             // 
             this.layoutControl1.Controls.Add(this.gctDanhSach);
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutControl1.Location = new System.Drawing.Point(0, 26);
+            this.layoutControl1.Location = new System.Drawing.Point(0, 24);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.layoutControlGroup1;
-            this.layoutControl1.Size = new System.Drawing.Size(884, 358);
+            this.layoutControl1.Size = new System.Drawing.Size(884, 360);
             this.layoutControl1.TabIndex = 4;
             this.layoutControl1.Text = "layoutControl1";
             // 
             // gctDanhSach
             // 
-            this.gctDanhSach.DataSource = this.eNhomNhaCungCapBindingSource;
             this.gctDanhSach.Location = new System.Drawing.Point(12, 12);
             this.gctDanhSach.MainView = this.grvDanhSach;
             this.gctDanhSach.MenuManager = this.barMenu;
             this.gctDanhSach.Name = "gctDanhSach";
-            this.gctDanhSach.Size = new System.Drawing.Size(860, 334);
+            this.gctDanhSach.Size = new System.Drawing.Size(860, 336);
             this.gctDanhSach.TabIndex = 4;
             this.gctDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvDanhSach});
@@ -85,30 +80,6 @@
             this.colGhiChu});
             this.grvDanhSach.GridControl = this.gctDanhSach;
             this.grvDanhSach.Name = "grvDanhSach";
-            // 
-            // layoutControlGroup1
-            // 
-            this.layoutControlGroup1.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
-            this.layoutControlGroup1.GroupBordersVisible = false;
-            this.layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this.layoutControlItem1});
-            this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlGroup1.Name = "layoutControlGroup1";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(884, 358);
-            this.layoutControlGroup1.TextVisible = false;
-            // 
-            // layoutControlItem1
-            // 
-            this.layoutControlItem1.Control = this.gctDanhSach;
-            this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
-            this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(864, 338);
-            this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
-            this.layoutControlItem1.TextVisible = false;
-            // 
-            // eNhomNhaCungCapBindingSource
-            // 
-            this.eNhomNhaCungCapBindingSource.DataSource = typeof(EntityModel.DataModel.eNhomNhaCungCap);
             // 
             // colKeyID
             // 
@@ -146,6 +117,26 @@
             this.colGhiChu.Visible = true;
             this.colGhiChu.VisibleIndex = 2;
             // 
+            // layoutControlGroup1
+            // 
+            this.layoutControlGroup1.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
+            this.layoutControlGroup1.GroupBordersVisible = false;
+            this.layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
+            this.layoutControlItem1});
+            this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlGroup1.Name = "layoutControlGroup1";
+            this.layoutControlGroup1.Size = new System.Drawing.Size(884, 360);
+            this.layoutControlGroup1.TextVisible = false;
+            // 
+            // layoutControlItem1
+            // 
+            this.layoutControlItem1.Control = this.gctDanhSach;
+            this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
+            this.layoutControlItem1.Name = "layoutControlItem1";
+            this.layoutControlItem1.Size = new System.Drawing.Size(864, 340);
+            this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem1.TextVisible = false;
+            // 
             // frmNhomNhaCungCap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -156,14 +147,12 @@
             this.Text = "Danh sách nhà cung cấp";
             this.Controls.SetChildIndex(this.layoutControl1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.barMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eNhomNhaCungCapBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -176,7 +165,6 @@
         private DevExpress.XtraGrid.GridControl gctDanhSach;
         private DevExpress.XtraGrid.Views.Grid.GridView grvDanhSach;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
-        private System.Windows.Forms.BindingSource eNhomNhaCungCapBindingSource;
         private DevExpress.XtraGrid.Columns.GridColumn colKeyID;
         private DevExpress.XtraGrid.Columns.GridColumn colMa;
         private DevExpress.XtraGrid.Columns.GridColumn colTen;

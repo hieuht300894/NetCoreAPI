@@ -24,7 +24,7 @@ namespace Client.GUI.DauKy
         {
             base.frmBase_Load(sender, e);
             LoadRepository();
-            LoadData(0);
+            LoadDataForm();
             CustomForm();
         }
 
@@ -33,7 +33,7 @@ namespace Client.GUI.DauKy
             IList<eKhachHang> lstKhachHang = await clsFunction.GetAll<eKhachHang>("khachhang");
             await RunMethodAsync(() => { rlokKhachHang.DataSource = lstKhachHang; });
         }
-        public async override void LoadData(object KeyID)
+        public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eSoDuDauKyKhachHang>();
             lstEntries = new BindingList<eSoDuDauKyKhachHang>(await clsFunction.GetAll<eSoDuDauKyKhachHang>("sodudaukykhachhang"));

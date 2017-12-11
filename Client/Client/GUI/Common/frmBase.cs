@@ -25,6 +25,7 @@ namespace Client.GUI.Common
         public string MsgAdd { get; set; } = "Thêm mới dữ liệu";
         public string MsgEdit { get; set; } = "Cập nhật dữ liệu";
         public string MsgDelete { get; set; } = "Xóa dữ liệu";
+
         public eFormType fType;
         public List<eFormType> fTypes;
         public List<ControlObject> lstChildControls = new List<ControlObject>();
@@ -286,7 +287,14 @@ namespace Client.GUI.Common
             {
                 bool res = await SaveData();
                 if (res)
+                {
+                    ShowAlert("Lưu dữ liệu thành công");
                     DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    ShowAlert("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+                }
             }
         }
         protected async virtual void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -296,7 +304,7 @@ namespace Client.GUI.Common
                 bool res = await SaveData();
                 if (res)
                 {
-                    clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    ShowAlert("Lưu dữ liệu thành công");
                     fType = eFormType.Add;
                     Text = MsgAdd;
                     RenewData();
@@ -304,7 +312,9 @@ namespace Client.GUI.Common
                     LoadDataForm();
                 }
                 else
-                    clsGeneral.showMessage("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+                {
+                    ShowAlert("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+                }
             }
         }
         protected virtual void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -318,7 +328,14 @@ namespace Client.GUI.Common
             {
                 bool res = await SaveData();
                 if (res)
+                {
+                    ShowAlert("Lưu dữ liệu thành công");
                     DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    ShowAlert("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+                }
             }
         }
         protected async virtual void bbpSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -328,7 +345,7 @@ namespace Client.GUI.Common
                 bool res = await SaveData();
                 if (res)
                 {
-                    clsGeneral.showMessage("Lưu dữ liệu thành công.");
+                    ShowAlert("Lưu dữ liệu thành công");
                     fType = eFormType.Add;
                     Text = MsgAdd;
                     RenewData();
@@ -336,7 +353,7 @@ namespace Client.GUI.Common
                     LoadDataForm();
                 }
                 else
-                    clsGeneral.showMessage("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
+                    ShowAlert("Lưu dữ liệu thất bại. Xin vui lòng thử lại.");
             }
         }
         protected virtual void bbpCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -618,7 +635,7 @@ namespace Client.GUI.Common
             };
             Invoke(action);
         }
-        public virtual void ShowAlert(string Title = "", string Text = "")
+        public virtual void ShowAlert(string Text = "", string Title = "Thông báo")
         {
             alertMsg.Show(this, Title, Text);
         }

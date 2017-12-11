@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Client.GUI.Common;
+using Client.Module;
 
 namespace Client.GUI.DanhMuc
 {
@@ -25,7 +26,7 @@ namespace Client.GUI.DanhMuc
         {
             base.frmBase_Load(sender, e);
             LoadRepository();
-            LoadData(0);
+            LoadDataForm();
             CustomForm();
         }
 
@@ -34,11 +35,11 @@ namespace Client.GUI.DanhMuc
             IList<eDonViTinh> lstDVT = await clsFunction.GetAll<eDonViTinh>("donvitinh");
             await RunMethodAsync(() => { rlokDVT.DataSource = lstDVT; });
         }
-        public async override void LoadData(object KeyID)
+        public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eSanPham>();
             lstEntries = new BindingList<eSanPham>(await clsFunction.GetAll<eSanPham>("sanpham"));
-       //     lstEntries.ToList().ForEach(x => { x.Color = Color.FromArgb(x.ColorHex); });
+            //     lstEntries.ToList().ForEach(x => { x.Color = Color.FromArgb(x.ColorHex); });
 
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
@@ -50,6 +51,8 @@ namespace Client.GUI.DanhMuc
         }
         public async override Task<bool> SaveData()
         {
+            DateTime time = DateTime.Now.ServerNow();
+
             lstEdited.ToList().ForEach(x =>
             {
                 eDonViTinh dvt = (eDonViTinh)rlokDVT.GetDataSourceRowByKeyValue(x.IDDonViTinh) ?? new eDonViTinh();
@@ -57,9 +60,23 @@ namespace Client.GUI.DanhMuc
                 x.TenDonViTinh = dvt.Ten;
 
                 x.MauSac = rpclr.ColorText.ToString();
-               // x.ColorHex = x.Color.ToArgb();
-            });
+                // x.ColorHex = x.Color.ToArgb();
 
+                if (x.KeyID > 0)
+                {
+                    x.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
+                    x.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
+                    x.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
+                    x.NgayCapNhat = time;
+                }
+                else
+                {
+                    x.NguoiTao = clsGeneral.curPersonnel.KeyID;
+                    x.MaNguoiTao = clsGeneral.curPersonnel.Ma;
+                    x.TenNguoiTao = clsGeneral.curPersonnel.Ten;
+                    x.NgayTao = time;
+                }
+            });
 
             bool chk = false;
             chk = await clsFunction.Post("sanpham", lstEdited.ToList());
@@ -74,14 +91,8 @@ namespace Client.GUI.DanhMuc
 
             gctDanhSach.MouseClick += gctDanhSach_MouseClick;
             grvDanhSach.RowUpdated += grvDanhSach_RowUpdated;
-            grvDanhSach.InitNewRow += grvDanhSach_InitNewRow;
         }
 
-        private void grvDanhSach_InitNewRow(object sender, DevExpress.XtraGrid.Views.Grid.InitNewRowEventArgs e)
-        {
-            GridView view = (GridView)sender;
-            view.SetRowCellValue(e.RowHandle, colKeyID, -lstEdited.Count);   
-        }
         private void gctDanhSach_MouseClick(object sender, MouseEventArgs e)
         {
             ShowGridPopup(sender, e, true, false, true, true, true, true);

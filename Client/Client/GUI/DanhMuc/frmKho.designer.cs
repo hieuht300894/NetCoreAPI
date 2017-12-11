@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.gctDanhSach = new DevExpress.XtraGrid.GridControl();
-            this.eKhoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.grvDanhSach = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colKeyID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colMa = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -44,7 +43,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eKhoBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
@@ -63,7 +61,6 @@
             // 
             // gctDanhSach
             // 
-            this.gctDanhSach.DataSource = this.eKhoBindingSource;
             this.gctDanhSach.Location = new System.Drawing.Point(12, 12);
             this.gctDanhSach.MainView = this.grvDanhSach;
             this.gctDanhSach.MenuManager = this.barMenu;
@@ -72,10 +69,6 @@
             this.gctDanhSach.TabIndex = 4;
             this.gctDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvDanhSach});
-            // 
-            // eKhoBindingSource
-            // 
-            this.eKhoBindingSource.DataSource = typeof(EntityModel.DataModel.eKho);
             // 
             // grvDanhSach
             // 
@@ -158,7 +151,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eKhoBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
@@ -172,7 +164,6 @@
         private DevExpress.XtraLayout.LayoutControl layoutControl1;
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraGrid.GridControl gctDanhSach;
-        private System.Windows.Forms.BindingSource eKhoBindingSource;
         private DevExpress.XtraGrid.Views.Grid.GridView grvDanhSach;
         private DevExpress.XtraGrid.Columns.GridColumn colKeyID;
         private DevExpress.XtraGrid.Columns.GridColumn colMa;

@@ -1,5 +1,6 @@
 ﻿using Client.BLL.Common;
 using Client.GUI.Common;
+using Client.Module;
 using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
 using System;
@@ -22,11 +23,11 @@ namespace Client.GUI.DanhMuc
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
-            LoadData(0);
+            LoadDataForm();
             CustomForm();
         }
 
-        public async override void LoadData(object KeyID)
+        public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eDonViTinh>();
             lstEntries = new BindingList<eDonViTinh>(await clsFunction.GetAll<eDonViTinh>("donvitinh"));
@@ -40,8 +41,27 @@ namespace Client.GUI.DanhMuc
         }
         public async override Task<bool> SaveData()
         {
+            DateTime time = DateTime.Now.ServerNow();
+
+            lstEdited.ToList().ForEach(x =>
+            {
+                if (x.KeyID > 0)
+                {
+                    x.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
+                    x.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
+                    x.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
+                    x.NgayCapNhat = time;
+                }
+                else
+                {
+                    x.NguoiTao = clsGeneral.curPersonnel.KeyID;
+                    x.MaNguoiTao = clsGeneral.curPersonnel.Ma;
+                    x.TenNguoiTao = clsGeneral.curPersonnel.Ten;
+                    x.NgayTao = time;
+                }
+            });
+
             bool chk = false;
-            await RunMethodAsync(() => { return false; });
             chk = await clsFunction.Post("donvitinh", lstEdited.ToList());
             return chk;
         }
@@ -51,14 +71,8 @@ namespace Client.GUI.DanhMuc
 
             gctDanhSach.MouseClick += gctDanhSach_MouseClick;
             grvDanhSach.RowUpdated += grvDanhSach_RowUpdated;
-            grvDanhSach.InitNewRow += grvDanhSach_InitNewRow;
         }
 
-        private void grvDanhSach_InitNewRow(object sender, DevExpress.XtraGrid.Views.Grid.InitNewRowEventArgs e)
-        {
-            GridView view = (GridView)sender;
-            view.SetRowCellValue(e.RowHandle, colKeyID, -lstEdited.Count);
-        }
         private void gctDanhSach_MouseClick(object sender, MouseEventArgs e)
         {
             ShowGridPopup(sender, e, true, false, true, true, true, true);

@@ -29,20 +29,21 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmKhachHang));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.gctDanhSach = new DevExpress.XtraGrid.GridControl();
-            this.eKhachHangBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.grvDanhSach = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colKeyID = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colMa = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colHo = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colTen = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colIDGioiTinh = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.rlokGioiTinh = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.colGioiTinh = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colNgaySinh = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.rdteNgay = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
             this.colDiaChi = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colIDTinhThanh = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.rlokTinhThanh = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.colTinhThanh = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colSoDienThoai = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colEmail = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -50,24 +51,18 @@
             this.colHinhAnh = new DevExpress.XtraGrid.Columns.GridColumn();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.rlokGioiTinh = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
-            this.rdteNgay = new DevExpress.XtraEditors.Repository.RepositoryItemDateEdit();
-            this.rlokTinhThanh = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eKhachHangBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokGioiTinh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rdteNgay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rdteNgay.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokTinhThanh)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             this.SuspendLayout();
-           
             // 
             // layoutControl1
             // 
@@ -82,7 +77,6 @@
             // 
             // gctDanhSach
             // 
-            this.gctDanhSach.DataSource = this.eKhachHangBindingSource;
             this.gctDanhSach.Location = new System.Drawing.Point(12, 12);
             this.gctDanhSach.MainView = this.grvDanhSach;
             this.gctDanhSach.MenuManager = this.barMenu;
@@ -95,10 +89,6 @@
             this.gctDanhSach.TabIndex = 4;
             this.gctDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvDanhSach});
-            // 
-            // eKhachHangBindingSource
-            // 
-            this.eKhachHangBindingSource.DataSource = typeof(EntityModel.DataModel.eKhachHang);
             // 
             // grvDanhSach
             // 
@@ -136,8 +126,8 @@
             // 
             // colHo
             // 
-            this.colHo.Caption = "Họ";
-            this.colHo.FieldName = "Ho";
+            this.colHo.Caption = "Họ tên";
+            this.colHo.FieldName = "Ten";
             this.colHo.Name = "colHo";
             this.colHo.Visible = true;
             this.colHo.VisibleIndex = 1;
@@ -147,8 +137,6 @@
             this.colTen.Caption = "Tên";
             this.colTen.FieldName = "Ten";
             this.colTen.Name = "colTen";
-            this.colTen.Visible = true;
-            this.colTen.VisibleIndex = 2;
             // 
             // colIDGioiTinh
             // 
@@ -157,7 +145,15 @@
             this.colIDGioiTinh.FieldName = "IDGioiTinh";
             this.colIDGioiTinh.Name = "colIDGioiTinh";
             this.colIDGioiTinh.Visible = true;
-            this.colIDGioiTinh.VisibleIndex = 3;
+            this.colIDGioiTinh.VisibleIndex = 2;
+            // 
+            // rlokGioiTinh
+            // 
+            this.rlokGioiTinh.AutoHeight = false;
+            this.rlokGioiTinh.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.rlokGioiTinh.Name = "rlokGioiTinh";
+            this.rlokGioiTinh.NullText = "";
             // 
             // colGioiTinh
             // 
@@ -172,7 +168,16 @@
             this.colNgaySinh.FieldName = "NgaySinh";
             this.colNgaySinh.Name = "colNgaySinh";
             this.colNgaySinh.Visible = true;
-            this.colNgaySinh.VisibleIndex = 4;
+            this.colNgaySinh.VisibleIndex = 3;
+            // 
+            // rdteNgay
+            // 
+            this.rdteNgay.AutoHeight = false;
+            this.rdteNgay.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.rdteNgay.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.rdteNgay.Name = "rdteNgay";
             // 
             // colDiaChi
             // 
@@ -180,7 +185,7 @@
             this.colDiaChi.FieldName = "DiaChi";
             this.colDiaChi.Name = "colDiaChi";
             this.colDiaChi.Visible = true;
-            this.colDiaChi.VisibleIndex = 5;
+            this.colDiaChi.VisibleIndex = 4;
             // 
             // colIDTinhThanh
             // 
@@ -189,7 +194,15 @@
             this.colIDTinhThanh.FieldName = "IDTinhThanh";
             this.colIDTinhThanh.Name = "colIDTinhThanh";
             this.colIDTinhThanh.Visible = true;
-            this.colIDTinhThanh.VisibleIndex = 6;
+            this.colIDTinhThanh.VisibleIndex = 5;
+            // 
+            // rlokTinhThanh
+            // 
+            this.rlokTinhThanh.AutoHeight = false;
+            this.rlokTinhThanh.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.rlokTinhThanh.Name = "rlokTinhThanh";
+            this.rlokTinhThanh.NullText = "";
             // 
             // colTinhThanh
             // 
@@ -203,14 +216,14 @@
             this.colSoDienThoai.FieldName = "SoDienThoai";
             this.colSoDienThoai.Name = "colSoDienThoai";
             this.colSoDienThoai.Visible = true;
-            this.colSoDienThoai.VisibleIndex = 7;
+            this.colSoDienThoai.VisibleIndex = 6;
             // 
             // colEmail
             // 
             this.colEmail.FieldName = "Email";
             this.colEmail.Name = "colEmail";
             this.colEmail.Visible = true;
-            this.colEmail.VisibleIndex = 8;
+            this.colEmail.VisibleIndex = 7;
             // 
             // colGhiChu
             // 
@@ -218,7 +231,7 @@
             this.colGhiChu.FieldName = "GhiChu";
             this.colGhiChu.Name = "colGhiChu";
             this.colGhiChu.Visible = true;
-            this.colGhiChu.VisibleIndex = 9;
+            this.colGhiChu.VisibleIndex = 8;
             // 
             // colHinhAnh
             // 
@@ -246,31 +259,6 @@
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 
-            // rlokGioiTinh
-            // 
-            this.rlokGioiTinh.AutoHeight = false;
-            this.rlokGioiTinh.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.rlokGioiTinh.Name = "rlokGioiTinh";
-            this.rlokGioiTinh.NullText = "";
-            // 
-            // rdteNgay
-            // 
-            this.rdteNgay.AutoHeight = false;
-            this.rdteNgay.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.rdteNgay.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.rdteNgay.Name = "rdteNgay";
-            // 
-            // rlokTinhThanh
-            // 
-            this.rlokTinhThanh.AutoHeight = false;
-            this.rlokTinhThanh.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.rlokTinhThanh.Name = "rlokTinhThanh";
-            this.rlokTinhThanh.NullText = "";
-            // 
             // frmKhachHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -282,18 +270,16 @@
             this.Text = "Danh sách khách hàng";
             this.Controls.SetChildIndex(this.layoutControl1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.barMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eKhachHangBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokGioiTinh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rdteNgay.CalendarTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rdteNgay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rlokTinhThanh)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -304,7 +290,6 @@
         private DevExpress.XtraLayout.LayoutControl layoutControl1;
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraGrid.GridControl gctDanhSach;
-        private System.Windows.Forms.BindingSource eKhachHangBindingSource;
         private DevExpress.XtraGrid.Views.Grid.GridView grvDanhSach;
         private DevExpress.XtraGrid.Columns.GridColumn colKeyID;
         private DevExpress.XtraGrid.Columns.GridColumn colMa;

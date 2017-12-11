@@ -24,7 +24,7 @@ namespace Client.GUI.DauKy
         {
             base.frmBase_Load(sender, e);
             LoadRepository();
-            LoadData(0);
+            LoadDataForm();
             CustomForm();
         }
 
@@ -36,10 +36,10 @@ namespace Client.GUI.DauKy
             IList<eKho> lstKho = await clsFunction.GetAll<eKho>("");
             await RunMethodAsync(() => { rlokKho.DataSource = lstKho; });
         }
-        public async override void LoadData(object KeyID)
+        public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eTonKhoDauKy>();
-            lstEntries = new BindingList<eTonKhoDauKy>(await clsFunction.GetAll<eTonKhoDauKy>(""));
+            lstEntries = new BindingList<eTonKhoDauKy>(await clsFunction.GetAll<eTonKhoDauKy>("tonkhodauky"));
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -66,7 +66,7 @@ namespace Client.GUI.DauKy
             });
 
             bool chk = false;
-            chk = await clsFunction.Post("", lstEdited.ToList());
+            chk = await clsFunction.Post("tonkhodauky", lstEdited.ToList());
             return chk;
         }
         public override void CustomForm()
