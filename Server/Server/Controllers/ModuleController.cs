@@ -15,7 +15,7 @@ using EntityModel.DataModel;
 namespace Server.Controllers
 {
     [Route("API/[controller]")]
-    public class InitDataController : Controller
+    public class ModuleController : Controller
     {
         [Route("DataSeed")]
         public async Task<IEnumerable<IActionResult>> DataSeed()
@@ -28,6 +28,12 @@ namespace Server.Controllers
             lstResult.Add(await InitDonViTinh());
 
             return lstResult;
+        }
+
+        [Route("TimeServer")]
+        public async Task<DateTime> TimeServer()
+        {
+            return await Task.Factory.StartNew(() => { return DateTime.Now; });
         }
 
         async Task<IActionResult> InitAgency()
