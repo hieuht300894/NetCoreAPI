@@ -65,6 +65,8 @@
     <Compile Include="DataModel\eTraHangKhachHang.cs" />
     <Compile Include="DataModel\eTraHangNhaCungCap.cs" />
     <Compile Include="DataModel\eXuatHangKhachHang.cs" />
+    <Compile Include="General\Detail.cs" />
+    <Compile Include="General\Master.cs" />
     <Compile Include="DataModel\xAccount.cs" />
     <Compile Include="DataModel\xAgency.cs" />
     <Compile Include="DataModel\xAppConfig.cs" />
