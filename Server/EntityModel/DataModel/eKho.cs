@@ -1,18 +1,10 @@
 ﻿
+using EntityModel.General;
+
 namespace EntityModel.DataModel
 {
 
-    public class eKho
+    public class eKho : Master
     {
-
-        public int KeyID { get; set; }
-
-        public string Ma { get; set; }
-
-        public string Ten { get; set; }
-
-        public int TrangThai { get; set; }
-
-        public string GhiChu { get; set; }
     }
 }
