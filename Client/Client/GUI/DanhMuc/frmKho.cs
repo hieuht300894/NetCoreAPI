@@ -53,7 +53,7 @@ namespace Client.GUI.DanhMuc
 
             gctDanhSach.MouseClick += gctDanhSach_MouseClick;
             grvDanhSach.RowUpdated += grvDanhSach_RowUpdated;
-            grvDanhSach.InitNewRow += grvDanhSach_InitNewRow;
+            //grvDanhSach.InitNewRow += grvDanhSach_InitNewRow;
         }
         public async override void DeleteEntry()
         {

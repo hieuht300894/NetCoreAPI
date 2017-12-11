@@ -141,11 +141,36 @@
     <Compile Include="GUI\DanhMuc\frmTinhThanh.Designer.cs">
       <DependentUpon>frmTinhThanh.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\DauKy\frmSoDuDauKyKhachHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DauKy\frmSoDuDauKyKhachHang.Designer.cs">
+      <DependentUpon>frmSoDuDauKyKhachHang.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DauKy\frmSoDuDauKyNhaCungCap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DauKy\frmSoDuDauKyNhaCungCap.Designer.cs">
+      <DependentUpon>frmSoDuDauKyNhaCungCap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DauKy\frmTonKhoDauKy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DauKy\frmTonKhoDauKy.Designer.cs">
+      <DependentUpon>frmTonKhoDauKy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\NhapHang\frmNhapHangNhaCungCap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\NhapHang\frmNhapHangNhaCungCap.Designer.cs">
+      <DependentUpon>frmNhapHangNhaCungCap.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\clsModel.cs" />
     <Compile Include="Module\clsCallForm.cs" />
     <Compile Include="Module\clsFormatControl.cs" />
     <Compile Include="Module\clsGeneral.cs" />
     <Compile Include="Module\ModuleHelper.cs" />
+    <Compile Include="Module\TempHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\Common\frmBase.resx">
@@ -186,6 +211,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\DanhMuc\frmTinhThanh.resx">
       <DependentUpon>frmTinhThanh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DauKy\frmSoDuDauKyKhachHang.resx">
+      <DependentUpon>frmSoDuDauKyKhachHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DauKy\frmSoDuDauKyNhaCungCap.resx">
+      <DependentUpon>frmSoDuDauKyNhaCungCap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DauKy\frmTonKhoDauKy.resx">
+      <DependentUpon>frmTonKhoDauKy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\NhapHang\frmNhapHangNhaCungCap.resx">
+      <DependentUpon>frmNhapHangNhaCungCap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraGrid.Columns;
+using System.Reflection;
 
 namespace Client
 {
@@ -35,69 +36,28 @@ namespace Client
 
             gct1.Format();
             grv1.CellValueChanged += Grv1_CellValueChanged;
+
+            EventInfo eInfo = grv1.GetType().GetEvent("CellValueChanged");
+            MethodInfo mInfo = grv1.GetType().GetMethods().FirstOrDefault(x => x.Name.Contains("CellValueChanged"));
+            //mInfo.Invoke(grv1, new object[] { new CellValueChangedEventArgs(0, new GridColumn(), 0) });
+            Delegate del = Delegate.CreateDelegate(typeof(CellMergeEventHandler), mInfo);
+            eInfo.RemoveEventHandler(grv1, del);
+
         }
 
         private void Grv1_CellValueChanged(object sender, CellValueChangedEventArgs e)
         {
         }
 
-        private void simpleButton1_Click(object sender, EventArgs e)
+        public IEnumerable<MethodInfo> GetSubscribedMethods(object obj)
         {
-            //List<MyGridCell> cells = new List<MyGridCell>();
-            //grv1.GetSelectedCells().ToList().ForEach(x =>
-            //{
-            //    cells.Add(new MyGridCell()
-            //    {
-            //        FormName = Name,
-            //        GridName = grv1.Name,
-            //        ColumnName = x.Column.Name,
-            //        RowHandle = x.RowHandle,
-            //        Value = grv1.GetRowCellValue(x.RowHandle, x.Column)
-            //    });
-            //});
+            Func<EventInfo, FieldInfo> ei2fi = ei => obj.GetType().GetField(ei.Name, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
 
-            //Clipboard.SetData("ABC", cells);
-        }
-
-        private void simpleButton2_Click(object sender, EventArgs e)
-        {
-            //var item = Clipboard.GetData("ABC");
-            //List<MyGridCell> cells = new List<MyGridCell>();
-            //if (item != null)
-            //    cells = (List<MyGridCell>)item;
-
-            //var qColumn = cells.
-            //     GroupBy(x => new
-            //     {
-            //         x.ColumnName
-            //     }).
-            //     Select(x => new
-            //     {
-            //         ColumnName = x.Key.ColumnName,
-            //         Cells = x.ToList(),
-            //         Start = x.Select(y => y.RowHandle).DefaultIfEmpty().Min(),
-            //         Total = x.Select(y => y.RowHandle).Count()
-            //     });
-
-            //int CurrentRow = grv1.FocusedRowHandle > 0 ? grv1.FocusedRowHandle : grv1.GetRowCount();
-            //int MinRow = cells.Select(y => y.RowHandle).DefaultIfEmpty().Min();
-            //int MaxRow = cells.Select(y => y.RowHandle).DefaultIfEmpty().Max();
-            //int TotalRow = MaxRow - MinRow + 1;
-            //grv1.AddNewItemRow(CurrentRow + TotalRow);
-
-            //foreach (var r in qColumn)
-            //{
-            //    foreach (MyGridCell cell in r.Cells)
-            //    {
-            //        GridColumn column = grv1.Columns.FirstOrDefault(x => x.Name.Equals(cell.ColumnName));
-            //        if (column != null)
-            //        {
-            //            int rowHandle = CurrentRow + cell.RowHandle - MinRow;
-            //            grv1.SetRowCellValue(rowHandle, column, cell.Value);//Hiện tại + vị trí bắt đầu cửa cell - vị trí bắt đầu của row
-            //            grv1.SelectCell(rowHandle, column);
-            //        }
-            //    }
-            //}
+            return from eventInfo in obj.GetType().GetEvents()
+                   let eventFieldInfo = ei2fi(eventInfo)
+                   let eventFieldValue = (Delegate)eventFieldInfo.GetValue(obj)
+                   from subscribedDelegate in eventFieldValue.GetInvocationList()
+                   select subscribedDelegate.Method;
         }
     }
 

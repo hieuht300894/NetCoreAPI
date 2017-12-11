@@ -481,7 +481,6 @@ namespace Client.Module
 
             grvMain.FormatColumn();
 
-
             grvMain.KeyDown += grvMain_KeyDown;
             grvMain.RowCountChanged += grvMain_RowCountChanged;
             grvMain.DataSourceChanged += grvMain_DataSourceChanged;
@@ -489,14 +488,7 @@ namespace Client.Module
             grvMain.ShowingEditor += (sender, e) => grvMain_ShowingEditor(sender, e);
             grvMain.VisibleColumns.ToList().ForEach(col => col.RealColumnEdit.KeyDown += realColumnEdit_KeyDown);
             grvMain.InvalidRowException += grvMain_InvalidRowException;
-
-            //EventInfo eInfo = grvMain.GetType().GetEvent("CellValueChanged");
-            //Delegate delRemove = Delegate.CreateDelegate(eInfo.EventHandlerType, eInfo.GetRemoveMethod());
-            //Delegate delAdd = Delegate.CreateDelegate(typeof(CellValueChangedEventHandler), eInfo.AddMethod);
-
-            //eInfo.RemoveEventHandler(grvMain, delRemove);
         }
-
 
         public static void SaveLayout(this GridView grvMain, XtraForm frmMain)
         {
@@ -515,14 +507,14 @@ namespace Client.Module
                 foreach (GridColumn col in grvMain.Columns)
                 {
                     xDisplay dis = new xDisplay();
-                    dis.ParentName = frmMain.Name;
-                    dis.Group = string.Empty;
-                    dis.Showing = col.Visible;
-                    dis.ColumnName = col.Name;
-                    dis.FieldName = col.FieldName;
-                    dis.EnableEdit = col.OptionsColumn.AllowEdit;
-                    dis.VisibleIndex = col.VisibleIndex;
-                    dis.Caption = col.Caption;
+                    //dis.ParentName = frmMain.Name;
+                    //dis.Group = string.Empty;
+                    //dis.Showing = col.Visible;
+                    //dis.ColumnName = col.Name;
+                    //dis.FieldName = col.FieldName;
+                    //dis.EnableEdit = col.OptionsColumn.AllowEdit;
+                    //dis.VisibleIndex = col.VisibleIndex;
+                    //dis.Caption = col.Caption;
                     lstDisplays.Add(dis);
                 }
 
@@ -546,21 +538,21 @@ namespace Client.Module
                     using (StreamReader sr = new StreamReader(path))
                     {
                         grvMain.BeginUpdate();
-                        List<xDisplay> lstDisplays = sr.ReadToEnd().DeserializeXML<xDisplay>().OrderByDescending(x => x.VisibleIndex).ToList();
+                        //List<xDisplay> lstDisplays = sr.ReadToEnd().DeserializeXML<xDisplay>().OrderByDescending(x => x.VisibleIndex).ToList();
 
-                        foreach (GridColumn col in grvMain.Columns)
-                        {
-                            xDisplay dis = lstDisplays.Find(x => x.ColumnName.Equals(col.Name)) ?? new xDisplay() { Showing = false };
-                            col.Visible = dis.Showing;
-                        }
+                        //foreach (GridColumn col in grvMain.Columns)
+                        //{
+                        //    xDisplay dis = lstDisplays.Find(x => x.ColumnName.Equals(col.Name)) ?? new xDisplay() { Showing = false };
+                        //    col.Visible = dis.Showing;
+                        //}
 
-                        List<xDisplay> lstVisibles = lstDisplays.Where(x => x.VisibleIndex >= 0).OrderBy(x => x.VisibleIndex).ToList();
+                        //List<xDisplay> lstVisibles = lstDisplays.Where(x => x.VisibleIndex >= 0).OrderBy(x => x.VisibleIndex).ToList();
 
-                        foreach (xDisplay dis in lstVisibles)
-                        {
-                            GridColumn col = grvMain.Columns.FirstOrDefault(x => x.Name.Equals(dis.ColumnName));
-                            col.VisibleIndex = dis.VisibleIndex;
-                        }
+                        //foreach (xDisplay dis in lstVisibles)
+                        //{
+                        //    GridColumn col = grvMain.Columns.FirstOrDefault(x => x.Name.Equals(dis.ColumnName));
+                        //    col.VisibleIndex = dis.VisibleIndex;
+                        //}
 
                         grvMain.EndUpdate();
                     }
@@ -624,37 +616,29 @@ namespace Client.Module
             grvMain.RefreshData();
             grvMain.BestFitColumns();
 
-            grvMain.TopRowChanged += grv_TopRowChanged;
+            //grvMain.TopRowChanged += grv_TopRowChanged;
         }
 
         static void Copy(this GridView grvMain)
         {
-            XtraForm frmMain = (XtraForm)grvMain.GridControl.FindForm();
+            TempHelper.ListCell = new List<MyGridCell>();
 
             List<MyGridCell> cells = new List<MyGridCell>();
             grvMain.GetSelectedCells().ToList().ForEach(x =>
             {
                 cells.Add(new MyGridCell()
                 {
-                    frmMain = frmMain,
-                    grvMain = grvMain,
                     Cell = x,
                     Value = grvMain.GetRowCellValue(x.RowHandle, x.Column)
                 });
             });
 
-            Clipboard.Clear();
             TempHelper.ListCell.AddRange(cells);
         }
 
         static void Paste(this GridView grvMain)
         {
-            XtraForm frmMain = (XtraForm)grvMain.GridControl.FindForm();
-
-            List<MyGridCell> cells = new List<MyGridCell>(TempHelper.ListCell.Where(x => x.frmMain.Name.Equals(frmMain.Name) && x.grvMain.Name.Equals(grvMain.Name)));
-            cells.ForEach(x => TempHelper.ListCell.Remove(x));
-
-            var qColumn = cells.
+            var qColumn = TempHelper.ListCell.
                  GroupBy(x => new
                  {
                      ColumnName = x.Cell.Column.Name
@@ -668,8 +652,8 @@ namespace Client.Module
                  });
 
             int CurrentRow = grvMain.FocusedRowHandle > 0 ? grvMain.FocusedRowHandle : grvMain.GetRowCount();
-            int MinRow = cells.Select(y => y.Cell.RowHandle).DefaultIfEmpty().Min();
-            int MaxRow = cells.Select(y => y.Cell.RowHandle).DefaultIfEmpty().Max();
+            int MinRow = TempHelper.ListCell.Select(y => y.Cell.RowHandle).DefaultIfEmpty().Min();
+            int MaxRow = TempHelper.ListCell.Select(y => y.Cell.RowHandle).DefaultIfEmpty().Max();
             int TotalRow = MaxRow - MinRow + 1;
             grvMain.AddNewItemRow(CurrentRow + TotalRow);
             grvMain.FocusedRowHandle = CurrentRow;

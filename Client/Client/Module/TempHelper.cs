@@ -16,8 +16,6 @@ namespace Client.Module
 
     public class MyGridCell
     {
-        public XtraForm frmMain { get; set; }
-        public GridView grvMain { get; set; }
         public GridCell Cell { get; set; }
         public Object Value { get; set; }
     }
