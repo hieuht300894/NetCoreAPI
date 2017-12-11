@@ -1,6 +1,8 @@
-﻿namespace EntityModel.DataModel
+﻿using EntityModel.General;
+
+namespace EntityModel.DataModel
 {
-    public class eTraHangKhachHang
+    public class eTraHangKhachHang : Master
     {
     }
 }

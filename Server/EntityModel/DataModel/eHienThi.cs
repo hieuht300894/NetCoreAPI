@@ -1,10 +1,8 @@
-﻿
+﻿using EntityModel.General;
+
 namespace EntityModel.DataModel
 {
-
-    public class eHienThi
+    public class eHienThi : Master
     {
-
-        public int KeyID { get; set; }
     }
 }

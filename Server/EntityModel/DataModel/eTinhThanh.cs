@@ -1,11 +1,9 @@
-﻿
+﻿using EntityModel.General;
+
 namespace EntityModel.DataModel
 {
-    public class eTinhThanh
+    public class eTinhThanh : Master
     {
-        public int KeyID { get; set; }
-        public string Ma { get; set; }
-        public string Ten { get; set; }
         public int IDLoai { get; set; }
         public string Loai { get; set; }
         public string DienGiai { get; set; }

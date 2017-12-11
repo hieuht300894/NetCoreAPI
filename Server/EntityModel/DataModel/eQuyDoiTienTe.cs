@@ -1,9 +1,9 @@
-﻿
+﻿using EntityModel.General;
+
 namespace EntityModel.DataModel
 {
-    public class eQuyDoiTienTe
+    public class eQuyDoiTienTe : Master
     {
-        public int KeyID { get; set; }
         public int IDTienTe { get; set; }
         public string TienTe { get; set; }
         public int IDTienTeQuyDoi { get; set; }
