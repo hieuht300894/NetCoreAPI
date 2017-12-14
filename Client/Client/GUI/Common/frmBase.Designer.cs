@@ -43,11 +43,12 @@
             this.btnRefresh = new DevExpress.XtraBars.BarButtonItem();
             this.btnPrintPreview = new DevExpress.XtraBars.BarButtonItem();
             this.btnExportExcel = new DevExpress.XtraBars.BarButtonItem();
-            this.barBottom = new DevExpress.XtraBars.Bar();
+            this.btnImportExcel = new DevExpress.XtraBars.BarButtonItem();
+            this.btnFitComlum = new DevExpress.XtraBars.BarButtonItem();
             this.betPercent = new DevExpress.XtraBars.BarEditItem();
             this.rpbPercent = new DevExpress.XtraEditors.Repository.RepositoryItemProgressBar();
-            this.btnFitComlum = new DevExpress.XtraBars.BarButtonItem();
             this.btnLoading = new DevExpress.XtraBars.BarButtonItem();
+            this.barBottom = new DevExpress.XtraBars.Bar();
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -65,7 +66,6 @@
             this.bbpExportExcel = new DevExpress.XtraBars.BarButtonItem();
             this.popGridMenu = new DevExpress.XtraBars.PopupMenu(this.components);
             this.alertMsg = new DevExpress.XtraBars.Alerter.AlertControl(this.components);
-            this.btnImportExcel = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
@@ -145,7 +145,10 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.btnRefresh, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnPrintPreview, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnExportExcel),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnImportExcel)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnImportExcel),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnFitComlum, true),
+            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.betPercent, "", false, true, true, 138),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnLoading)});
             this.barTop.OptionsBar.DrawDragBorder = false;
             this.barTop.OptionsBar.MultiLine = true;
             this.barTop.OptionsBar.UseWholeRow = true;
@@ -229,38 +232,13 @@
                 | System.Windows.Forms.Keys.E));
             this.btnExportExcel.Name = "btnExportExcel";
             // 
-            // barBottom
+            // btnImportExcel
             // 
-            this.barBottom.BarName = "Bottom Menu";
-            this.barBottom.CanDockStyle = DevExpress.XtraBars.BarCanDockStyle.Bottom;
-            this.barBottom.DockCol = 0;
-            this.barBottom.DockRow = 0;
-            this.barBottom.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
-            this.barBottom.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
-            new DevExpress.XtraBars.LinkPersistInfo(DevExpress.XtraBars.BarLinkUserDefines.Width, this.betPercent, "", true, true, true, 138),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnFitComlum),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnLoading)});
-            this.barBottom.OptionsBar.DrawBorder = false;
-            this.barBottom.OptionsBar.DrawDragBorder = false;
-            this.barBottom.OptionsBar.MultiLine = true;
-            this.barBottom.OptionsBar.UseWholeRow = true;
-            this.barBottom.Text = "Bottom Menu";
-            // 
-            // betPercent
-            // 
-            this.betPercent.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
-            this.betPercent.Edit = this.rpbPercent;
-            this.betPercent.EditValue = 0;
-            this.betPercent.EditWidth = 0;
-            this.betPercent.Id = 20;
-            this.betPercent.Name = "betPercent";
-            // 
-            // rpbPercent
-            // 
-            this.rpbPercent.Name = "rpbPercent";
-            this.rpbPercent.ReadOnly = true;
-            this.rpbPercent.ShowTitle = true;
-            this.rpbPercent.Step = 1;
+            this.btnImportExcel.Caption = "Import Excel";
+            this.btnImportExcel.Id = 31;
+            this.btnImportExcel.ImageOptions.Image = global::Client.Properties.Resources.Grid_16x16;
+            this.btnImportExcel.Name = "btnImportExcel";
+            this.btnImportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // btnFitComlum
             // 
@@ -271,6 +249,23 @@
             this.btnFitComlum.Name = "btnFitComlum";
             this.btnFitComlum.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnFitComlum_ItemClick);
             // 
+            // betPercent
+            // 
+            this.betPercent.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
+            this.betPercent.Edit = this.rpbPercent;
+            this.betPercent.EditValue = 0;
+            this.betPercent.EditWidth = 0;
+            this.betPercent.Id = 20;
+            this.betPercent.Name = "betPercent";
+            this.betPercent.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            // 
+            // rpbPercent
+            // 
+            this.rpbPercent.Name = "rpbPercent";
+            this.rpbPercent.ReadOnly = true;
+            this.rpbPercent.ShowTitle = true;
+            this.rpbPercent.Step = 1;
+            // 
             // btnLoading
             // 
             this.btnLoading.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
@@ -278,7 +273,21 @@
             this.btnLoading.Id = 29;
             this.btnLoading.ImageOptions.Image = global::Client.Properties.Resources.Stop_16x16;
             this.btnLoading.Name = "btnLoading";
+            this.btnLoading.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             this.btnLoading.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnLoading_ItemClick);
+            // 
+            // barBottom
+            // 
+            this.barBottom.BarName = "Bottom Menu";
+            this.barBottom.CanDockStyle = DevExpress.XtraBars.BarCanDockStyle.Bottom;
+            this.barBottom.DockCol = 0;
+            this.barBottom.DockRow = 0;
+            this.barBottom.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
+            this.barBottom.OptionsBar.DrawBorder = false;
+            this.barBottom.OptionsBar.DrawDragBorder = false;
+            this.barBottom.OptionsBar.MultiLine = true;
+            this.barBottom.OptionsBar.UseWholeRow = true;
+            this.barBottom.Text = "Bottom Menu";
             // 
             // barDockControlTop
             // 
@@ -292,9 +301,9 @@
             // 
             this.barDockControlBottom.CausesValidation = false;
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.barDockControlBottom.Location = new System.Drawing.Point(0, 384);
+            this.barDockControlBottom.Location = new System.Drawing.Point(0, 388);
             this.barDockControlBottom.Manager = this.barMenu;
-            this.barDockControlBottom.Size = new System.Drawing.Size(884, 27);
+            this.barDockControlBottom.Size = new System.Drawing.Size(884, 23);
             // 
             // barDockControlLeft
             // 
@@ -302,7 +311,7 @@
             this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControlLeft.Location = new System.Drawing.Point(0, 24);
             this.barDockControlLeft.Manager = this.barMenu;
-            this.barDockControlLeft.Size = new System.Drawing.Size(0, 360);
+            this.barDockControlLeft.Size = new System.Drawing.Size(0, 364);
             // 
             // barDockControlRight
             // 
@@ -310,7 +319,7 @@
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.barDockControlRight.Location = new System.Drawing.Point(884, 24);
             this.barDockControlRight.Manager = this.barMenu;
-            this.barDockControlRight.Size = new System.Drawing.Size(0, 360);
+            this.barDockControlRight.Size = new System.Drawing.Size(0, 364);
             // 
             // btnClose
             // 
@@ -422,14 +431,6 @@
             this.alertMsg.LookAndFeel.SkinName = "Office 2010 Blue";
             this.alertMsg.ShowPinButton = false;
             this.alertMsg.ShowToolTips = false;
-            // 
-            // btnImportExcel
-            // 
-            this.btnImportExcel.Caption = "Import Excel";
-            this.btnImportExcel.Id = 31;
-            this.btnImportExcel.ImageOptions.Image = global::Client.Properties.Resources.Grid_16x16;
-            this.btnImportExcel.Name = "btnImportExcel";
-            this.btnImportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
             // frmBase
             // 
