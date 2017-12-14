@@ -12,18 +12,18 @@ namespace Server.Service
 {
     public class Repository<T> : IRepository<T> where T : class, new()
     {
-        public zModel Context { get; set; }
+        public aModel Context { get; set; }
 
-        public Repository(zModel db)
+        public Repository(aModel db)
         {
-            this.Context = db;
+            Context = db;
         }
 
         public async Task<IEnumerable<T>> GetAll()
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 IEnumerable<T> lstResult = await Context.Set<T>().ToListAsync();
                 return lstResult;
             }
@@ -34,7 +34,7 @@ namespace Server.Service
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 T item = await Context.Set<T>().FindAsync(id.ConvertType<T>());
                 return item ?? new T();
             }
@@ -45,7 +45,7 @@ namespace Server.Service
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 await Context.Database.BeginTransactionAsync();
                 await Context.Set<T>().AddAsync(Item);
                 await Context.SaveChangesAsync();
@@ -63,7 +63,7 @@ namespace Server.Service
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 Items = Items ?? new T[] { };
                 await Context.Database.BeginTransactionAsync();
                 await Context.Set<T>().AddRangeAsync(Items);
@@ -82,7 +82,7 @@ namespace Server.Service
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 await Context.Database.BeginTransactionAsync();
                 Context.Set<T>().Update(Item);
                 await Context.SaveChangesAsync();
@@ -100,7 +100,7 @@ namespace Server.Service
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 Items = Items ?? new T[] { };
                 await Context.Database.BeginTransactionAsync();
                 Context.Set<T>().UpdateRange(Items);
@@ -119,7 +119,7 @@ namespace Server.Service
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 await Context.Database.BeginTransactionAsync();
                 T Item = await Context.Set<T>().FindAsync(id);
                 Context.Set<T>().Remove(Item);
@@ -138,7 +138,7 @@ namespace Server.Service
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 await Context.Database.BeginTransactionAsync();
                 Context.Set<T>().Attach(Item);
                 Context.Set<T>().Remove(Item);
@@ -157,7 +157,7 @@ namespace Server.Service
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 ids = ids ?? new object[] { };
                 await Context.Database.BeginTransactionAsync();
                 foreach (object id in ids)
@@ -180,7 +180,7 @@ namespace Server.Service
         {
             try
             {
-                Context = new zModel();
+                Context = new aModel();
                 Items = Items ?? new T[] { };
                 await Context.Database.BeginTransactionAsync();
                 foreach (T Item in Items)
@@ -202,9 +202,9 @@ namespace Server.Service
 
     public class RepositoryCollection : IRepositoryCollection
     {
-        private zModel db;
+        private aModel db;
 
-        public RepositoryCollection(zModel db)
+        public RepositoryCollection(aModel db)
         {
             this.db = db;
         }

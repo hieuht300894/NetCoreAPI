@@ -20,7 +20,7 @@ namespace Server.Controllers
         {
             try
             {
-                Instance.Context = new zModel();
+                Instance.Context = new aModel();
                 Items = Items ?? new eTonKhoDauKy[] { };
                 await Instance.Context.Database.BeginTransactionAsync();
                 foreach (eTonKhoDauKy item in Items)

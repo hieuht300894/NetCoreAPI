@@ -23,7 +23,7 @@ namespace Server.Service
         }
         async static void InitAgency()
         {
-            zModel db = new zModel();
+            aModel db = new aModel();
             await Task.Factory.StartNew(() =>
             {
                 if (db.xAgency.Count() == 0)
@@ -39,7 +39,7 @@ namespace Server.Service
         }
         async static void InitTienTe()
         {
-            zModel db = new zModel();
+            aModel db = new aModel();
             await Task.Factory.StartNew(() =>
             {
                 if (db.eTienTe.Count() == 0)
@@ -55,7 +55,7 @@ namespace Server.Service
         }
         async static void InitTinhThanh()
         {
-            zModel db = new zModel();
+            aModel db = new aModel();
             await Task.Factory.StartNew(() =>
             {
                 if (db.eTinhThanh.Count() == 0)
@@ -71,7 +71,7 @@ namespace Server.Service
         }
         async static void InitDonViTinh()
         {
-            zModel db = new zModel();
+            aModel db = new aModel();
             await Task.Factory.StartNew(() =>
             {
                 if (db.eDonViTinh.Count() == 0)

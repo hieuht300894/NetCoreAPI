@@ -39,7 +39,7 @@ namespace Server.Controllers
         {
             try
             {
-                Instance.Context = new zModel();
+                Instance.Context = new aModel();
                 Items = Items ?? new T[] { };
 
                 await Instance.Context.Database.BeginTransactionAsync();
@@ -60,7 +60,7 @@ namespace Server.Controllers
         {
             try
             {
-                Instance.Context = new zModel();
+                Instance.Context = new aModel();
                 Items = Items ?? new T[] { };
                 await Instance.Context.Database.BeginTransactionAsync();
                 Instance.Context.Set<T>().UpdateRange(Items);
@@ -80,7 +80,7 @@ namespace Server.Controllers
         {
             try
             {
-                Instance.Context = new zModel();
+                Instance.Context = new aModel();
                 Items = Items ?? new T[] { };
                 await Instance.Context.Database.BeginTransactionAsync();
                 foreach (T Item in Items)

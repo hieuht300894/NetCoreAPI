@@ -38,7 +38,7 @@ namespace Server.Controllers
 
         async Task<IActionResult> InitAgency()
         {
-            zModel db = new zModel();
+            aModel db = new aModel();
 
             if (db.xAgency.Count() == 0)
             {
@@ -55,7 +55,7 @@ namespace Server.Controllers
         }
         async Task<IActionResult> InitTienTe()
         {
-            zModel db = new zModel();
+            aModel db = new aModel();
 
             if (db.eTienTe.Count() == 0)
             {
@@ -71,7 +71,7 @@ namespace Server.Controllers
         }
         async Task<IActionResult> InitTinhThanh()
         {
-            zModel db = new zModel();
+            aModel db = new aModel();
 
             if (db.eTinhThanh.Count() == 0)
             {
@@ -87,7 +87,7 @@ namespace Server.Controllers
         }
         async Task<IActionResult> InitDonViTinh()
         {
-            zModel db = new zModel();
+            aModel db = new aModel();
 
             if (db.eDonViTinh.Count() == 0)
             {

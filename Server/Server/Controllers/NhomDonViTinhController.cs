@@ -21,7 +21,7 @@ namespace Server.Controllers
         {
             try
             {
-                Instance.Context = new zModel();
+                Instance.Context = new aModel();
                 Items = Items ?? new eNhomDonViTinh[] { };
                 await Instance.Context.Database.BeginTransactionAsync();
                 foreach (eNhomDonViTinh item in Items)

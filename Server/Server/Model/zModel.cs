@@ -12,14 +12,8 @@ namespace Server.Model
     public class zModel : DbContext
     {
         /*
-         * 1. Add new DB
-         * Add-Migration "Name not exist"
-         * Enable-Migrations 
-         * Update-Database –Verbose
-         * -----------------------------------
-         * 2. Update DB
-         * Add-Migration "Name not exist"
-         * Update-Database –Verbose
+         * Add-Migration "Name not exist" -context zModel
+         * Update-Database -context zModel
          */
 
 

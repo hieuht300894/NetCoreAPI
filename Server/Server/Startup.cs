@@ -35,7 +35,7 @@ namespace Server
             ModuleHelper.ConnectionString = Configuration.GetConnectionString("QuanLyBanHangModel");
 
             services.AddMvc();
-            services.AddDbContext<zModel>(options => options.UseSqlServer(ModuleHelper.ConnectionString));
+            services.AddDbContext<aModel>(options => options.UseSqlServer(ModuleHelper.ConnectionString));
             services.AddScoped(typeof(IRepositoryCollection), typeof(RepositoryCollection));
         }
 
@@ -55,7 +55,7 @@ namespace Server
 
         void GetPrimaryKey()
         {
-            zModel db = new zModel();
+            aModel db = new aModel();
             ModuleHelper.ListKeys = new List<IKey>();
             var eTypes = db.Model.GetEntityTypes();
             foreach (var eType in eTypes)
