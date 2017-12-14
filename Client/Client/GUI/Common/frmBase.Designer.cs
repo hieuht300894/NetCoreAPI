@@ -65,6 +65,7 @@
             this.bbpExportExcel = new DevExpress.XtraBars.BarButtonItem();
             this.popGridMenu = new DevExpress.XtraBars.PopupMenu(this.components);
             this.alertMsg = new DevExpress.XtraBars.Alerter.AlertControl(this.components);
+            this.btnImportExcel = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barMenu)).BeginInit();
@@ -118,9 +119,10 @@
             this.bbpSaveAndAdd,
             this.bbpExportExcel,
             this.btnLoading,
-            this.btnFitComlum});
+            this.btnFitComlum,
+            this.btnImportExcel});
             this.barMenu.MainMenu = this.barTop;
-            this.barMenu.MaxItemId = 31;
+            this.barMenu.MaxItemId = 32;
             this.barMenu.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.rpbPercent});
             this.barMenu.StatusBar = this.barBottom;
@@ -142,7 +144,8 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.btnCancel),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnRefresh, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnPrintPreview, true),
-            new DevExpress.XtraBars.LinkPersistInfo(this.btnExportExcel)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnExportExcel),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnImportExcel)});
             this.barTop.OptionsBar.DrawDragBorder = false;
             this.barTop.OptionsBar.MultiLine = true;
             this.barTop.OptionsBar.UseWholeRow = true;
@@ -219,7 +222,7 @@
             // 
             // btnExportExcel
             // 
-            this.btnExportExcel.Caption = "Xuất Excel";
+            this.btnExportExcel.Caption = "Export Excel";
             this.btnExportExcel.Id = 19;
             this.btnExportExcel.ImageOptions.Image = global::Client.Properties.Resources.ExportToXLSX_16x16;
             this.btnExportExcel.ItemShortcut = new DevExpress.XtraBars.BarShortcut(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
@@ -420,6 +423,14 @@
             this.alertMsg.ShowPinButton = false;
             this.alertMsg.ShowToolTips = false;
             // 
+            // btnImportExcel
+            // 
+            this.btnImportExcel.Caption = "Import Excel";
+            this.btnImportExcel.Id = 31;
+            this.btnImportExcel.ImageOptions.Image = global::Client.Properties.Resources.Grid_16x16;
+            this.btnImportExcel.Name = "btnImportExcel";
+            this.btnImportExcel.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            // 
             // frmBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -482,5 +493,6 @@
         private DevExpress.XtraBars.Alerter.AlertControl alertMsg;
         private DevExpress.XtraBars.BarButtonItem btnLoading;
         private DevExpress.XtraBars.BarButtonItem btnFitComlum;
+        public DevExpress.XtraBars.BarButtonItem btnImportExcel;
     }
 }

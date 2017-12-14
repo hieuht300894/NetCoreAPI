@@ -117,6 +117,7 @@ namespace Client.GUI.Common
             btnRefresh.ItemClick += btnRefresh_ItemClick;
             btnPrintPreview.ItemClick += btnPrintPreview_ItemClick;
             btnExportExcel.ItemClick += btnExportExcel_ItemClick;
+            btnImportExcel.ItemClick += btnImportExcel_ItemClick;
 
             bbpAdd.ItemClick += bbpAdd_ItemClick;
             bbpEdit.ItemClick += bbpEdit_ItemClick;
@@ -130,6 +131,7 @@ namespace Client.GUI.Common
             bbpPrintPreview.ItemClick += bbpPrintPreview_ItemClick;
             bbpExportExcel.ItemClick += bbpExportExcel_ItemClick;
         }
+
         private void LoadControl()
         {
             lstChildControls = new List<ControlObject>();
@@ -255,9 +257,15 @@ namespace Client.GUI.Common
         }
         protected virtual void btnExportExcel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            ExportExcel();
         }
         protected virtual void btnPrintPreview_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            PrintPreview();
+        }
+        protected virtual void btnImportExcel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            ImportExcel();
         }
         protected virtual void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -277,9 +285,11 @@ namespace Client.GUI.Common
         }
         protected virtual void bbpExportExcel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            ExportExcel();
         }
         protected virtual void bbpPrintPreview_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            PrintPreview();
         }
         protected async virtual void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
@@ -684,6 +694,9 @@ namespace Client.GUI.Common
         public virtual void RefreshEntry()
         {
         }
+        public virtual void PrintPreview() { }
+        public virtual void ExportExcel() { }
+        public virtual void ImportExcel() { }
         public virtual void LoadDataForm()
         {
         }
