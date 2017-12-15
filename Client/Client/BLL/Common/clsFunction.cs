@@ -60,6 +60,10 @@ namespace Client.BLL.Common
                 request.Parameters.Clear();
                 request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
+
+                if (!string.IsNullOrWhiteSpace(response.Content))
+                    entity = response.Content.DeserializeToList<T>().FirstOrDefault() ?? new T();
+
                 return response.StatusCode == System.Net.HttpStatusCode.OK;
             }
             catch { return false; }
@@ -106,6 +110,10 @@ namespace Client.BLL.Common
                 request.Parameters.Clear();
                 request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
+
+                if (!string.IsNullOrWhiteSpace(response.Content))
+                    entity = response.Content.DeserializeToList<T>().FirstOrDefault() ?? new T();
+
                 return response.StatusCode == System.Net.HttpStatusCode.OK;
             }
             catch { return false; }
