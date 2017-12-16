@@ -24,7 +24,8 @@ namespace Server.Service
             try
             {
                 Context = new aModel();
-                IEnumerable<T> lstResult = await Context.Set<T>().ToListAsync();
+                IEnumerable<T> lstTemp = await Context.Set<T>().ToListAsync();
+                IList<T> lstResult = lstTemp.OrderBy<T, String>("Ten").ToList();
                 return lstResult;
             }
             catch { return new List<T>(); }
