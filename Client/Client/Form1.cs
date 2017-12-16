@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DevExpress.XtraGrid.Columns;
 using System.Reflection;
+using EntityModel.DataModel;
+using Client.BLL.Common;
 
 namespace Client
 {
@@ -24,21 +26,21 @@ namespace Client
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private  void Form1_Load(object sender, EventArgs e)
         {
-            List<Order> list = new List<Order>();
-            int i = 1;
-            int l = 5;
-            for (i = 1; i <= l; i++)
-            {
-                list.Add(new Order() { KeyID = i, Price = i, ID = i });
-            }
+            //List<Order> list = new List<Order>();
+            //int i = 1;
+            //int l = 5;
+            //for (i = 1; i <= l; i++)
+            //{
+            //    list.Add(new Order() { KeyID = i, Price = i, ID = i });
+            //}
 
-            var r1 = list.Sum<Order, decimal>("ID");
-            var r2 = list.OrderBy<Order, decimal>("ID");
-            var r3 = list.OrderByDescending<Order, decimal>("ID");
-            var r4 = list.Min<Order, decimal>("ID");
-            var r5 = list.Max<Order, decimal>("ID");
+            //var r1 = list.Sum<Order, decimal>("ID");
+            //var r2 = list.OrderBy<Order, decimal>("ID");
+            //var r3 = list.OrderByDescending<Order, decimal>("ID");
+            //var r4 = list.Min<Order, decimal>("ID");
+            //var r5 = list.Max<Order, decimal>("ID");
         }
     }
 
