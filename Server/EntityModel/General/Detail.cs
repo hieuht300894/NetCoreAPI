@@ -14,6 +14,7 @@ namespace EntityModel.General
         public Detail()
         {
             KeyID = _KeyID;
+            TrangThai = 1;
         }
 
         public Int32 KeyID { get; set; }
