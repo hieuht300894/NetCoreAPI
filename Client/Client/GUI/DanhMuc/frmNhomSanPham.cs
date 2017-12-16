@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using EntityModel.DataModel;
 using Client.GUI.Common;
 using Client.Module;
+using System.Collections.Generic;
 
 namespace Client.GUI.DanhMuc
 {
@@ -61,9 +62,8 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            bool chk = false;
-            chk = await clsFunction.Post("nhomsanpham", lstEdited.ToList());
-            return chk;
+            Tuple<bool, List<eNhomSanPham>> Res = await clsFunction.Post<eNhomSanPham, eNhomSanPham>("nhomsanpham", lstEdited.ToList());
+            return Res.Item1;
         }
         public override void CustomForm()
         {

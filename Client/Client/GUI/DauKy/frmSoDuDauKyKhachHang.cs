@@ -54,9 +54,8 @@ namespace Client.GUI.DauKy
                 x.TenKhachHang = khachHang.Ten;
             });
 
-            bool chk = false;
-            chk = await clsFunction.Post("sodudaukykhachhang", lstEdited.ToList());
-            return chk;
+            Tuple<bool, List<eSoDuDauKyKhachHang>> Res = await clsFunction.Post<eSoDuDauKyKhachHang, eSoDuDauKyKhachHang>("sodudaukykhachhang", lstEdited.ToList());
+            return Res.Item1;
         }
         public override void CustomForm()
         {

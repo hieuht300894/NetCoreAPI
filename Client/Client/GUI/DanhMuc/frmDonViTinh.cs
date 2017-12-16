@@ -4,6 +4,7 @@ using Client.Module;
 using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -61,9 +62,8 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            bool chk = false;
-            chk = await clsFunction.Post("donvitinh", lstEdited.ToList());
-            return chk;
+            Tuple<bool, List<eDonViTinh>> Res = await clsFunction.Post<eDonViTinh, eDonViTinh>("donvitinh", lstEdited.ToList());
+            return Res.Item1;
         }
         public override void CustomForm()
         {

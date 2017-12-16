@@ -54,9 +54,8 @@ namespace Client.GUI.DauKy
                 x.TenNhaCungCap = NhaCungCap.Ten;
             });
 
-            bool chk = false;
-            chk = await clsFunction.Post("sodudaukynhacungcap", lstEdited.ToList());
-            return chk;
+            Tuple<bool, List<eSoDuDauKyNhaCungCap>> Res = await clsFunction.Post<eSoDuDauKyNhaCungCap, eSoDuDauKyNhaCungCap>("sodudaukynhacungcap", lstEdited.ToList());
+            return Res.Item1;
         }
         public override void CustomForm()
         {

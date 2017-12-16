@@ -143,10 +143,10 @@ namespace Client.GUI.DanhMuc
                 _aEntry.TrangThai = 2;
             }
 
-            bool res = await (_aEntry.KeyID > 0 ? clsFunction.Put("Kho", _aEntry) : clsFunction.Post("Kho", _aEntry));
-            if (res)
-                _ReloadData?.Invoke(_aEntry.KeyID);
-            return res;
+            Tuple<bool, eKho> Res = await (_aEntry.KeyID > 0 ? clsFunction.Put<eKho, eKho>("Kho", _aEntry) : clsFunction.Post<eKho, eKho>("Kho", _aEntry));
+            if (Res.Item1)
+                _ReloadData?.Invoke(Res.Item2.KeyID);
+            return Res.Item1;
         }
     }
 }

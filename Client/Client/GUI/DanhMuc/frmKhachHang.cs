@@ -77,9 +77,8 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            bool chk = false;
-            chk = await clsFunction.Post("khachhang", lstEdited.ToList());
-            return chk;
+            Tuple<bool, List<eKhachHang>> Res = await clsFunction.Post<eKhachHang, eKhachHang>("khachhang", lstEdited.ToList());
+            return Res.Item1;
         }
         public override void CustomForm()
         {
