@@ -73,7 +73,7 @@ namespace Client.GUI.NhapHang
             lstDetail_Edited = new BindingList<eNhapHangNhaCungCapChiTiet>();
 
             _iEntry = _iEntry ?? new eNhapHangNhaCungCap();
-            _aEntry = await clsFunction.GetByID<eNhapHangNhaCungCap>(_iEntry.KeyID);
+            _aEntry = await clsFunction.GetByID<eNhapHangNhaCungCap>("", _iEntry.KeyID);
             SetControlValue();
             SetDataSource();
         }

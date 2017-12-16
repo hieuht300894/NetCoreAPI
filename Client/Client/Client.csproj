@@ -74,12 +74,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\Common\clsFunction.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\Common\frmBase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +91,12 @@
     </Compile>
     <Compile Include="GUI\Common\frmWaiting.Designer.cs">
       <DependentUpon>frmWaiting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmDanhMuc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DanhMuc\frmDanhMuc.Designer.cs">
+      <DependentUpon>frmDanhMuc.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\DanhMuc\frmDonViTinh.cs">
       <SubType>Form</SubType>
@@ -190,9 +190,6 @@
     <Compile Include="Module\TempHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\Common\frmBase.resx">
       <DependentUpon>frmBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -201,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Common\frmWaiting.resx">
       <DependentUpon>frmWaiting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DanhMuc\frmDanhMuc.resx">
+      <DependentUpon>frmDanhMuc.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\DanhMuc\frmDonViTinh.resx">
       <DependentUpon>frmDonViTinh.cs</DependentUpon>

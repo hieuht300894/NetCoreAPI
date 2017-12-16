@@ -1,4 +1,5 @@
 ﻿using Client.GUI.Common;
+using Client.GUI.DanhMuc;
 using DevExpress.XtraEditors;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,10 @@ namespace Client.Module
                 foreach (Type type in types)
                 {
                     if (type.BaseType == typeof(frmBase))
+                    {
+                        ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
+                    }
+                    if (type.BaseType == typeof(frmDanhMuc))
                     {
                         ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
                     }

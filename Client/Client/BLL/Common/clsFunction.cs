@@ -35,10 +35,17 @@ namespace Client.BLL.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="KeyID"></param>
         /// <returns></returns>
-        public static async Task<T> GetByID<T>(object KeyID) where T : class, new()
+        public static async Task<T> GetByID<T>(String api, object KeyID) where T : class, new()
         {
-            await Task.Factory.StartNew(() => { });
-            try { return new T(); }
+            try
+            {
+                IRestClient client = new RestClient(ModuleHelper.Url + $"/{(api.TrimStart('/'))}/{KeyID}");
+                IRestRequest request = new RestRequest();
+                request.Method = Method.GET;
+                IRestResponse response = await client.ExecuteTaskAsync(request);
+                T item = response.Content.DeserializeToObject<T>();
+                return item ?? new T();
+            }
             catch { return new T(); }
         }
 
