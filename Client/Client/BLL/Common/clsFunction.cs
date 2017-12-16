@@ -26,7 +26,7 @@ namespace Client.BLL.Common
                 IList<T> lstResult = response.Content.DeserializeToList<T>();
                 return lstResult ?? new List<T>();
             }
-            catch (Exception ex) { return new List<T>(); }
+            catch { return new List<T>(); }
         }
 
         /// <summary>

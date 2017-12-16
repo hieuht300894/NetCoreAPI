@@ -388,7 +388,7 @@ namespace Client.Module
                 gctMain.ProcessGridKey -= GctMain_ProcessGridKey;
                 gctMain.ProcessGridKey += GctMain_ProcessGridKey;
             }
-            catch (Exception ex) { }
+            catch { }
 
         }
 
