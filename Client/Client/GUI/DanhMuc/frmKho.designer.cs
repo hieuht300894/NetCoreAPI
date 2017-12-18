@@ -28,14 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // layoutControlGroup1
-            // 
-            this.layoutControlGroup1.Name = "Root";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(884, 364);
             // 
             // frmKho
             // 
@@ -45,8 +37,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "frmKho";
             this.Text = "Danh sách kho";
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -1,6 +1,7 @@
 ﻿using Client.BLL.Common;
 using Client.GUI.Common;
 using Client.Module;
+using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
 using System;
@@ -14,8 +15,9 @@ namespace Client.GUI.DanhMuc
 {
     public partial class frmNhaCungCap : frmBase
     {
-        BindingList<eNhaCungCap> lstEntries = new BindingList<eNhaCungCap>();
-        BindingList<eNhaCungCap> lstEdited = new BindingList<eNhaCungCap>();
+        eNhaCungCap _iEntry;
+        eNhaCungCap _aEntry;
+        IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>();
 
         public frmNhaCungCap()
         {
@@ -24,6 +26,7 @@ namespace Client.GUI.DanhMuc
         protected override void frmBase_Load(object sender, EventArgs e)
         {
             base.frmBase_Load(sender, e);
+
             LoadRepository();
             LoadDataForm();
             CustomForm();
@@ -31,67 +34,64 @@ namespace Client.GUI.DanhMuc
 
         async void LoadRepository()
         {
-            IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>(await clsFunction.GetAll<eTinhThanh>("tinhthanh"));
-            await RunMethodAsync(() => { rlokTinhThanh.DataSource = lstTinhThanh; });
+            lstTinhThanh = await clsFunction.GetAll<eTinhThanh>("TinhThanh/DanhSach63TinhThanh");
+            await RunMethodAsync(() => {/* slokTinhThanh.Properties.DataSource = lstTinhThanh;*/ });
         }
         public async override void LoadDataForm()
         {
-            lstEdited = new BindingList<eNhaCungCap>();
-            lstEntries = new BindingList<eNhaCungCap>(await clsFunction.GetAll<eNhaCungCap>("nhacungcap"));
-            await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
+            _iEntry = _iEntry ?? new eNhaCungCap();
+            _aEntry = await clsFunction.GetByID<eNhaCungCap>("NhaCungCap", _iEntry.KeyID);
+
+            SetControlValue();
+        }
+        public override void SetControlValue()
+        {
+            txtMa.DataBindings.Add("EditValue", _aEntry, "Ma", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtTen.DataBindings.Add("EditValue", _aEntry, "Ten", true, DataSourceUpdateMode.OnPropertyChanged);
+            mmeGhiChu.DataBindings.Add("EditValue", _aEntry, "GhiChu", true, DataSourceUpdateMode.OnPropertyChanged);
+            //txtDiaChi.DataBindings.Add("EditValue", _aEntry, "DiaChi", true, DataSourceUpdateMode.OnPropertyChanged);
+            //txtSDT.DataBindings.Add("EditValue", _aEntry, "DienThoai", true, DataSourceUpdateMode.OnPropertyChanged);
+            //txtNguoiLienHe.DataBindings.Add("EditValue", _aEntry, "NguoiLienHe", true, DataSourceUpdateMode.OnPropertyChanged);
+            //lokTinhThanh.DataBindings.Add("EditValue", _aEntry, "IDTinhThanh", true, DataSourceUpdateMode.OnPropertyChanged);
+            //slokTinhThanh.DataBindings.Add("Text", _aEntry, "TinhThanh", true, DataSourceUpdateMode.OnPropertyChanged);
         }
         public override bool ValidationForm()
         {
-            grvDanhSach.CloseEditor();
-            grvDanhSach.UpdateCurrentRow();
             return base.ValidationForm();
         }
         public async override Task<bool> SaveData()
         {
-            DateTime time = DateTime.Now.ServerNow();
-
-            lstEdited.ToList().ForEach(x =>
+            if (_aEntry.KeyID > 0)
             {
-                eTinhThanh tinhThanh = (eTinhThanh)rlokTinhThanh.GetDataSourceRowByKeyValue(x.IDTinhThanh) ?? new eTinhThanh();
-                x.TinhThanh = tinhThanh.Ten;
+                _aEntry.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
+                _aEntry.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
+                _aEntry.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
+                _aEntry.NgayCapNhat = DateTime.Now.ServerNow();
+                _aEntry.TrangThai = 2;
+            }
+            else
+            {
+                _aEntry.NguoiTao = clsGeneral.curPersonnel.KeyID;
+                _aEntry.MaNguoiTao = clsGeneral.curPersonnel.Ma;
+                _aEntry.TenNguoiTao = clsGeneral.curPersonnel.Ten;
+                _aEntry.NgayTao = DateTime.Now.ServerNow();
+                _aEntry.TrangThai = 1;
+            }
 
-                if (x.KeyID > 0)
-                {
-                    x.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
-                    x.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
-                    x.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
-                    x.NgayCapNhat = time;
-                }
-                else
-                {
-                    x.NguoiTao = clsGeneral.curPersonnel.KeyID;
-                    x.MaNguoiTao = clsGeneral.curPersonnel.Ma;
-                    x.TenNguoiTao = clsGeneral.curPersonnel.Ten;
-                    x.NgayTao = time;
-                }
-            });
+            Tuple<bool, eNhaCungCap> Res = await (_aEntry.KeyID > 0 ?
+                clsFunction.Put<eNhaCungCap, eNhaCungCap>("NhaCungCap", _aEntry) :
+                clsFunction.Post<eNhaCungCap, eNhaCungCap>("NhaCungCap", _aEntry));
 
-            Tuple<bool, List<eNhaCungCap>> Res = await clsFunction.Post<eNhaCungCap, eNhaCungCap>("nhacungcap", lstEdited.ToList());
+            if (Res.Item1)
+                _ReloadData?.Invoke(Res.Item2.KeyID);
             return Res.Item1;
         }
         public override void CustomForm()
         {
-            rlokTinhThanh.ValueMember = "KeyID";
-            rlokTinhThanh.DisplayMember = "Ten";
+            //lokTinhThanh.Properties.ValueMember = "KeyID";
+            //lokTinhThanh.Properties.DisplayMember = "Ten";
 
             base.CustomForm();
-
-            gctDanhSach.MouseClick += gctDanhSach_MouseClick;
-            grvDanhSach.RowUpdated += grvDanhSach_RowUpdated;
-        }
-
-        private void gctDanhSach_MouseClick(object sender, MouseEventArgs e)
-        {
-            ShowGridPopup(sender, e, true, false, true, true, true, true);
-        }
-        private void grvDanhSach_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
-        {
-            if (!lstEdited.Any(x => x.KeyID == ((eNhaCungCap)e.Row).KeyID)) lstEdited.Add((eNhaCungCap)e.Row);
         }
     }
 }

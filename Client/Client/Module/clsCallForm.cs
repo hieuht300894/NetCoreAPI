@@ -23,10 +23,6 @@ namespace Client.Module
                     {
                         ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
                     }
-                    if (type.BaseType == typeof(frmDanhMuc))
-                    {
-                        ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
-                    }
                     if (type.BaseType == typeof(XtraForm))
                     {
                         ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
