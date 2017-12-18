@@ -17,6 +17,44 @@ namespace Server.Controllers
         {
         }
 
+        public override async Task<IEnumerable<eNhapHangNhaCungCap>> GetAll()
+        {
+            try
+            {
+                return await Task.Factory.StartNew(() =>
+                {
+                    Instance.Context = new Model.aModel();
+                    IEnumerable<eNhapHangNhaCungCap> lstMaster = Instance.Context.eNhapHangNhaCungCap.ToList();
+                    IEnumerable<eNhapHangNhaCungCapChiTiet> lstDetail = Instance.Context.eNhapHangNhaCungCapChiTiet.ToList();
+
+                    var q1 =
+                        from a in lstDetail
+                        group a by a.IDNhapHangNhaCungCap into g
+                        select new { Key = g.Key, Value = g.ToList() };
+                    var q2 =
+                        from a in lstMaster
+                        join b in q1
+                        on a.KeyID equals b.Key
+                        select new { Master = a, Detail = b.Value };
+                    q2.ToList().ForEach(x =>
+                    {
+                        x.Detail.ForEach(y =>
+                        {
+                            x.Master.eNhapHangNhaCungCapChiTiet.Add(y);
+                        });
+                    });
+                    var q3 =
+                        from a in q2
+                        select a.Master;
+
+                    List<eNhapHangNhaCungCap> lstResult = new List<eNhapHangNhaCungCap>(q3);
+                    return lstResult;
+                });
+
+            }
+            catch { return new List<eNhapHangNhaCungCap>(); }
+        }
+
         public async override Task<eNhapHangNhaCungCap> GetByID(string id)
         {
             try
@@ -75,6 +113,7 @@ namespace Server.Controllers
                 if (congNo == null)
                 {
                     congNo = new eCongNoNhaCungCap();
+                    congNo.KeyID = 0;
                     congNo.IDNhaCungCap = item.IDNhaCungCap;
                     congNo.MaNhaCungCap = item.MaNhaCungCap;
                     congNo.TenNhaCungCap = item.TenNhaCungCap;
