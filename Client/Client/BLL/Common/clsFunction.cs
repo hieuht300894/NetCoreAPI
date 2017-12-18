@@ -52,13 +52,11 @@ namespace Client.BLL.Common
         /// <summary>
         /// Thêm mới dữ liệu
         /// </summary>
-        /// <typeparam name="TIn"></typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="api"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static async Task<Tuple<bool, TOut>> Post<TIn, TOut>(String api, TIn entity)
-            where TIn : class, new()
-            where TOut : class, new()
+        public static async Task<Tuple<bool, T>> Post<T>(String api, T entity) where T : class, new()
         {
             try
             {
@@ -67,15 +65,15 @@ namespace Client.BLL.Common
                 request.Method = Method.POST;
                 request.AddHeader("Accept", "application/json");
                 request.Parameters.Clear();
-                request.AddParameter("application/json", (new List<TIn>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                TOut Item = response.Content.DeserializeToList<TOut>().FirstOrDefault() ?? new TOut();
+                T Item = response.Content.DeserializeToList<T>().FirstOrDefault() ?? new T();
 
                 return Tuple.Create(Status, Item);
             }
-            catch { return Tuple.Create(false, new TOut()); }
+            catch { return Tuple.Create(false, new T()); }
         }
 
         /// <summary>
@@ -85,9 +83,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static async Task<Tuple<bool, List<TOut>>> Post<TIn, TOut>(String api, List<TIn> entries)
-            where TIn : class, new()
-            where TOut : class, new()
+        public static async Task<Tuple<bool, List<T>>> Post<T>(String api, List<T> entries) where T : class, new()
         {
             try
             {
@@ -100,11 +96,11 @@ namespace Client.BLL.Common
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                List<TOut> Items = response.Content.DeserializeToList<TOut>() ?? new List<TOut>();
+                List<T> Items = response.Content.DeserializeToList<T>() ?? new List<T>();
 
                 return Tuple.Create(Status, Items);
             }
-            catch { return Tuple.Create(false, new List<TOut>()); }
+            catch { return Tuple.Create(false, new List<T>()); }
         }
 
         /// <summary>
@@ -114,9 +110,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static async Task<Tuple<bool, TOut>> Put<TIn, TOut>(String api, TIn entity)
-            where TIn : class, new()
-            where TOut : class, new()
+        public static async Task<Tuple<bool, T>> Put<T>(String api, T entity) where T : class, new()
         {
             try
             {
@@ -125,15 +119,15 @@ namespace Client.BLL.Common
                 request.Method = Method.PUT;
                 request.AddHeader("Accept", "application/json");
                 request.Parameters.Clear();
-                request.AddParameter("application/json", (new List<TIn>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                TOut Item = response.Content.DeserializeToList<TOut>().FirstOrDefault() ?? new TOut();
+                T Item = response.Content.DeserializeToList<T>().FirstOrDefault() ?? new T();
 
                 return Tuple.Create(Status, Item);
             }
-            catch { return Tuple.Create(false, new TOut()); }
+            catch { return Tuple.Create(false, new T()); }
         }
 
         /// <summary>
@@ -143,9 +137,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static async Task<Tuple<bool, List<TOut>>> Put<TIn, TOut>(String api, List<TIn> entries)
-            where TIn : class, new()
-            where TOut : class, new()
+        public static async Task<Tuple<bool, List<T>>> Put<T>(String api, List<T> entries) where T : class, new()
         {
             try
             {
@@ -157,11 +149,11 @@ namespace Client.BLL.Common
                 request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                List<TOut> Items = response.Content.DeserializeToList<TOut>() ?? new List<TOut>();
+                List<T> Items = response.Content.DeserializeToList<T>() ?? new List<T>();
 
                 return Tuple.Create(Status, Items);
             }
-            catch { return Tuple.Create(false, new List<TOut>()); }
+            catch { return Tuple.Create(false, new List<T>()); }
         }
 
         /// <summary>

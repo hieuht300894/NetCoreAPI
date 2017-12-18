@@ -110,9 +110,71 @@ namespace Client.GUI.NhapHang
         {
             return base.ValidationForm();
         }
-        public override Task<bool> SaveData()
+        public async override Task<bool> SaveData()
         {
-            return base.SaveData();
+            if (_aEntry.KeyID > 0)
+            {
+                _aEntry.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
+                _aEntry.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
+                _aEntry.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
+                _aEntry.NgayCapNhat = DateTime.Now.ServerNow();
+                _aEntry.TrangThai = 2;
+
+            }
+            else
+            {
+                _aEntry.NguoiTao = clsGeneral.curPersonnel.KeyID;
+                _aEntry.MaNguoiTao = clsGeneral.curPersonnel.Ma;
+                _aEntry.TenNguoiTao = clsGeneral.curPersonnel.Ten;
+                _aEntry.NgayTao = DateTime.Now.ServerNow();
+                _aEntry.TrangThai = 1;
+            }
+
+            _aEntry.Ma = txtMaPhieu.Text.Trim();
+            _aEntry.MaLoHang = txtSoLoHang.Text.Trim();
+            _aEntry.NgayNhap = dteNgayNhap.DateTime;
+            _aEntry.GhiChu = mmeGhiChu.Text.Trim();
+            _aEntry.SoLuong = spnSoLuong.Value;
+            _aEntry.ThanhTien = spnSoTien.Value;
+            _aEntry.TongTien = spnTongNo.Value;
+            _aEntry.NoCu = spnNoCu.Value;
+            _aEntry.ThanhToan = spnThanhToan.Value;
+            _aEntry.ConLai = spnConLai.Value;
+
+            _aEntry.eNhapHangNhaCungCapChiTiet.Clear();
+            foreach (eNhapHangNhaCungCapChiTiet item in lstDetail)
+            {
+                if (item.KeyID > 0)
+                {
+                    item.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
+                    item.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
+                    item.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
+                    item.NgayCapNhat = DateTime.Now.ServerNow();
+                    item.TrangThai = 2;
+
+                }
+                else
+                {
+                    item.NguoiTao = clsGeneral.curPersonnel.KeyID;
+                    item.MaNguoiTao = clsGeneral.curPersonnel.Ma;
+                    item.TenNguoiTao = clsGeneral.curPersonnel.Ten;
+                    item.NgayTao = DateTime.Now.ServerNow();
+                    item.TrangThai = 1;
+                }
+
+                eKho kho = (eKho)rlokKho.GetDataSourceRowByKeyValue(item.IDKho) ?? new eKho();
+                item.MaKho = kho.Ma;
+                item.TenKho = kho.Ten;
+
+                _aEntry.eNhapHangNhaCungCapChiTiet.Add(item);
+            }
+
+            Tuple<bool, eNhapHangNhaCungCap> Res = await (_aEntry.KeyID > 0 ?
+                clsFunction.Put("NhapHangNhaCungCap", _aEntry) :
+                clsFunction.Post("NhapHangNhaCungCap", _aEntry));
+            if (Res.Item1)
+                KeyID = Res.Item2.KeyID;
+            return Res.Item1;
         }
         public override void CustomForm()
         {
@@ -204,29 +266,24 @@ namespace Client.GUI.NhapHang
             {
                 item.SoLuong = item.SoLuongSi + item.SoLuongLe;
                 item.ThanhTien = item.SoLuong * item.DonGia;
-                item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
-                CapNhatSoTien();
-            }
-            if (e.Column.FieldName.Equals("SoLuong") )
-            {
-                item.ThanhTien = item.SoLuong * item.DonGia;
-                item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
+                item.TienChietKhau = item.ThanhTien * (item.ChietKhau / 100);
+                item.TongTien = item.ThanhTien - item.TienChietKhau;
+                //item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
                 CapNhatSoTien();
             }
             if (e.Column.FieldName.Equals("DonGia"))
             {
                 item.ThanhTien = item.SoLuong * item.DonGia;
-                item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
-                CapNhatSoTien();
-            }
-            if (e.Column.FieldName.Equals("ThanhTien"))
-            {
-                item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
+                item.TienChietKhau = item.ThanhTien * (item.ChietKhau / 100);
+                item.TongTien = item.ThanhTien - item.TienChietKhau;
+                //item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
                 CapNhatSoTien();
             }
             if (e.Column.FieldName.Equals("ChietKhau"))
             {
-                item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
+                item.TienChietKhau = item.ThanhTien * (item.ChietKhau / 100);
+                item.TongTien = item.ThanhTien - item.TienChietKhau;
+                //item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
                 CapNhatSoTien();
             }
 

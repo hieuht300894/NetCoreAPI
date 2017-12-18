@@ -97,8 +97,8 @@ namespace Client.GUI.DanhMuc
             _aEntry.TinhThanh = tinhThanh.Ten;
 
             Tuple<bool, eNhaCungCap> Res = await (_aEntry.KeyID > 0 ?
-                clsFunction.Put<eNhaCungCap, eNhaCungCap>("NhaCungCap", _aEntry) :
-                clsFunction.Post<eNhaCungCap, eNhaCungCap>("NhaCungCap", _aEntry));
+                clsFunction.Put("NhaCungCap", _aEntry) :
+                clsFunction.Post("NhaCungCap", _aEntry));
             if (Res.Item1)
                 KeyID = Res.Item2.KeyID;
             return Res.Item1;

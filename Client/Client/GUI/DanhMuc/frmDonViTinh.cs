@@ -62,7 +62,7 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            Tuple<bool, List<eDonViTinh>> Res = await clsFunction.Post<eDonViTinh, eDonViTinh>("donvitinh", lstEdited.ToList());
+            Tuple<bool, List<eDonViTinh>> Res = await clsFunction.Post("donvitinh", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

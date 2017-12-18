@@ -159,8 +159,8 @@ namespace Client.GUI.DanhMuc
             _aEntry.GhiChu = mmeGhiChu.Text.Trim();
 
             Tuple<bool, eKho> Res = await (_aEntry.KeyID > 0 ? 
-                clsFunction.Put<eKho, eKho>("Kho", _aEntry) : 
-                clsFunction.Post<eKho, eKho>("Kho", _aEntry));
+                clsFunction.Put("Kho", _aEntry) : 
+                clsFunction.Post("Kho", _aEntry));
             if (Res.Item1)
                 KeyID = Res.Item2.KeyID;
             return Res.Item1;

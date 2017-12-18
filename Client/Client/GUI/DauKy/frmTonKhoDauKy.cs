@@ -65,7 +65,7 @@ namespace Client.GUI.DauKy
                 x.TenKho = kho.Ten;
             });
 
-            Tuple<bool, List<eTonKhoDauKy>> Res = await clsFunction.Post<eTonKhoDauKy, eTonKhoDauKy>("tonkhodauky", lstEdited.ToList());
+            Tuple<bool, List<eTonKhoDauKy>> Res = await clsFunction.Post("tonkhodauky", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()
