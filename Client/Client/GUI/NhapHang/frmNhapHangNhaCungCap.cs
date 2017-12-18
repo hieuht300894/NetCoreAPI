@@ -19,7 +19,7 @@ namespace Client.GUI.NhapHang
         IList<eSanPham> lstSanPham = new List<eSanPham>();
         IList<eKho> lstKho = new List<eKho>();
         IList<eNhomSanPham> lstNhomSanPham = new List<eNhomSanPham>();
-        eNhapHangNhaCungCap _iEntry;
+        public eNhapHangNhaCungCap _iEntry;
         eNhapHangNhaCungCap _aEntry;
         BindingList<eNhapHangNhaCungCapChiTiet> lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
 
@@ -75,31 +75,46 @@ namespace Client.GUI.NhapHang
         }
         public async override void LoadDataForm()
         {
-            lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
+            DisableEvents();
 
+            lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
             _iEntry = _iEntry ?? new eNhapHangNhaCungCap();
             _aEntry = await clsFunction.GetByID<eNhapHangNhaCungCap>("NhapHangNhaCungCap", _iEntry.KeyID);
+
             SetControlValue();
             SetDataSource();
+            EnableEvents();
         }
         public override void SetControlValue()
         {
-            if (_aEntry.KeyID > 0)
-            {
-                dteNgayNhap.EditValue = _aEntry.NgayNhap;
-                slokNhaCungCap.LockButton();
-            }
-            else
-            {
-                slokNhaCungCap.UnlockButton();
-            }
-
             slokNhaCungCap.EditValue = _aEntry.IDNhaCungCap;
             txtMaPhieu.EditValue = _aEntry.Ma;
             txtSoLoHang.EditValue = _aEntry.MaLoHang;
             mmeGhiChu.EditValue = _aEntry.GhiChu;
             spnSoTien.Value = _aEntry.TongTien;
             spnSoLuong.Value = _aEntry.SoLuong;
+            spnSoTienCu.Value = _aEntry.TongTien;
+            spnThanhToanCu.Value = _aEntry.ThanhToan;
+            spnNoCu.Value = _aEntry.NoCu;
+            spnTongNo.Value = _aEntry.TongTien + _aEntry.NoCu;
+            spnThanhToan.Value = _aEntry.ThanhToan;
+            spnConLai.Value = _aEntry.ConLai;
+
+            if (_aEntry.KeyID > 0)
+            {
+                dteNgayNhap.DateTime = _aEntry.NgayNhap;
+                slokNhaCungCap.LockButton();
+
+                lciSoTienCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                lciThanhToanCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+            }
+            else
+            {
+                slokNhaCungCap.UnlockButton();
+
+                lciSoTienCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+                lciThanhToanCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+            }
         }
         public override void SetDataSource()
         {
@@ -112,12 +127,14 @@ namespace Client.GUI.NhapHang
         }
         public async override Task<bool> SaveData()
         {
+            DateTime time = DateTime.Now.ServerNow();
+
             if (_aEntry.KeyID > 0)
             {
                 _aEntry.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
                 _aEntry.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
                 _aEntry.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
-                _aEntry.NgayCapNhat = DateTime.Now.ServerNow();
+                _aEntry.NgayCapNhat = time;
                 _aEntry.TrangThai = 2;
 
             }
@@ -126,8 +143,13 @@ namespace Client.GUI.NhapHang
                 _aEntry.NguoiTao = clsGeneral.curPersonnel.KeyID;
                 _aEntry.MaNguoiTao = clsGeneral.curPersonnel.Ma;
                 _aEntry.TenNguoiTao = clsGeneral.curPersonnel.Ten;
-                _aEntry.NgayTao = DateTime.Now.ServerNow();
+                _aEntry.NgayTao = time;
                 _aEntry.TrangThai = 1;
+
+                eNhaCungCap nhaCungCap = (eNhaCungCap)slokNhaCungCap.Properties.GetRowByKeyValue(slokNhaCungCap.EditValue) ?? new eNhaCungCap();
+                _aEntry.IDNhaCungCap = nhaCungCap.KeyID;
+                _aEntry.MaNhaCungCap = nhaCungCap.Ma;
+                _aEntry.TenNhaCungCap = nhaCungCap.Ten;
             }
 
             _aEntry.Ma = txtMaPhieu.Text.Trim();
@@ -149,7 +171,7 @@ namespace Client.GUI.NhapHang
                     item.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
                     item.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
                     item.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
-                    item.NgayCapNhat = DateTime.Now.ServerNow();
+                    item.NgayCapNhat = time;
                     item.TrangThai = 2;
 
                 }
@@ -158,7 +180,7 @@ namespace Client.GUI.NhapHang
                     item.NguoiTao = clsGeneral.curPersonnel.KeyID;
                     item.MaNguoiTao = clsGeneral.curPersonnel.Ma;
                     item.TenNguoiTao = clsGeneral.curPersonnel.Ten;
-                    item.NgayTao = DateTime.Now.ServerNow();
+                    item.NgayTao = time;
                     item.TrangThai = 1;
                 }
 
@@ -191,21 +213,9 @@ namespace Client.GUI.NhapHang
 
             grvChiTiet.OptionsView.ColumnAutoWidth = false;
 
-            slokNhomSanPham.PreviewKeyDown -= LokNhomSanPham_PreviewKeyDown;
-            srcMaSanPham.PreviewKeyDown -= SrcMaSanPham_PreviewKeyDown;
-            srcTenSanPham.PreviewKeyDown -= SrcTenSanPham_PreviewKeyDown;
-            grvChiTiet.CellValueChanged -= GrvChiTiet_CellValueChanged;
-            rbtnXoa.ButtonClick -= RbtnXoa_ButtonClick;
-            spnThanhToan.EditValueChanged -= SpnThanhToan_EditValueChanged;
-            grvSanPham.DoubleClick -= GrvSanPham_DoubleClick;
+            DisableEvents();
 
-            slokNhomSanPham.PreviewKeyDown += LokNhomSanPham_PreviewKeyDown;
-            srcMaSanPham.PreviewKeyDown += SrcMaSanPham_PreviewKeyDown;
-            srcTenSanPham.PreviewKeyDown += SrcTenSanPham_PreviewKeyDown;
-            grvChiTiet.CellValueChanged += GrvChiTiet_CellValueChanged;
-            rbtnXoa.ButtonClick += RbtnXoa_ButtonClick;
-            spnThanhToan.EditValueChanged += SpnThanhToan_EditValueChanged;
-            grvSanPham.DoubleClick += GrvSanPham_DoubleClick;
+            EnableEvents();
 
             frmNhaCungCap frm = new frmNhaCungCap();
             frm.fType = Module.QuanLyBanHang.eFormType.Add;
@@ -213,7 +223,26 @@ namespace Client.GUI.NhapHang
             frm._ReloadData = LoadNhaCungCap;
             slokNhaCungCap.AddNewItem(frm);
         }
-
+        public override void EnableEvents()
+        {
+            slokNhomSanPham.PreviewKeyDown += LokNhomSanPham_PreviewKeyDown;
+            srcMaSanPham.PreviewKeyDown += SrcMaSanPham_PreviewKeyDown;
+            srcTenSanPham.PreviewKeyDown += SrcTenSanPham_PreviewKeyDown;
+            grvChiTiet.CellValueChanged += GrvChiTiet_CellValueChanged;
+            rbtnXoa.ButtonClick += RbtnXoa_ButtonClick;
+            spnThanhToan.EditValueChanged += SpnThanhToan_EditValueChanged;
+            grvSanPham.DoubleClick += GrvSanPham_DoubleClick;
+        }
+        public override void DisableEvents()
+        {
+            slokNhomSanPham.PreviewKeyDown -= LokNhomSanPham_PreviewKeyDown;
+            srcMaSanPham.PreviewKeyDown -= SrcMaSanPham_PreviewKeyDown;
+            srcTenSanPham.PreviewKeyDown -= SrcTenSanPham_PreviewKeyDown;
+            grvChiTiet.CellValueChanged -= GrvChiTiet_CellValueChanged;
+            rbtnXoa.ButtonClick -= RbtnXoa_ButtonClick;
+            spnThanhToan.EditValueChanged -= SpnThanhToan_EditValueChanged;
+            grvSanPham.DoubleClick -= GrvSanPham_DoubleClick;
+        }
         void TimKiemSanPham()
         {
             List<eSanPham> lstTimKiem = new List<eSanPham>(lstSanPham);

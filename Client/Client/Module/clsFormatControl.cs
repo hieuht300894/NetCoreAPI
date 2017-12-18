@@ -279,9 +279,9 @@ namespace Client.Module
                 {
                     LayoutControlGroup lcg = item as LayoutControlGroup;
                     lcg.OptionsItemText.TextAlignMode = TextAlignModeGroup.AlignWithChildren;
-                    lcg.AppearanceItemCaption.Options.UseForeColor = true;
-                    lcg.AppearanceItemCaption.ForeColor = MyColor.LayoutGroupColor;
-                    lcg.AppearanceItemCaption.Font = new Font(lcg.AppearanceItemCaption.Font.FontFamily, lcg.AppearanceItemCaption.Font.Size, FontStyle.Bold);
+                    lcg.AppearanceGroup.Options.UseForeColor = true;
+                    lcg.AppearanceGroup.ForeColor = MyColor.LayoutGroupColor;
+                    lcg.AppearanceGroup.Font = new Font(lcg.AppearanceItemCaption.Font.FontFamily, lcg.AppearanceItemCaption.Font.Size, FontStyle.Bold);
                 }
                 if (item is LayoutControlItem)
                 {

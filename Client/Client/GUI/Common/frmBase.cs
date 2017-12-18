@@ -27,7 +27,7 @@ namespace Client.GUI.Common
         public string MsgDelete { get; set; } = "Xóa dữ liệu";
 
         public eFormType fType;
-        public List<eFormType> fTypes;
+        public List<eFormType> fTypes = new List<eFormType>();
         public List<ControlObject> lstChildControls = new List<ControlObject>();
         bool IsLeaveForm = false;
         public object KeyID = 0;
@@ -97,7 +97,6 @@ namespace Client.GUI.Common
         }
         private void LoadAccessForm()
         {
-            fTypes = fTypes ?? new List<eFormType>();
             if (!fTypes.Any(x => x == fType)) fTypes.Add(fType);
 
             //if (clsGeneral.curPersonnel.KeyID > 0 && clsGeneral.curAccount.IDPermission > 0 && clsGeneral.curAccount.IDPermission > 0)
@@ -328,7 +327,6 @@ namespace Client.GUI.Common
         }
         protected virtual void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            ResetControlValue();
             LoadDataForm();
         }
         protected async virtual void bbpSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -365,7 +363,6 @@ namespace Client.GUI.Common
         }
         protected virtual void bbpCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            ResetControlValue();
             LoadDataForm();
         }
         private void btnLoading_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -717,17 +714,11 @@ namespace Client.GUI.Common
         {
             return await Task<bool>.Factory.StartNew(() => { return true; });
         }
-        public virtual void ResetControlValue()
+        public virtual void EnableEvents()
         {
-            lstChildControls.ForEach(x =>
-            {
-                if (x.ctrMain != null)
-                {
-                    BaseEdit baseEdit = x.ctrMain as BaseEdit;
-                    if (baseEdit != null)
-                        baseEdit.DataBindings.Clear();
-                }
-            });
+        }
+        public virtual void DisableEvents()
+        {
         }
         #endregion
         #endregion
