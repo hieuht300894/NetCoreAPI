@@ -1517,24 +1517,23 @@ namespace Client.Module
                 col.Visible = true;
                 slokMain.Properties.View.Columns.Add(col);
             }
+
+            slokMain.Properties.TextEditStyle = TextEditStyles.Standard;
             slokMain.Properties.ShowFooter = false;
             slokMain.Properties.ShowClearButton = false;
-
-            slokMain.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
-            slokMain.Properties.LookAndFeel.Style = LookAndFeelStyle.Office2003;
 
             slokMain.Properties.View.Format(showIndicator, ColumnAuto, false);
             slokMain.Properties.View.OptionsView.ShowColumnHeaders = showHeader;
             slokMain.Properties.View.OptionsSelection.MultiSelect = false;
 
-            slokMain.Popup -= lokMain_Popup;
-            slokMain.Popup += lokMain_Popup;
+            //slokMain.Popup -= lokMain_Popup;
+            //slokMain.Popup += lokMain_Popup;
         }
 
         static void lokMain_Popup(object sender, EventArgs e)
         {
             Control f = (sender as IPopupControl).PopupWindow;
-            string[] controlNames = new string[] { "btClear", "btFind" };
+            string[] controlNames = new string[] { };
             foreach (string name in controlNames)
             {
                 Control[] controls = f.Controls.Find(name, true);
@@ -1550,13 +1549,45 @@ namespace Client.Module
             lokMain.Popup -= lokMain_Popup;
         }
 
-        public static int ToInt32(this SearchLookUpEdit lokMain)
+        public static int ToInt32(this SearchLookUpEdit slokMain)
         {
-            try
-            {
-                return Convert.ToInt32(lokMain.EditValue);
-            }
+            try { return Convert.ToInt32(slokMain.EditValue); }
             catch { return 0; }
+        }
+
+        public static void AddNewItem(this SearchLookUpEdit slokMain, XtraForm frmMain)
+        {
+            EditorButton btn = new EditorButton();
+            btn.Kind = ButtonPredefines.Glyph;
+            btn.Image = Properties.Resources.Add_16x16;
+            slokMain.Properties.Buttons.Add(btn);
+
+            slokMain.Properties.ButtonClick -= (s, e) => slokMain_Properties_ButtonClick(s, e, frmMain);
+            slokMain.Properties.ButtonClick += (s, e) => slokMain_Properties_ButtonClick(s, e, frmMain);
+        }
+
+        private static void slokMain_Properties_ButtonClick(object sender, ButtonPressedEventArgs e, XtraForm frmMain)
+        {
+            if (e.Button.Index == 1)
+                frmMain.ShowDialog();
+        }
+
+        public static void LockButton(this SearchLookUpEdit slokMain)
+        {
+            slokMain.Enabled = false;
+            for (int i = 0; i < slokMain.Properties.Buttons.Count; i++)
+            {
+                slokMain.Properties.Buttons[i].Enabled = false;
+            }
+        }
+
+        public static void UnlockButton(this SearchLookUpEdit slokMain)
+        {
+            slokMain.Enabled = true;
+            for (int i = 0; i < slokMain.Properties.Buttons.Count; i++)
+            {
+                slokMain.Properties.Buttons[i].Enabled = true;
+            }
         }
         #endregion
         #endregion

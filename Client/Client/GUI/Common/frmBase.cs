@@ -30,6 +30,7 @@ namespace Client.GUI.Common
         public List<eFormType> fTypes;
         public List<ControlObject> lstChildControls = new List<ControlObject>();
         bool IsLeaveForm = false;
+        public object KeyID = 0;
         public delegate void ReloadData(object KeyID);
         public ReloadData _ReloadData;
         #endregion
@@ -197,7 +198,7 @@ namespace Client.GUI.Common
         {
             try
             {
-                _ReloadData?.Invoke(0);
+                _ReloadData?.Invoke(KeyID);
 
                 foreach (ControlObject ctrObj in lstChildControls)
                 {
@@ -317,8 +318,6 @@ namespace Client.GUI.Common
                     ShowAlert("Lưu dữ liệu thành công");
                     fType = eFormType.Add;
                     Text = MsgAdd;
-                    RenewData();
-                    ResetControl();
                     LoadDataForm();
                 }
                 else
@@ -329,7 +328,7 @@ namespace Client.GUI.Common
         }
         protected virtual void btnCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            ResetControl();
+            ResetControlValue();
             LoadDataForm();
         }
         protected async virtual void bbpSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -358,8 +357,6 @@ namespace Client.GUI.Common
                     ShowAlert("Lưu dữ liệu thành công");
                     fType = eFormType.Add;
                     Text = MsgAdd;
-                    RenewData();
-                    ResetControl();
                     LoadDataForm();
                 }
                 else
@@ -368,7 +365,7 @@ namespace Client.GUI.Common
         }
         protected virtual void bbpCancel_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            ResetControl();
+            ResetControlValue();
             LoadDataForm();
         }
         private void btnLoading_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
@@ -694,9 +691,15 @@ namespace Client.GUI.Common
         public virtual void RefreshEntry()
         {
         }
-        public virtual void PrintPreview() { }
-        public virtual void ExportExcel() { }
-        public virtual void ImportExcel() { }
+        public virtual void PrintPreview()
+        {
+        }
+        public virtual void ExportExcel()
+        {
+        }
+        public virtual void ImportExcel()
+        {
+        }
         public virtual void LoadDataForm()
         {
         }
@@ -714,10 +717,7 @@ namespace Client.GUI.Common
         {
             return await Task<bool>.Factory.StartNew(() => { return true; });
         }
-        public virtual void RenewData()
-        {
-        }
-        public virtual void ResetControl()
+        public virtual void ResetControlValue()
         {
             lstChildControls.ForEach(x =>
             {

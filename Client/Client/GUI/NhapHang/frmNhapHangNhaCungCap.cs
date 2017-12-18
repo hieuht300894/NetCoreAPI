@@ -1,5 +1,6 @@
 ﻿using Client.BLL.Common;
 using Client.GUI.Common;
+using Client.GUI.DanhMuc;
 using Client.Module;
 using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
@@ -34,6 +35,7 @@ namespace Client.GUI.NhapHang
             base.frmBase_Load(sender, e);
 
             LoadRepository();
+            LoadNhaCungCap(0);
             LoadDataForm();
             CustomForm();
         }
@@ -52,7 +54,7 @@ namespace Client.GUI.NhapHang
             await RunMethodAsync(() =>
             {
                 dteNgayNhap.DateTime = DateTime.Now.ServerNow();
-                lokNhomSanPham.Properties.DataSource = lstNhomSanPham;
+                slokNhomSanPham.Properties.DataSource = lstNhomSanPham;
                 rlokSanPham.DataSource = lstSanPham;
                 rlokKho.DataSource = lstKho;
                 gctSanPham.DataSource = lstSanPham;
@@ -63,6 +65,15 @@ namespace Client.GUI.NhapHang
                     srcMaSanPham.Properties.Items.Add(rSanPham.Ma);
                     srcTenSanPham.Properties.Items.Add(rSanPham.Ten);
                 }
+            });
+        }
+        async void LoadNhaCungCap(object KeyID)
+        {
+            IList<eNhaCungCap> lstNhaCungCap = await clsFunction.GetAll<eNhaCungCap>("NhaCungCap");
+            await RunMethodAsync(() =>
+            {
+                slokNhaCungCap.Properties.DataSource = lstNhaCungCap;
+                slokNhaCungCap.EditValue = KeyID;
             });
         }
         public async override void LoadDataForm()
@@ -79,7 +90,20 @@ namespace Client.GUI.NhapHang
         }
         public override void SetControlValue()
         {
-            lokNhaCungCap.DataBindings.Add("EditValue", _aEntry, "IDNhaCungCap", true, DataSourceUpdateMode.OnPropertyChanged);
+            if (_aEntry.KeyID > 0)
+            {
+                slokNhaCungCap.LockButton();
+            }
+            else
+            {
+                _aEntry.NgayNhap = dteNgayNhap.DateTime;
+                slokNhaCungCap.UnlockButton();
+            }
+
+            ResetControlValue();
+
+            slokNhaCungCap.DataBindings.Add("EditValue", _aEntry, "IDNhaCungCap", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtMaPhieu.DataBindings.Add("EditValue", _aEntry, "Ma", true, DataSourceUpdateMode.OnPropertyChanged);
             txtSoLoHang.DataBindings.Add("EditValue", _aEntry, "MaLoHang", true, DataSourceUpdateMode.OnPropertyChanged);
             dteNgayNhap.DataBindings.Add("DateTime", _aEntry, "NgayNhap", true, DataSourceUpdateMode.OnPropertyChanged);
             mmeGhiChu.DataBindings.Add("EditValue", _aEntry, "GhiChu", true, DataSourceUpdateMode.OnPropertyChanged);
@@ -102,10 +126,10 @@ namespace Client.GUI.NhapHang
         }
         public override void CustomForm()
         {
-            lokNhaCungCap.Properties.ValueMember = "KeyID";
-            lokNhaCungCap.Properties.DisplayMember = "Ten";
-            lokNhomSanPham.Properties.ValueMember = "KeyID";
-            lokNhomSanPham.Properties.DisplayMember = "Ten";
+            slokNhaCungCap.Properties.ValueMember = "KeyID";
+            slokNhaCungCap.Properties.DisplayMember = "Ten";
+            slokNhomSanPham.Properties.ValueMember = "KeyID";
+            slokNhomSanPham.Properties.DisplayMember = "Ten";
             rlokKho.ValueMember = "KeyID";
             rlokKho.DisplayMember = "Ten";
             rlokSanPham.ValueMember = "KeyID";
@@ -115,7 +139,16 @@ namespace Client.GUI.NhapHang
 
             grvChiTiet.OptionsView.ColumnAutoWidth = false;
 
-            lokNhomSanPham.PreviewKeyDown += LokNhomSanPham_PreviewKeyDown;
+            slokNhomSanPham.PreviewKeyDown -= LokNhomSanPham_PreviewKeyDown;
+            srcMaSanPham.PreviewKeyDown -= SrcMaSanPham_PreviewKeyDown;
+            srcTenSanPham.PreviewKeyDown -= SrcTenSanPham_PreviewKeyDown;
+            grvChiTiet.InitNewRow -= GrvChiTiet_InitNewRow;
+            grvChiTiet.RowUpdated -= GrvChiTiet_RowUpdated;
+            grvChiTiet.CellValueChanged -= GrvChiTiet_CellValueChanged;
+            rbtnXoa.ButtonClick -= RbtnXoa_ButtonClick;
+            spnThanhToan.EditValueChanged -= SpnThanhToan_EditValueChanged;
+
+            slokNhomSanPham.PreviewKeyDown += LokNhomSanPham_PreviewKeyDown;
             srcMaSanPham.PreviewKeyDown += SrcMaSanPham_PreviewKeyDown;
             srcTenSanPham.PreviewKeyDown += SrcTenSanPham_PreviewKeyDown;
             grvChiTiet.InitNewRow += GrvChiTiet_InitNewRow;
@@ -123,6 +156,12 @@ namespace Client.GUI.NhapHang
             grvChiTiet.CellValueChanged += GrvChiTiet_CellValueChanged;
             rbtnXoa.ButtonClick += RbtnXoa_ButtonClick;
             spnThanhToan.EditValueChanged += SpnThanhToan_EditValueChanged;
+
+            frmNhaCungCap frm = new frmNhaCungCap();
+            frm.fType = Module.QuanLyBanHang.eFormType.Add;
+            frm.Text = "Thêm mới nhà cung cấp";
+            frm._ReloadData = LoadNhaCungCap;
+            slokNhaCungCap.AddNewItem(frm);
         }
         void TimKiemSanPham()
         {

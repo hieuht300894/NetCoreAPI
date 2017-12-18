@@ -17,7 +17,6 @@ namespace Client.GUI.DanhMuc
     {
         eNhaCungCap _iEntry;
         eNhaCungCap _aEntry;
-        IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>();
 
         public frmNhaCungCap()
         {
@@ -34,8 +33,8 @@ namespace Client.GUI.DanhMuc
 
         async void LoadRepository()
         {
-            lstTinhThanh = await clsFunction.GetAll<eTinhThanh>("TinhThanh/DanhSach63TinhThanh");
-            await RunMethodAsync(() => {/* slokTinhThanh.Properties.DataSource = lstTinhThanh;*/ });
+            IList<eTinhThanh> lstTinhThanh = await clsFunction.GetAll<eTinhThanh>("TinhThanh/DanhSach63TinhThanh");
+            await RunMethodAsync(() => { slokTinhThanh.Properties.DataSource = lstTinhThanh; });
         }
         public async override void LoadDataForm()
         {
@@ -46,14 +45,23 @@ namespace Client.GUI.DanhMuc
         }
         public override void SetControlValue()
         {
+            if (_aEntry.KeyID > 0)
+            {
+                txtTen.Select();
+            }
+            else
+            {
+                txtMa.Select();
+            }
+
+            ResetControlValue();
             txtMa.DataBindings.Add("EditValue", _aEntry, "Ma", true, DataSourceUpdateMode.OnPropertyChanged);
             txtTen.DataBindings.Add("EditValue", _aEntry, "Ten", true, DataSourceUpdateMode.OnPropertyChanged);
             mmeGhiChu.DataBindings.Add("EditValue", _aEntry, "GhiChu", true, DataSourceUpdateMode.OnPropertyChanged);
-            //txtDiaChi.DataBindings.Add("EditValue", _aEntry, "DiaChi", true, DataSourceUpdateMode.OnPropertyChanged);
-            //txtSDT.DataBindings.Add("EditValue", _aEntry, "DienThoai", true, DataSourceUpdateMode.OnPropertyChanged);
-            //txtNguoiLienHe.DataBindings.Add("EditValue", _aEntry, "NguoiLienHe", true, DataSourceUpdateMode.OnPropertyChanged);
-            //lokTinhThanh.DataBindings.Add("EditValue", _aEntry, "IDTinhThanh", true, DataSourceUpdateMode.OnPropertyChanged);
-            //slokTinhThanh.DataBindings.Add("Text", _aEntry, "TinhThanh", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtDiaChi.DataBindings.Add("EditValue", _aEntry, "DiaChi", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtSDT.DataBindings.Add("EditValue", _aEntry, "DienThoai", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtNguoiLienHe.DataBindings.Add("EditValue", _aEntry, "NguoiLienHe", true, DataSourceUpdateMode.OnPropertyChanged);
+            slokTinhThanh.DataBindings.Add("EditValue", _aEntry, "IDTinhThanh", true, DataSourceUpdateMode.OnPropertyChanged);
         }
         public override bool ValidationForm()
         {
@@ -78,18 +86,22 @@ namespace Client.GUI.DanhMuc
                 _aEntry.TrangThai = 1;
             }
 
+            eTinhThanh tinhThanh = (eTinhThanh)slokTinhThanh.Properties.GetRowByKeyValue(slokTinhThanh.EditValue) ?? new eTinhThanh();
+            _aEntry.TinhThanh = tinhThanh.Ten;
+
             Tuple<bool, eNhaCungCap> Res = await (_aEntry.KeyID > 0 ?
                 clsFunction.Put<eNhaCungCap, eNhaCungCap>("NhaCungCap", _aEntry) :
                 clsFunction.Post<eNhaCungCap, eNhaCungCap>("NhaCungCap", _aEntry));
 
             if (Res.Item1)
-                _ReloadData?.Invoke(Res.Item2.KeyID);
+                KeyID = Res.Item2.KeyID;
+
             return Res.Item1;
         }
         public override void CustomForm()
         {
-            //lokTinhThanh.Properties.ValueMember = "KeyID";
-            //lokTinhThanh.Properties.DisplayMember = "Ten";
+            slokTinhThanh.Properties.ValueMember = "KeyID";
+            slokTinhThanh.Properties.DisplayMember = "Ten";
 
             base.CustomForm();
         }

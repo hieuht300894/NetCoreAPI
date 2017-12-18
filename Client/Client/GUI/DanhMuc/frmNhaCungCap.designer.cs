@@ -30,11 +30,11 @@
         {
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.mmeGhiChu = new DevExpress.XtraEditors.MemoEdit();
-            this.searchLookUpEdit1 = new DevExpress.XtraEditors.SearchLookUpEdit();
+            this.slokTinhThanh = new DevExpress.XtraEditors.SearchLookUpEdit();
             this.searchLookUpEdit1View = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.textEdit5 = new DevExpress.XtraEditors.TextEdit();
-            this.textEdit4 = new DevExpress.XtraEditors.TextEdit();
-            this.textEdit3 = new DevExpress.XtraEditors.TextEdit();
+            this.txtDiaChi = new DevExpress.XtraEditors.TextEdit();
+            this.txtNguoiLienHe = new DevExpress.XtraEditors.TextEdit();
+            this.txtSDT = new DevExpress.XtraEditors.TextEdit();
             this.txtTen = new DevExpress.XtraEditors.TextEdit();
             this.txtMa = new DevExpress.XtraEditors.TextEdit();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
@@ -49,11 +49,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mmeGhiChu.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.searchLookUpEdit1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.slokTinhThanh.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.searchLookUpEdit1View)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit5.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit4.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit3.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtDiaChi.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtNguoiLienHe.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSDT.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTen.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMa.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
@@ -69,10 +69,10 @@
             // layoutControl1
             // 
             this.layoutControl1.Controls.Add(this.mmeGhiChu);
-            this.layoutControl1.Controls.Add(this.searchLookUpEdit1);
-            this.layoutControl1.Controls.Add(this.textEdit5);
-            this.layoutControl1.Controls.Add(this.textEdit4);
-            this.layoutControl1.Controls.Add(this.textEdit3);
+            this.layoutControl1.Controls.Add(this.slokTinhThanh);
+            this.layoutControl1.Controls.Add(this.txtDiaChi);
+            this.layoutControl1.Controls.Add(this.txtNguoiLienHe);
+            this.layoutControl1.Controls.Add(this.txtSDT);
             this.layoutControl1.Controls.Add(this.txtTen);
             this.layoutControl1.Controls.Add(this.txtMa);
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -85,22 +85,23 @@
             // 
             // mmeGhiChu
             // 
-            this.mmeGhiChu.Location = new System.Drawing.Point(108, 132);
+            this.mmeGhiChu.Location = new System.Drawing.Point(77, 132);
             this.mmeGhiChu.Name = "mmeGhiChu";
-            this.mmeGhiChu.Size = new System.Drawing.Size(464, 89);
+            this.mmeGhiChu.Size = new System.Drawing.Size(495, 89);
             this.mmeGhiChu.StyleController = this.layoutControl1;
             this.mmeGhiChu.TabIndex = 10;
             // 
-            // searchLookUpEdit1
+            // slokTinhThanh
             // 
-            this.searchLookUpEdit1.Location = new System.Drawing.Point(108, 108);
-            this.searchLookUpEdit1.Name = "searchLookUpEdit1";
-            this.searchLookUpEdit1.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            this.slokTinhThanh.Location = new System.Drawing.Point(77, 108);
+            this.slokTinhThanh.Name = "slokTinhThanh";
+            this.slokTinhThanh.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.searchLookUpEdit1.Properties.View = this.searchLookUpEdit1View;
-            this.searchLookUpEdit1.Size = new System.Drawing.Size(464, 20);
-            this.searchLookUpEdit1.StyleController = this.layoutControl1;
-            this.searchLookUpEdit1.TabIndex = 9;
+            this.slokTinhThanh.Properties.NullText = "";
+            this.slokTinhThanh.Properties.View = this.searchLookUpEdit1View;
+            this.slokTinhThanh.Size = new System.Drawing.Size(495, 20);
+            this.slokTinhThanh.StyleController = this.layoutControl1;
+            this.slokTinhThanh.TabIndex = 9;
             // 
             // searchLookUpEdit1View
             // 
@@ -109,43 +110,43 @@
             this.searchLookUpEdit1View.OptionsSelection.EnableAppearanceFocusedCell = false;
             this.searchLookUpEdit1View.OptionsView.ShowGroupPanel = false;
             // 
-            // textEdit5
+            // txtDiaChi
             // 
-            this.textEdit5.Location = new System.Drawing.Point(108, 84);
-            this.textEdit5.Name = "textEdit5";
-            this.textEdit5.Size = new System.Drawing.Size(464, 20);
-            this.textEdit5.StyleController = this.layoutControl1;
-            this.textEdit5.TabIndex = 8;
+            this.txtDiaChi.Location = new System.Drawing.Point(77, 84);
+            this.txtDiaChi.Name = "txtDiaChi";
+            this.txtDiaChi.Size = new System.Drawing.Size(495, 20);
+            this.txtDiaChi.StyleController = this.layoutControl1;
+            this.txtDiaChi.TabIndex = 8;
             // 
-            // textEdit4
+            // txtNguoiLienHe
             // 
-            this.textEdit4.Location = new System.Drawing.Point(390, 60);
-            this.textEdit4.Name = "textEdit4";
-            this.textEdit4.Size = new System.Drawing.Size(182, 20);
-            this.textEdit4.StyleController = this.layoutControl1;
-            this.textEdit4.TabIndex = 7;
+            this.txtNguoiLienHe.Location = new System.Drawing.Point(359, 60);
+            this.txtNguoiLienHe.Name = "txtNguoiLienHe";
+            this.txtNguoiLienHe.Size = new System.Drawing.Size(213, 20);
+            this.txtNguoiLienHe.StyleController = this.layoutControl1;
+            this.txtNguoiLienHe.TabIndex = 7;
             // 
-            // textEdit3
+            // txtSDT
             // 
-            this.textEdit3.Location = new System.Drawing.Point(108, 60);
-            this.textEdit3.Name = "textEdit3";
-            this.textEdit3.Size = new System.Drawing.Size(182, 20);
-            this.textEdit3.StyleController = this.layoutControl1;
-            this.textEdit3.TabIndex = 6;
+            this.txtSDT.Location = new System.Drawing.Point(77, 60);
+            this.txtSDT.Name = "txtSDT";
+            this.txtSDT.Size = new System.Drawing.Size(213, 20);
+            this.txtSDT.StyleController = this.layoutControl1;
+            this.txtSDT.TabIndex = 6;
             // 
             // txtTen
             // 
-            this.txtTen.Location = new System.Drawing.Point(108, 36);
+            this.txtTen.Location = new System.Drawing.Point(77, 36);
             this.txtTen.Name = "txtTen";
-            this.txtTen.Size = new System.Drawing.Size(464, 20);
+            this.txtTen.Size = new System.Drawing.Size(495, 20);
             this.txtTen.StyleController = this.layoutControl1;
             this.txtTen.TabIndex = 5;
             // 
             // txtMa
             // 
-            this.txtMa.Location = new System.Drawing.Point(108, 12);
+            this.txtMa.Location = new System.Drawing.Point(77, 12);
             this.txtMa.Name = "txtMa";
-            this.txtMa.Size = new System.Drawing.Size(464, 20);
+            this.txtMa.Size = new System.Drawing.Size(495, 20);
             this.txtMa.StyleController = this.layoutControl1;
             this.txtMa.TabIndex = 4;
             // 
@@ -172,7 +173,8 @@
             this.layoutControlItem1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
             this.layoutControlItem1.Size = new System.Drawing.Size(564, 24);
-            this.layoutControlItem1.TextSize = new System.Drawing.Size(93, 13);
+            this.layoutControlItem1.Text = "Mã";
+            this.layoutControlItem1.TextSize = new System.Drawing.Size(62, 13);
             // 
             // layoutControlItem2
             // 
@@ -180,39 +182,44 @@
             this.layoutControlItem2.Location = new System.Drawing.Point(0, 24);
             this.layoutControlItem2.Name = "layoutControlItem2";
             this.layoutControlItem2.Size = new System.Drawing.Size(564, 24);
-            this.layoutControlItem2.TextSize = new System.Drawing.Size(93, 13);
+            this.layoutControlItem2.Text = "Tên";
+            this.layoutControlItem2.TextSize = new System.Drawing.Size(62, 13);
             // 
             // layoutControlItem3
             // 
-            this.layoutControlItem3.Control = this.textEdit3;
+            this.layoutControlItem3.Control = this.txtSDT;
             this.layoutControlItem3.Location = new System.Drawing.Point(0, 48);
             this.layoutControlItem3.Name = "layoutControlItem3";
             this.layoutControlItem3.Size = new System.Drawing.Size(282, 24);
-            this.layoutControlItem3.TextSize = new System.Drawing.Size(93, 13);
+            this.layoutControlItem3.Text = "Điện thoại";
+            this.layoutControlItem3.TextSize = new System.Drawing.Size(62, 13);
             // 
             // layoutControlItem4
             // 
-            this.layoutControlItem4.Control = this.textEdit4;
+            this.layoutControlItem4.Control = this.txtNguoiLienHe;
             this.layoutControlItem4.Location = new System.Drawing.Point(282, 48);
             this.layoutControlItem4.Name = "layoutControlItem4";
             this.layoutControlItem4.Size = new System.Drawing.Size(282, 24);
-            this.layoutControlItem4.TextSize = new System.Drawing.Size(93, 13);
+            this.layoutControlItem4.Text = "Người liên hệ";
+            this.layoutControlItem4.TextSize = new System.Drawing.Size(62, 13);
             // 
             // layoutControlItem5
             // 
-            this.layoutControlItem5.Control = this.textEdit5;
+            this.layoutControlItem5.Control = this.txtDiaChi;
             this.layoutControlItem5.Location = new System.Drawing.Point(0, 72);
             this.layoutControlItem5.Name = "layoutControlItem5";
             this.layoutControlItem5.Size = new System.Drawing.Size(564, 24);
-            this.layoutControlItem5.TextSize = new System.Drawing.Size(93, 13);
+            this.layoutControlItem5.Text = "Địa chỉ";
+            this.layoutControlItem5.TextSize = new System.Drawing.Size(62, 13);
             // 
             // layoutControlItem6
             // 
-            this.layoutControlItem6.Control = this.searchLookUpEdit1;
+            this.layoutControlItem6.Control = this.slokTinhThanh;
             this.layoutControlItem6.Location = new System.Drawing.Point(0, 96);
             this.layoutControlItem6.Name = "layoutControlItem6";
             this.layoutControlItem6.Size = new System.Drawing.Size(564, 24);
-            this.layoutControlItem6.TextSize = new System.Drawing.Size(93, 13);
+            this.layoutControlItem6.Text = "Tỉnh thành";
+            this.layoutControlItem6.TextSize = new System.Drawing.Size(62, 13);
             // 
             // layoutControlItem7
             // 
@@ -220,7 +227,8 @@
             this.layoutControlItem7.Location = new System.Drawing.Point(0, 120);
             this.layoutControlItem7.Name = "layoutControlItem7";
             this.layoutControlItem7.Size = new System.Drawing.Size(564, 93);
-            this.layoutControlItem7.TextSize = new System.Drawing.Size(93, 13);
+            this.layoutControlItem7.Text = "Ghi chú";
+            this.layoutControlItem7.TextSize = new System.Drawing.Size(62, 13);
             // 
             // frmNhaCungCap
             // 
@@ -236,11 +244,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mmeGhiChu.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.searchLookUpEdit1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.slokTinhThanh.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.searchLookUpEdit1View)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit5.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit4.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.textEdit3.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtDiaChi.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtNguoiLienHe.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSDT.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTen.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMa.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
@@ -260,11 +268,11 @@
 
         private DevExpress.XtraLayout.LayoutControl layoutControl1;
         private DevExpress.XtraEditors.MemoEdit mmeGhiChu;
-        private DevExpress.XtraEditors.SearchLookUpEdit searchLookUpEdit1;
+        private DevExpress.XtraEditors.SearchLookUpEdit slokTinhThanh;
         private DevExpress.XtraGrid.Views.Grid.GridView searchLookUpEdit1View;
-        private DevExpress.XtraEditors.TextEdit textEdit5;
-        private DevExpress.XtraEditors.TextEdit textEdit4;
-        private DevExpress.XtraEditors.TextEdit textEdit3;
+        private DevExpress.XtraEditors.TextEdit txtDiaChi;
+        private DevExpress.XtraEditors.TextEdit txtNguoiLienHe;
+        private DevExpress.XtraEditors.TextEdit txtSDT;
         private DevExpress.XtraEditors.TextEdit txtTen;
         private DevExpress.XtraEditors.TextEdit txtMa;
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
