@@ -22,9 +22,6 @@ namespace Client.GUI.NhapHang
         eNhapHangNhaCungCap _iEntry;
         eNhapHangNhaCungCap _aEntry;
         BindingList<eNhapHangNhaCungCapChiTiet> lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
-        BindingList<eNhapHangNhaCungCapChiTiet> lstDetail_BAK = new BindingList<eNhapHangNhaCungCapChiTiet>();
-        BindingList<eNhapHangNhaCungCapChiTiet> lstDetail_Edited = new BindingList<eNhapHangNhaCungCapChiTiet>();
-        BindingList<eNhapHangNhaCungCapChiTiet> lstDetail_Deleted = new BindingList<eNhapHangNhaCungCapChiTiet>();
 
         public frmNhapHangNhaCungCap()
         {
@@ -47,9 +44,9 @@ namespace Client.GUI.NhapHang
 
         async void LoadRepository()
         {
-            lstNhomSanPham = await clsFunction.GetAll<eNhomSanPham>("");
-            lstSanPham = await clsFunction.GetAll<eSanPham>("");
-            lstKho = await clsFunction.GetAll<eKho>("");
+            lstNhomSanPham = await clsFunction.GetAll<eNhomSanPham>("NhomSanPham");
+            lstSanPham = await clsFunction.GetAll<eSanPham>("SanPham");
+            lstKho = await clsFunction.GetAll<eKho>("Kho");
 
             await RunMethodAsync(() =>
             {
@@ -79,12 +76,9 @@ namespace Client.GUI.NhapHang
         public async override void LoadDataForm()
         {
             lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
-            lstDetail_BAK = new BindingList<eNhapHangNhaCungCapChiTiet>();
-            lstDetail_Deleted = new BindingList<eNhapHangNhaCungCapChiTiet>();
-            lstDetail_Edited = new BindingList<eNhapHangNhaCungCapChiTiet>();
 
             _iEntry = _iEntry ?? new eNhapHangNhaCungCap();
-            _aEntry = await clsFunction.GetByID<eNhapHangNhaCungCap>("", _iEntry.KeyID);
+            _aEntry = await clsFunction.GetByID<eNhapHangNhaCungCap>("NhapHangNhaCungCap", _iEntry.KeyID);
             SetControlValue();
             SetDataSource();
         }
@@ -110,11 +104,10 @@ namespace Client.GUI.NhapHang
             spnSoTien.DataBindings.Add("Value", _aEntry, "TongTien", true, DataSourceUpdateMode.OnPropertyChanged);
             spnSoLuong.DataBindings.Add("Value", _aEntry, "SoLuong", true, DataSourceUpdateMode.OnPropertyChanged);
         }
-        public async override void SetDataSource()
+        public override void SetDataSource()
         {
-            lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>(await clsFunction.GetAll<eNhapHangNhaCungCapChiTiet>(""));
-            lstDetail_BAK = new BindingList<eNhapHangNhaCungCapChiTiet>(lstDetail.Clone());
-            await RunMethodAsync(() => { gctChiTiet.DataSource = lstDetail; });
+            lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>(_aEntry.eNhapHangNhaCungCapChiTiet.ToList());
+            gctChiTiet.DataSource = lstDetail;
         }
         public override bool ValidationForm()
         {
@@ -142,20 +135,18 @@ namespace Client.GUI.NhapHang
             slokNhomSanPham.PreviewKeyDown -= LokNhomSanPham_PreviewKeyDown;
             srcMaSanPham.PreviewKeyDown -= SrcMaSanPham_PreviewKeyDown;
             srcTenSanPham.PreviewKeyDown -= SrcTenSanPham_PreviewKeyDown;
-            grvChiTiet.InitNewRow -= GrvChiTiet_InitNewRow;
-            grvChiTiet.RowUpdated -= GrvChiTiet_RowUpdated;
             grvChiTiet.CellValueChanged -= GrvChiTiet_CellValueChanged;
             rbtnXoa.ButtonClick -= RbtnXoa_ButtonClick;
             spnThanhToan.EditValueChanged -= SpnThanhToan_EditValueChanged;
+            grvSanPham.DoubleClick -= GrvSanPham_DoubleClick;
 
             slokNhomSanPham.PreviewKeyDown += LokNhomSanPham_PreviewKeyDown;
             srcMaSanPham.PreviewKeyDown += SrcMaSanPham_PreviewKeyDown;
             srcTenSanPham.PreviewKeyDown += SrcTenSanPham_PreviewKeyDown;
-            grvChiTiet.InitNewRow += GrvChiTiet_InitNewRow;
-            grvChiTiet.RowUpdated += GrvChiTiet_RowUpdated;
             grvChiTiet.CellValueChanged += GrvChiTiet_CellValueChanged;
             rbtnXoa.ButtonClick += RbtnXoa_ButtonClick;
             spnThanhToan.EditValueChanged += SpnThanhToan_EditValueChanged;
+            grvSanPham.DoubleClick += GrvSanPham_DoubleClick;
 
             frmNhaCungCap frm = new frmNhaCungCap();
             frm.fType = Module.QuanLyBanHang.eFormType.Add;
@@ -163,6 +154,7 @@ namespace Client.GUI.NhapHang
             frm._ReloadData = LoadNhaCungCap;
             slokNhaCungCap.AddNewItem(frm);
         }
+
         void TimKiemSanPham()
         {
             List<eSanPham> lstTimKiem = new List<eSanPham>(lstSanPham);
@@ -201,27 +193,8 @@ namespace Client.GUI.NhapHang
             if (item != null)
             {
                 lstDetail.Remove(item);
-
-                if (lstDetail_Edited.Any(x => x.KeyID == item.KeyID))
-                    lstDetail_Edited.Remove(item);
-
-                if (lstDetail_Deleted.Any(x => x.KeyID == item.KeyID))
-                    lstDetail_Deleted.Remove(item);
+                CapNhatSoTien();
             }
-        }
-        private void GrvChiTiet_InitNewRow(object sender, InitNewRowEventArgs e)
-        {
-            GridView view = (GridView)sender;
-            view.CellValueChanged -= GrvChiTiet_CellValueChanged;
-            view.SetRowCellValue(e.RowHandle, "KeyID", -lstDetail_Edited.Count);
-            view.CellValueChanged += GrvChiTiet_CellValueChanged;
-        }
-        private void GrvChiTiet_RowUpdated(object sender, DevExpress.XtraGrid.Views.Base.RowObjectEventArgs e)
-        {
-            GridView view = (GridView)sender;
-            eNhapHangNhaCungCapChiTiet item = (eNhapHangNhaCungCapChiTiet)e.Row;
-            if (!lstDetail_Edited.Any(x => x.KeyID == item.KeyID))
-                lstDetail_Edited.Add(item);
         }
         private void GrvChiTiet_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
         {
@@ -237,9 +210,20 @@ namespace Client.GUI.NhapHang
                 item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
                 CapNhatSoTien();
             }
+            if (e.Column.FieldName.Equals("SoLuong") )
+            {
+                item.ThanhTien = item.SoLuong * item.DonGia;
+                item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
+                CapNhatSoTien();
+            }
             if (e.Column.FieldName.Equals("DonGia"))
             {
                 item.ThanhTien = item.SoLuong * item.DonGia;
+                item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
+                CapNhatSoTien();
+            }
+            if (e.Column.FieldName.Equals("ThanhTien"))
+            {
                 item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
                 CapNhatSoTien();
             }
@@ -248,6 +232,8 @@ namespace Client.GUI.NhapHang
                 item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
                 CapNhatSoTien();
             }
+
+            view.UpdateCurrentRow();
             view.CellValueChanged += GrvChiTiet_CellValueChanged;
         }
         private void SrcTenSanPham_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -261,6 +247,32 @@ namespace Client.GUI.NhapHang
         private void LokNhomSanPham_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Tab) { TimKiemSanPham(); }
+        }
+        private void GrvSanPham_DoubleClick(object sender, EventArgs e)
+        {
+            GridView view = (GridView)sender;
+            eSanPham sp = (eSanPham)view.GetFocusedRow();
+            if (sp != null)
+            {
+                int index = lstDetail.FindIndex(x => x.IDSanPham == sp.KeyID);
+                if (index != -1)
+                {
+                    grvChiTiet.FocusedRowHandle = index;
+                }
+                else
+                {
+                    eNhapHangNhaCungCapChiTiet iDT = new eNhapHangNhaCungCapChiTiet();
+                    iDT.IDSanPham = sp.KeyID;
+                    iDT.MaSanPham = sp.Ma;
+                    iDT.TenSanPham = sp.Ten;
+                    iDT.IDDonViTinh = sp.IDDonViTinh;
+                    iDT.MaDonViTinh = sp.MaDonViTinh;
+                    iDT.TenDonViTinh = sp.TenDonViTinh;
+                    iDT.SoLuongLe = 1;
+                    iDT.SoLuong = 1;
+                    lstDetail.Add(iDT);
+                }
+            }
         }
     }
 }

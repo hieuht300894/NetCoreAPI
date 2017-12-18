@@ -30,6 +30,7 @@
         {
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
+            this.txtMaPhieu = new DevExpress.XtraEditors.TextEdit();
             this.spnTongNo = new DevExpress.XtraEditors.SpinEdit();
             this.spnThanhToan = new DevExpress.XtraEditors.SpinEdit();
             this.mmeGhiChu = new DevExpress.XtraEditors.MemoEdit();
@@ -83,6 +84,7 @@
             this.layoutControlItem6 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem7 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem15 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.layoutControlItem18 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlGroup4 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlGroup5 = new DevExpress.XtraLayout.LayoutControlGroup();
@@ -95,11 +97,10 @@
             this.layoutControlItem16 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem14 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem17 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.txtMaPhieu = new DevExpress.XtraEditors.TextEdit();
-            this.layoutControlItem18 = new DevExpress.XtraLayout.LayoutControlItem();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaPhieu.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.spnTongNo.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.spnThanhToan.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mmeGhiChu.Properties)).BeginInit();
@@ -141,6 +142,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem15)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem18)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup5)).BeginInit();
@@ -153,8 +155,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem16)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem14)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem17)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMaPhieu.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem18)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
@@ -185,6 +185,15 @@
             this.layoutControl1.Size = new System.Drawing.Size(884, 364);
             this.layoutControl1.TabIndex = 4;
             this.layoutControl1.Text = "layoutControl1";
+            // 
+            // txtMaPhieu
+            // 
+            this.txtMaPhieu.Location = new System.Drawing.Point(419, 66);
+            this.txtMaPhieu.MenuManager = this.barMenu;
+            this.txtMaPhieu.Name = "txtMaPhieu";
+            this.txtMaPhieu.Size = new System.Drawing.Size(179, 20);
+            this.txtMaPhieu.StyleController = this.layoutControl1;
+            this.txtMaPhieu.TabIndex = 21;
             // 
             // spnTongNo
             // 
@@ -401,9 +410,9 @@
             // gridColumn5
             // 
             this.gridColumn5.Caption = "Sản phẩm";
-            this.gridColumn5.ColumnEdit = this.rlokSanPham;
-            this.gridColumn5.FieldName = "IDSanPham";
+            this.gridColumn5.FieldName = "TenSanPham";
             this.gridColumn5.Name = "gridColumn5";
+            this.gridColumn5.OptionsColumn.AllowEdit = false;
             this.gridColumn5.Visible = true;
             this.gridColumn5.VisibleIndex = 0;
             // 
@@ -806,6 +815,15 @@
             this.layoutControlItem15.Text = "Ghi chú";
             this.layoutControlItem15.TextSize = new System.Drawing.Size(76, 13);
             // 
+            // layoutControlItem18
+            // 
+            this.layoutControlItem18.Control = this.txtMaPhieu;
+            this.layoutControlItem18.Location = new System.Drawing.Point(0, 24);
+            this.layoutControlItem18.Name = "layoutControlItem18";
+            this.layoutControlItem18.Size = new System.Drawing.Size(262, 24);
+            this.layoutControlItem18.Text = "Mã phiếu nhập";
+            this.layoutControlItem18.TextSize = new System.Drawing.Size(76, 13);
+            // 
             // layoutControlGroup4
             // 
             this.layoutControlGroup4.ExpandButtonVisible = true;
@@ -924,24 +942,6 @@
             this.layoutControlItem17.Text = "Tổng nợ";
             this.layoutControlItem17.TextSize = new System.Drawing.Size(76, 13);
             // 
-            // txtMaPhieu
-            // 
-            this.txtMaPhieu.Location = new System.Drawing.Point(419, 66);
-            this.txtMaPhieu.MenuManager = this.barMenu;
-            this.txtMaPhieu.Name = "txtMaPhieu";
-            this.txtMaPhieu.Size = new System.Drawing.Size(179, 20);
-            this.txtMaPhieu.StyleController = this.layoutControl1;
-            this.txtMaPhieu.TabIndex = 21;
-            // 
-            // layoutControlItem18
-            // 
-            this.layoutControlItem18.Control = this.txtMaPhieu;
-            this.layoutControlItem18.Location = new System.Drawing.Point(0, 24);
-            this.layoutControlItem18.Name = "layoutControlItem18";
-            this.layoutControlItem18.Size = new System.Drawing.Size(262, 24);
-            this.layoutControlItem18.Text = "Mã phiếu nhập";
-            this.layoutControlItem18.TextSize = new System.Drawing.Size(76, 13);
-            // 
             // frmNhapHangNhaCungCap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -954,6 +954,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaPhieu.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.spnTongNo.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.spnThanhToan.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mmeGhiChu.Properties)).EndInit();
@@ -995,6 +996,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem15)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem18)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup5)).EndInit();
@@ -1007,8 +1009,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem14)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem17)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtMaPhieu.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem18)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
