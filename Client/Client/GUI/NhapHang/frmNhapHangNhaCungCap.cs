@@ -86,23 +86,20 @@ namespace Client.GUI.NhapHang
         {
             if (_aEntry.KeyID > 0)
             {
+                dteNgayNhap.EditValue = _aEntry.NgayNhap;
                 slokNhaCungCap.LockButton();
             }
             else
             {
-                _aEntry.NgayNhap = dteNgayNhap.DateTime;
                 slokNhaCungCap.UnlockButton();
             }
 
-            ResetControlValue();
-
-            slokNhaCungCap.DataBindings.Add("EditValue", _aEntry, "IDNhaCungCap", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtMaPhieu.DataBindings.Add("EditValue", _aEntry, "Ma", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtSoLoHang.DataBindings.Add("EditValue", _aEntry, "MaLoHang", true, DataSourceUpdateMode.OnPropertyChanged);
-            dteNgayNhap.DataBindings.Add("DateTime", _aEntry, "NgayNhap", true, DataSourceUpdateMode.OnPropertyChanged);
-            mmeGhiChu.DataBindings.Add("EditValue", _aEntry, "GhiChu", true, DataSourceUpdateMode.OnPropertyChanged);
-            spnSoTien.DataBindings.Add("Value", _aEntry, "TongTien", true, DataSourceUpdateMode.OnPropertyChanged);
-            spnSoLuong.DataBindings.Add("Value", _aEntry, "SoLuong", true, DataSourceUpdateMode.OnPropertyChanged);
+            slokNhaCungCap.EditValue = _aEntry.IDNhaCungCap;
+            txtMaPhieu.EditValue = _aEntry.Ma;
+            txtSoLoHang.EditValue = _aEntry.MaLoHang;
+            mmeGhiChu.EditValue = _aEntry.GhiChu;
+            spnSoTien.Value = _aEntry.TongTien;
+            spnSoLuong.Value = _aEntry.SoLuong;
         }
         public override void SetDataSource()
         {

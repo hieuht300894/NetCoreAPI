@@ -54,14 +54,13 @@ namespace Client.GUI.DanhMuc
                 txtMa.Select();
             }
 
-            ResetControlValue();
-            txtMa.DataBindings.Add("EditValue", _aEntry, "Ma", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtTen.DataBindings.Add("EditValue", _aEntry, "Ten", true, DataSourceUpdateMode.OnPropertyChanged);
-            mmeGhiChu.DataBindings.Add("EditValue", _aEntry, "GhiChu", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtDiaChi.DataBindings.Add("EditValue", _aEntry, "DiaChi", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtSDT.DataBindings.Add("EditValue", _aEntry, "DienThoai", true, DataSourceUpdateMode.OnPropertyChanged);
-            txtNguoiLienHe.DataBindings.Add("EditValue", _aEntry, "NguoiLienHe", true, DataSourceUpdateMode.OnPropertyChanged);
-            slokTinhThanh.DataBindings.Add("EditValue", _aEntry, "IDTinhThanh", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtMa.EditValue = _aEntry.Ma;
+            txtTen.EditValue = _aEntry.Ten;
+            mmeGhiChu.EditValue = _aEntry.GhiChu;
+            txtDiaChi.EditValue = _aEntry.DiaChi;
+            txtSDT.EditValue = _aEntry.DienThoai;
+            txtNguoiLienHe.EditValue = _aEntry.NguoiLienHe;
+            slokTinhThanh.EditValue = _aEntry.IDTinhThanh;
         }
         public override bool ValidationForm()
         {
@@ -86,16 +85,22 @@ namespace Client.GUI.DanhMuc
                 _aEntry.TrangThai = 1;
             }
 
+            _aEntry.Ma = txtMa.Text.Trim();
+            _aEntry.Ten = txtTen.Text.Trim();
+            _aEntry.GhiChu = mmeGhiChu.Text.Trim();
+            _aEntry.DiaChi = txtDiaChi.Text.Trim();
+            _aEntry.DienThoai = txtSDT.Text.Trim();
+            _aEntry.NguoiLienHe = txtNguoiLienHe.Text.Trim();
+
             eTinhThanh tinhThanh = (eTinhThanh)slokTinhThanh.Properties.GetRowByKeyValue(slokTinhThanh.EditValue) ?? new eTinhThanh();
+            _aEntry.IDTinhThanh = tinhThanh.KeyID;
             _aEntry.TinhThanh = tinhThanh.Ten;
 
             Tuple<bool, eNhaCungCap> Res = await (_aEntry.KeyID > 0 ?
                 clsFunction.Put<eNhaCungCap, eNhaCungCap>("NhaCungCap", _aEntry) :
                 clsFunction.Post<eNhaCungCap, eNhaCungCap>("NhaCungCap", _aEntry));
-
             if (Res.Item1)
                 KeyID = Res.Item2.KeyID;
-
             return Res.Item1;
         }
         public override void CustomForm()

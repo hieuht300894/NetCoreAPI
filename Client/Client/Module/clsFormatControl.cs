@@ -385,8 +385,8 @@ namespace Client.Module
                 GridView grvMain = gctMain.MainView as GridView;
                 grvMain.Format(showIndicator, ColumnAuto, ShowLines);
 
-                gctMain.ProcessGridKey -= GctMain_ProcessGridKey;
-                gctMain.ProcessGridKey += GctMain_ProcessGridKey;
+                //gctMain.ProcessGridKey -= GctMain_ProcessGridKey;
+                //gctMain.ProcessGridKey += GctMain_ProcessGridKey;
             }
             catch { }
 
@@ -414,7 +414,7 @@ namespace Client.Module
             grvMain.OptionsCustomization.AllowSort = true;
             //grvMain.OptionsView.ShowAutoFilterRow = true;
             grvMain.OptionsSelection.MultiSelect = true;
-            grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.CellSelect;
+            grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
             grvMain.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = true;
             grvMain.OptionsFilter.ColumnFilterPopupMode = DevExpress.XtraGrid.Columns.ColumnFilterPopupMode.Excel;
             //grvMain.OptionsFind.AlwaysVisible = true;

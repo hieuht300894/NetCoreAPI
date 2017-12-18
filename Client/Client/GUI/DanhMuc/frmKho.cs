@@ -91,69 +91,79 @@ namespace Client.GUI.DanhMuc
     //    }
     //}
 
-    public partial class frmKho : XtraForm
+    public partial class frmKho : frmBase
     {
+        eKho _iEntry;
+        eKho _aEntry;
+
         public frmKho()
         {
             InitializeComponent();
         }
+        protected override void frmBase_Load(object sender, EventArgs e)
+        {
+            base.frmBase_Load(sender, e);
 
-        //    eKho _iEntry;
-        //    eKho _aEntry;
+            LoadDataForm();
+            CustomForm();
+        }
 
-        //    public frmKho()
-        //    {
-        //        InitializeComponent();
-        //    }
-        //    protected override void frmBase_Load(object sender, EventArgs e)
-        //    {
-        //        base.frmBase_Load(sender, e);
+        public async override void LoadDataForm()
+        {
+            _iEntry = _iEntry ?? new eKho();
+            _aEntry = await clsFunction.GetByID<eKho>("Kho", _iEntry.KeyID);
 
-        //        LoadDataForm();
-        //        CustomForm();
-        //    }
+            SetControlValue();
+        }
+        public override void SetControlValue()
+        {
+            if (_aEntry.KeyID > 0)
+            {
+                txtTen.Select();
+            }
+            else
+            {
+                txtMa.Select();
+            }
 
-        //    public async override void LoadDataForm()
-        //    {
-        //        _iEntry = _iEntry ?? new eKho();
-        //        _aEntry = await clsFunction.GetByID<eKho>("Kho", _iEntry.KeyID);
+            txtMa.EditValue = _aEntry.Ma;
+            txtTen.EditValue = _aEntry.Ten;
+            mmeGhiChu.EditValue = _aEntry.GhiChu;
+        }
+        public override bool ValidationForm()
+        {
+            return base.ValidationForm();
+        }
+        public async override Task<bool> SaveData()
+        {
+            if (_aEntry.KeyID > 0)
+            {
+                _aEntry.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
+                _aEntry.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
+                _aEntry.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
+                _aEntry.NgayCapNhat = DateTime.Now.ServerNow();
+                _aEntry.TrangThai = 2;
 
-        //        SetControlValue();
-        //    }
-        //    public override void SetControlValue()
-        //    {
-        //        //txtMa.DataBindings.Add("EditValue", _aEntry, "Ma", true, DataSourceUpdateMode.OnPropertyChanged);
-        //        //txtTen.DataBindings.Add("EditValue", _aEntry, "Ten", true, DataSourceUpdateMode.OnPropertyChanged);
-        //        //mmeGhiChu.DataBindings.Add("EditValue", _aEntry, "GhiChu", true, DataSourceUpdateMode.OnPropertyChanged);
-        //    }
-        //    public override bool ValidationForm()
-        //    {
-        //        return base.ValidationForm();
-        //    }
-        //    public async override Task<bool> SaveData()
-        //    {
-        //        if (_aEntry.KeyID > 0)
-        //        {
-        //            _aEntry.NguoiCapNhat = clsGeneral.curPersonnel.KeyID;
-        //            _aEntry.MaNguoiCapNhat = clsGeneral.curPersonnel.Ma;
-        //            _aEntry.TenNguoiCapNhat = clsGeneral.curPersonnel.Ten;
-        //            _aEntry.NgayCapNhat = DateTime.Now.ServerNow();
-        //            _aEntry.TrangThai = 2;
+            }
+            else
+            {
+                _aEntry.NguoiTao = clsGeneral.curPersonnel.KeyID;
+                _aEntry.MaNguoiTao = clsGeneral.curPersonnel.Ma;
+                _aEntry.TenNguoiTao = clsGeneral.curPersonnel.Ten;
+                _aEntry.NgayTao = DateTime.Now.ServerNow();
+                _aEntry.TrangThai = 1;
+            }
 
-        //        }
-        //        else
-        //        {
-        //            _aEntry.NguoiTao = clsGeneral.curPersonnel.KeyID;
-        //            _aEntry.MaNguoiTao = clsGeneral.curPersonnel.Ma;
-        //            _aEntry.TenNguoiTao = clsGeneral.curPersonnel.Ten;
-        //            _aEntry.NgayTao = DateTime.Now.ServerNow();
-        //            _aEntry.TrangThai = 1;
-        //        }
+            _aEntry.Ma = txtMa.Text.Trim();
+            _aEntry.Ten = txtTen.Text.Trim();
+            _aEntry.GhiChu = mmeGhiChu.Text.Trim();
 
-        //        Tuple<bool, eKho> Res = await (_aEntry.KeyID > 0 ? clsFunction.Put<eKho, eKho>("Kho", _aEntry) : clsFunction.Post<eKho, eKho>("Kho", _aEntry));
-        //        if (Res.Item1)
-        //            _ReloadData?.Invoke(Res.Item2.KeyID);
-        //        return Res.Item1;
-        //    }
+            Tuple<bool, eKho> Res = await (_aEntry.KeyID > 0 ? 
+                clsFunction.Put<eKho, eKho>("Kho", _aEntry) : 
+                clsFunction.Post<eKho, eKho>("Kho", _aEntry));
+            if (Res.Item1)
+                KeyID = Res.Item2.KeyID;
+            return Res.Item1;
+        }
     }
 }
