@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
 using Server.Model;
 using Server.Utils;
 using System;
@@ -198,6 +199,26 @@ namespace Server.Service
                 Context.Database.RollbackTransaction();
                 return false;
             }
+        }
+
+        public async Task<IDbContextTransaction> BeginTransaction()
+        {
+            return await Context.Database.BeginTransactionAsync();
+        }
+
+        public async Task<Int32> SaveChanges()
+        {
+            return await Context.SaveChangesAsync();
+        }
+
+        public void CommitTransaction()
+        {
+            Context.Database.CommitTransaction();
+        }
+
+        public void RollbackTransaction()
+        {
+            Context.Database.RollbackTransaction();
         }
     }
 

@@ -14,6 +14,7 @@ namespace Server.Model
         /*
          * Add-Migration "Name not exist" -context zModel
          * Update-Database -context zModel
+         * Remove-Migration -context zModel
          */
 
 
@@ -54,7 +55,7 @@ namespace Server.Model
         public virtual DbSet<eNhomKhachHang> eNhomKhachHang { get; set; }
         public virtual DbSet<eNhomNhaCungCap> eNhomNhaCungCap { get; set; }
         public virtual DbSet<eNhomSanPham> eNhomSanPham { get; set; }
-        public virtual DbSet<eNhomNhaCungCap> eSanPham { get; set; }
+        public virtual DbSet<eSanPham> eSanPham { get; set; }
         public virtual DbSet<eTienTe> eTienTe { get; set; }
         public virtual DbSet<eTinhThanh> eTinhThanh { get; set; }
         #endregion
@@ -107,9 +108,9 @@ namespace Server.Model
             modelBuilder.Entity<eNhomKhachHang>().HasKey(x => x.KeyID);
             modelBuilder.Entity<eNhomNhaCungCap>().HasKey(x => x.KeyID);
             modelBuilder.Entity<eNhomSanPham>().HasKey(x => x.KeyID);
-            modelBuilder.Entity<eNhomNhaCungCap>().HasKey(x => x.KeyID);
             modelBuilder.Entity<eTienTe>().HasKey(x => x.KeyID);
             modelBuilder.Entity<eTinhThanh>().HasKey(x => x.KeyID);
+            modelBuilder.Entity<eSanPham>().HasKey(x => x.KeyID);
             #endregion
 
             #region Khai báo đầu kỳ

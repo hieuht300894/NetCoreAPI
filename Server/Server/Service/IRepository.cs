@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,10 @@ namespace Server.Service
         Task<bool> DeleteEntry(T item);
         Task<bool> DeleteEntries(object[] ids);
         Task<bool> DeleteEntries(T[] items);
-
+        Task<IDbContextTransaction> BeginTransaction();
+        Task<Int32> SaveChanges();
+        void CommitTransaction();
+        void RollbackTransaction();
     }
     public interface IRepositoryCollection
     {

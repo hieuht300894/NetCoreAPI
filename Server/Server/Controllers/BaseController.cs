@@ -21,17 +21,17 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public virtual async Task<IActionResult> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
             IEnumerable<T> Items = await Instance.GetAll();
-            return Ok(Items);
+            return Items;
         }
 
         [HttpGet("{id}")]
-        public virtual async Task<IActionResult> GetByID(String id)
+        public virtual async Task<T> GetByID(String id)
         {
             T Item = await Instance.GetByID(id);
-            return Ok(Item);
+            return Item;
         }
 
         [HttpPost]

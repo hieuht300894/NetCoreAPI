@@ -11,27 +11,27 @@ using Server.Model;
 
 namespace Server.Controllers
 {
-    public class SanPhamController : BaseController<eNhomNhaCungCap>
+    public class SanPhamController : BaseController<eSanPham>
     {
         public SanPhamController(IRepositoryCollection Collection) : base(Collection)
         {
         }
 
-        public async override Task<IActionResult> AddEntries([FromBody] eNhomNhaCungCap[] Items)
+        public async override Task<IActionResult> AddEntries([FromBody] eSanPham[] Items)
         {
             try
             {
                 Instance.Context = new aModel();
-                Items = Items ?? new eNhomNhaCungCap[] { };
+                Items = Items ?? new eSanPham[] { };
                 await Instance.Context.Database.BeginTransactionAsync();
-                foreach (eNhomNhaCungCap item in Items)
+                foreach (eSanPham item in Items)
                 {
                     item.KeyID = item.KeyID > 0 ? item.KeyID : 0;
 
                     if (item.KeyID == 0)
-                        await Instance.Context.eNhomNhaCungCap.AddAsync(item);
+                        await Instance.Context.eSanPham.AddAsync(item);
                     else
-                        Instance.Context.eNhomNhaCungCap.Update(item);
+                        Instance.Context.eSanPham.Update(item);
                 }
                 await Instance.Context.SaveChangesAsync();
                 Instance.Context.Database.CommitTransaction();

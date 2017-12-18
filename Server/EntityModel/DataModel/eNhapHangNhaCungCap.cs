@@ -17,6 +17,9 @@ namespace EntityModel.DataModel
         public decimal ChietKhau { get; set; }
         public decimal TienChietKhau { get; set; }
         public decimal TongTien { get; set; }
+        public decimal NoCu { get; set; }
+        public decimal ThanhToan { get; set; }
+        public decimal ConLai { get; set; }
         public virtual ICollection<eNhapHangNhaCungCapChiTiet> eNhapHangNhaCungCapChiTiet { get; set; } = new HashSet<eNhapHangNhaCungCapChiTiet>();
     }
 }

@@ -15,5 +15,17 @@ namespace Server.Controllers
         public TinhThanhController(IRepositoryCollection Collection) : base(Collection)
         {
         }
+
+        [Route("DanhSach63TinhThanh")]
+        public IList<eTinhThanh> DanhSach63TinhThanh()
+        {
+            try
+            {
+                Instance.Context = new Model.aModel();
+                IList<eTinhThanh> lstResult = Instance.Context.eTinhThanh.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2).ToList();
+                return lstResult;
+            }
+            catch { return new List<eTinhThanh>(); }
+        }
     }
 }
