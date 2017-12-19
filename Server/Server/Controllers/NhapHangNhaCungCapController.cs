@@ -17,7 +17,7 @@ namespace Server.Controllers
         {
         }
 
-        public override async Task<IEnumerable<eNhapHangNhaCungCap>> GetAll()
+        public async override Task<IEnumerable<eNhapHangNhaCungCap>> GetAll()
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Server.Controllers
             catch { return new eNhapHangNhaCungCap(); }
         }
 
-        public override async Task<IActionResult> AddEntries([FromBody] eNhapHangNhaCungCap[] Items)
+        public async override Task<IActionResult> AddEntries([FromBody] eNhapHangNhaCungCap[] Items)
         {
             try
             {
@@ -105,6 +105,52 @@ namespace Server.Controllers
             }
         }
 
+        public async override Task<IActionResult> UpdateEntries([FromBody] eNhapHangNhaCungCap[] Items)
+        {
+            try
+            {
+                Instance.Context = new Model.aModel();
+                await Instance.BeginTransaction();
+
+                Instance.Context.eNhapHangNhaCungCap.UpdateRange(Items);
+
+                Items.ToList().ForEach(x =>
+                {
+                    IEnumerable<eNhapHangNhaCungCapChiTiet> lstDetail = Instance.Context.eNhapHangNhaCungCapChiTiet.Where(y => y.IDNhapHangNhaCungCap == x.KeyID).ToList();
+                    lstDetail.ToList().ForEach(y =>
+                    {
+                        eNhapHangNhaCungCapChiTiet obj = x.eNhapHangNhaCungCapChiTiet.FirstOrDefault(z => z.KeyID == y.KeyID);
+                        if (obj == null)
+                            Instance.Context.eNhapHangNhaCungCapChiTiet.Remove(y);
+                        else
+                            Instance.Context.Entry(y).CurrentValues.SetValues(obj);
+
+                    });
+                    x.eNhapHangNhaCungCapChiTiet.ToList().ForEach(y =>
+                    {
+                        if (y.KeyID <= 0)
+                        {
+                            y.KeyID = 0;
+                            y.IDNhapHangNhaCungCap = x.KeyID;
+                            Instance.Context.eNhapHangNhaCungCapChiTiet.Add(y);
+                        }
+                    });
+                });
+
+                CapNhatCongNo(Items);
+
+                await Instance.SaveChanges();
+                Instance.CommitTransaction();
+
+                return Ok(Items);
+            }
+            catch (Exception ex)
+            {
+                Instance.RollbackTransaction();
+                return BadRequest();
+            }
+        }
+
         async void CapNhatCongNo(eNhapHangNhaCungCap[] Items)
         {
             foreach (eNhapHangNhaCungCap item in Items)
@@ -117,12 +163,12 @@ namespace Server.Controllers
                     congNo.IDNhaCungCap = item.IDNhaCungCap;
                     congNo.MaNhaCungCap = item.MaNhaCungCap;
                     congNo.TenNhaCungCap = item.TenNhaCungCap;
-                    congNo.IsNhapHang = true;
                     congNo.IDMaster = item.KeyID;
                     congNo.NguoiTao = item.NguoiTao;
                     congNo.MaNguoiTao = item.MaNguoiTao;
                     congNo.TenNguoiTao = item.TenNguoiTao;
                     congNo.NgayTao = item.NgayTao;
+                    congNo.IsNhapHang = true;
                     await Instance.Context.eCongNoNhaCungCap.AddAsync(congNo);
                 }
                 else
@@ -134,12 +180,33 @@ namespace Server.Controllers
                 }
                 congNo.TrangThai = item.TrangThai;
                 congNo.Ngay = item.NgayNhap;
+                congNo.ThanhTien = item.ThanhTien;
+                congNo.VAT = item.VAT;
+                congNo.TienVAT = item.TienVAT;
+                congNo.CK = item.ChietKhau;
+                congNo.TienCK = item.TienChietKhau;
                 congNo.TongTien = item.TongTien;
                 congNo.NoCu = item.NoCu;
                 congNo.ThanhToan = item.ThanhToan;
                 congNo.ConLai = item.ConLai;
                 congNo.GhiChu = item.GhiChu;
             }
+        }
+
+        [Route("CongNoHienTai/{IDMaster}/{IDNhaCungCap}/{NgayHienTai}")]
+        public eCongNoNhaCungCap CongNoHienTai(int IDMaster, int IDNhaCungCap, DateTime NgayHienTai)
+        {
+            try
+            {
+                Instance.Context = new Model.aModel();
+                IEnumerable<eCongNoNhaCungCap> lstCongNo = Instance.Context.eCongNoNhaCungCap.Where(x => x.IDNhaCungCap == IDNhaCungCap);
+                lstCongNo = lstCongNo.Where(x => x.Ngay.Date <= NgayHienTai.Date);
+
+                eCongNoNhaCungCap congNo = lstCongNo.FirstOrDefault(x => x.IDMaster == IDMaster) ?? new eCongNoNhaCungCap();
+                congNo.ConLai = lstCongNo.Where(x => x.IDMaster != IDMaster).ToList().Sum(x => x.ConLai);
+                return congNo;
+            }
+            catch { return new eCongNoNhaCungCap(); }
         }
     }
 }
