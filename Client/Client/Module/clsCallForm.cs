@@ -12,25 +12,29 @@ namespace Client.Module
 {
     public class clsCallForm
     {
-        public static void InitFormCollection()
+        public async static void InitFormCollection()
         {
             try
             {
-                Type[] types = Assembly.GetExecutingAssembly().GetTypes();
-                foreach (Type type in types)
+                await Task.Factory.StartNew(() =>
                 {
-                    if (type.BaseType == typeof(frmBase))
+                    Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+                    foreach (Type type in types)
                     {
-                        ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
+                        if (type.BaseType == typeof(frmBase))
+                        {
+                            ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
+                        }
+                        if (type.BaseType == typeof(XtraForm))
+                        {
+                            ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
+                        }
                     }
-                    if (type.BaseType == typeof(XtraForm))
-                    {
-                        ModuleHelper.ListFormItem.Add(new FormItem() { fType = type, Name = type.Name });
-                    }
-                }
+                });
             }
             catch { }
         }
+
         public static FormItem CreateNewForm(string bbiName)
         {
             return ModuleHelper.ListFormItem.Find(x => x.Name.Equals(bbiName));

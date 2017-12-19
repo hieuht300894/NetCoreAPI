@@ -19,7 +19,6 @@ namespace Client.GUI.Common
     public partial class frmMain : XtraForm
     {
         #region Variable
-
         #endregion
 
         #region Form
@@ -33,54 +32,67 @@ namespace Client.GUI.Common
         #endregion
 
         #region Method
-        private void LoadDataForm()
+        async void LoadDataForm()
         {
-            clsGeneral.CallWaitForm(this);
-
-            clsCallForm.InitFormCollection();
-            AddItemClick();
-
-            clsGeneral.CloseWaitForm();
-        }
-        private void AddDocument(XtraForm _xtrForm)
-        {
-            // BaseDocument document = docManager.GetDocument(_xtrForm);
-            BaseDocument document = tbvMain.Documents.FirstOrDefault(x => x.Control.Name.Equals(_xtrForm.Name));
-
-            if (document != null)
-                tbvMain.Controller.Activate(document);
-            else
+            await Task.Factory.StartNew(() =>
             {
-                _xtrForm.Text = _xtrForm.Text;
-                _xtrForm.MdiParent = this;
-                _xtrForm.Show();
-            }
+                clsGeneral.CallWaitForm(this);
+
+                clsCallForm.InitFormCollection();
+                AddItemClick();
+
+                clsGeneral.CloseWaitForm();
+            });
         }
-        private async void AddItemClick()
+        async void AddDocument(XtraForm _xtrForm)
+        {
+            await Task.Factory.StartNew(() =>
+            {
+
+                BaseDocument document = tbvMain.Documents.FirstOrDefault(x => x.Control.Name.Equals(_xtrForm.Name));
+
+                if (document != null)
+                    tbvMain.Controller.Activate(document);
+                else
+                {
+                    Invoke(new Action(() =>
+                    {
+                        _xtrForm.Invoke(new Action(() =>
+                        {
+                            _xtrForm.MdiParent = this;
+                            _xtrForm.Show();
+                        }));
+                    }));
+                }
+
+            });
+        }
+        async void AddItemClick()
         {
             // Duyệt từng page trong ribbon
             try
             {
-                await Task.Factory.StartNew(() => { });
-
-                foreach (RibbonPage page in rcMain.Pages)
+                await Task.Factory.StartNew(() =>
                 {
-                    foreach (RibbonPageGroup group in page.Groups)
+                    foreach (RibbonPage page in rcMain.Pages)
                     {
-                        foreach (var item in group.ItemLinks)
+                        foreach (RibbonPageGroup group in page.Groups)
                         {
-                            if (item is BarButtonItemLink)
+                            foreach (var item in group.ItemLinks)
                             {
-                                BarButtonItemLink bbi = item as BarButtonItemLink;
-                                if (bbi.Item.Name.StartsWith("frm"))
+                                if (item is BarButtonItemLink)
                                 {
-                                    bbi.Item.ItemClick -= bbi_ItemClick;
-                                    bbi.Item.ItemClick += bbi_ItemClick;
+                                    BarButtonItemLink bbi = item as BarButtonItemLink;
+                                    if (bbi.Item.Name.StartsWith("frm"))
+                                    {
+                                        bbi.Item.ItemClick -= bbi_ItemClick;
+                                        bbi.Item.ItemClick += bbi_ItemClick;
+                                    }
                                 }
                             }
                         }
                     }
-                }
+                });
             }
             catch { }
         }
@@ -91,17 +103,15 @@ namespace Client.GUI.Common
         {
             LoadDataForm();
         }
-        private void bbi_ItemClick(object sender, ItemClickEventArgs e)
+        async void bbi_ItemClick(object sender, ItemClickEventArgs e)
         {
-            try
+            await Task.Factory.StartNew(() =>
             {
                 clsGeneral.CallWaitForm(this);
                 FormItem fi = clsCallForm.CreateNewForm(e.Item.Name);
-                if (fi != null)
-                    AddDocument(fi.xForm);
+                if (fi != null) AddDocument(fi.xForm);
                 clsGeneral.CloseWaitForm();
-            }
-            catch { clsGeneral.CloseWaitForm(); }
+            });
         }
         #endregion
     }

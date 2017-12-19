@@ -15,7 +15,7 @@ namespace Client.BLL.Common
         /// Lấy danh sách dữ liệu
         /// </summary>
         /// <returns></returns>
-        public async static Task<IList<T>> GetItemsAsync<T>(String api, params object[] Objs) where T : class, new()
+        public async static Task<List<T>> GetItemsAsync<T>(String api, params object[] Objs) where T : class, new()
         {
             try
             {
@@ -27,7 +27,7 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
                 IRestResponse response = await client.ExecuteTaskAsync(request);
-                IList<T> lstResult = response.Content.DeserializeToList<T>();
+                List<T> lstResult = response.Content.DeserializeToList<T>();
                 return lstResult ?? new List<T>();
             }
             catch { return new List<T>(); }
@@ -217,7 +217,7 @@ namespace Client.BLL.Common
         /// Lấy danh sách dữ liệu
         /// </summary>
         /// <returns></returns>
-        public static IList<T> GetAll<T>(String api, params object[] Objs) where T : class, new()
+        public static List<T> GetAll<T>(String api, params object[] Objs) where T : class, new()
         {
             try
             {
@@ -229,7 +229,7 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
                 IRestResponse response = client.Execute(request);
-                IList<T> lstResult = response.Content.DeserializeToList<T>();
+                List<T> lstResult = response.Content.DeserializeToList<T>();
                 return lstResult ?? new List<T>();
             }
             catch { return new List<T>(); }

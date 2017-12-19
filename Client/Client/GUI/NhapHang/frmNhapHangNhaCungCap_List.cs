@@ -18,6 +18,9 @@ namespace Client.GUI.NhapHang
 {
     public partial class frmNhapHangNhaCungCap_List : frmBase
     {
+        List<eNhapHangNhaCungCap> lstMaster = new List<eNhapHangNhaCungCap>();
+        List<eNhapHangNhaCungCapChiTiet> lstDetail = new List<eNhapHangNhaCungCapChiTiet>();
+
         public frmNhapHangNhaCungCap_List()
         {
             InitializeComponent();
@@ -27,13 +30,16 @@ namespace Client.GUI.NhapHang
             base.frmBase_Load(sender, e);
 
             LoadData(0);
+            SetDataSource();
             CustomForm();
         }
 
         public async override void LoadData(object KeyID)
         {
-            IList<eNhapHangNhaCungCap> lstMaster = await clsFunction.GetItemsAsync<eNhapHangNhaCungCap>("NhapHangNhaCungCap");
-            IList<eNhapHangNhaCungCapChiTiet> lstDetail = new List<eNhapHangNhaCungCapChiTiet>();
+            lstMaster = await clsFunction.GetItemsAsync<eNhapHangNhaCungCap>("NhapHangNhaCungCap");
+        }
+        public async override void SetDataSource()
+        {
             await RunMethodAsync(() =>
             {
                 gctDanhSach.DataSource = lstMaster;

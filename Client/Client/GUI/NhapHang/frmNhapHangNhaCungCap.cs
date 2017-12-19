@@ -19,6 +19,7 @@ namespace Client.GUI.NhapHang
         IList<eSanPham> lstSanPham = new List<eSanPham>();
         IList<eKho> lstKho = new List<eKho>();
         IList<eNhomSanPham> lstNhomSanPham = new List<eNhomSanPham>();
+        IList<eNhaCungCap> lstNhaCungCap = new List<eNhaCungCap>();
         public eNhapHangNhaCungCap _iEntry;
         eNhapHangNhaCungCap _aEntry;
         BindingList<eNhapHangNhaCungCapChiTiet> lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
@@ -31,6 +32,7 @@ namespace Client.GUI.NhapHang
         {
             base.frmBase_Load(sender, e);
 
+            LoadNhaCungCap(0);
             LoadRepository();
             LoadDataForm();
             CustomForm();
@@ -46,25 +48,36 @@ namespace Client.GUI.NhapHang
             lstNhomSanPham = await clsFunction.GetItemsAsync<eNhomSanPham>("NhomSanPham");
             lstSanPham = await clsFunction.GetItemsAsync<eSanPham>("SanPham");
             lstKho = await clsFunction.GetItemsAsync<eKho>("Kho");
+
+            dteNgayNhap.DateTime = DateTime.Now.ServerNow();
+            slokNhomSanPham.Properties.DataSource = lstNhomSanPham;
+            rlokSanPham.DataSource = lstSanPham;
+            rlokKho.DataSource = lstKho;
+            slokNhaCungCap.Properties.DataSource = lstNhaCungCap;
+            gctSanPham.DataSource = lstSanPham;
+
+            var qSanPham = lstSanPham.Select(x => new { x.Ma, x.Ten });
+            foreach (var rSanPham in qSanPham)
+            {
+                srcMaSanPham.Properties.Items.Add(rSanPham.Ma);
+                srcTenSanPham.Properties.Items.Add(rSanPham.Ten);
+            }
         }
         async void LoadNhaCungCap(object KeyID)
         {
-            IList<eNhaCungCap> lstNhaCungCap = await clsFunction.GetItemsAsync<eNhaCungCap>("NhaCungCap");
-            await RunMethodAsync(() => { slokNhaCungCap.Properties.DataSource = lstNhaCungCap; });
-            slokNhaCungCap.EditValue = KeyID;
+            lstNhaCungCap = await clsFunction.GetItemsAsync<eNhaCungCap>("NhaCungCap");
+            if (Convert.ToInt32(KeyID) > 0)
+                slokNhaCungCap.EditValue = KeyID;
         }
         public override void LoadDataForm()
         {
-            DisableEvents();
-
             lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
             _iEntry = _iEntry ?? new eNhapHangNhaCungCap();
             _aEntry = clsFunction.GetItem<eNhapHangNhaCungCap>("NhapHangNhaCungCap", _iEntry.KeyID);
 
-            LoadNhaCungCap(_aEntry.IDNhaCungCap);
-            SetControlValue();
+            DisableEvents();
             SetDataSource();
-
+            SetControlValue();
             EnableEvents();
         }
         public override void SetControlValue()
@@ -97,24 +110,25 @@ namespace Client.GUI.NhapHang
                 lciSoTienCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
                 lciThanhToanCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
             }
-        }
-        public override void SetDataSource()
-        {
-            dteNgayNhap.DateTime = DateTime.Now.ServerNow();
-            slokNhomSanPham.Properties.DataSource = lstNhomSanPham;
-            rlokSanPham.DataSource = lstSanPham;
-            rlokKho.DataSource = lstKho;
-            gctSanPham.DataSource = lstSanPham;
-
-            var qSanPham = lstSanPham.Select(x => new { x.Ma, x.Ten });
-            foreach (var rSanPham in qSanPham)
-            {
-                srcMaSanPham.Properties.Items.Add(rSanPham.Ma);
-                srcTenSanPham.Properties.Items.Add(rSanPham.Ten);
-            }
 
             lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>(_aEntry.eNhapHangNhaCungCapChiTiet.ToList());
             gctChiTiet.DataSource = lstDetail;
+        }
+        public override void SetDataSource()
+        {
+            //dteNgayNhap.DateTime = DateTime.Now.ServerNow();
+            //slokNhomSanPham.Properties.DataSource = lstNhomSanPham;
+            //rlokSanPham.DataSource = lstSanPham;
+            //rlokKho.DataSource = lstKho;
+            //slokNhaCungCap.Properties.DataSource = lstNhaCungCap;
+            //gctSanPham.DataSource = lstSanPham;
+
+            //var qSanPham = lstSanPham.Select(x => new { x.Ma, x.Ten });
+            //foreach (var rSanPham in qSanPham)
+            //{
+            //    srcMaSanPham.Properties.Items.Add(rSanPham.Ma);
+            //    srcTenSanPham.Properties.Items.Add(rSanPham.Ten);
+            //}
         }
         public override bool ValidationForm()
         {
