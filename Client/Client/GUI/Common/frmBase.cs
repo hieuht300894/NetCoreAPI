@@ -291,12 +291,11 @@ namespace Client.GUI.Common
         {
             PrintPreview();
         }
-        protected async virtual void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        protected virtual void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (ValidationForm())
             {
-                bool res = await SaveData();
-                if (res)
+                if (SaveData())
                 {
                     ShowAlert("Lưu dữ liệu thành công");
                     DialogResult = DialogResult.OK;
@@ -307,12 +306,11 @@ namespace Client.GUI.Common
                 }
             }
         }
-        protected async virtual void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        protected virtual void btnSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (ValidationForm())
             {
-                bool res = await SaveData();
-                if (res)
+                if (SaveData())
                 {
                     ShowAlert("Lưu dữ liệu thành công");
                     fType = eFormType.Add;
@@ -329,12 +327,11 @@ namespace Client.GUI.Common
         {
             LoadDataForm();
         }
-        protected async virtual void bbpSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        protected virtual void bbpSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (ValidationForm())
             {
-                bool res = await SaveData();
-                if (res)
+                if (SaveData())
                 {
                     ShowAlert("Lưu dữ liệu thành công");
                     DialogResult = DialogResult.OK;
@@ -345,12 +342,11 @@ namespace Client.GUI.Common
                 }
             }
         }
-        protected async virtual void bbpSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        protected virtual void bbpSaveAndAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             if (ValidationForm())
             {
-                bool res = await SaveData();
-                if (res)
+                if (SaveData())
                 {
                     ShowAlert("Lưu dữ liệu thành công");
                     fType = eFormType.Add;
@@ -710,9 +706,9 @@ namespace Client.GUI.Common
         {
             return true;
         }
-        public async virtual Task<bool> SaveData()
+        public virtual bool SaveData()
         {
-            return await Task<bool>.Factory.StartNew(() => { return true; });
+            return true;
         }
         public virtual void EnableEvents()
         {

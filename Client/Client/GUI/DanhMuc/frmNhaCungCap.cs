@@ -33,13 +33,13 @@ namespace Client.GUI.DanhMuc
 
         async void LoadRepository()
         {
-            IList<eTinhThanh> lstTinhThanh = await clsFunction.GetAll<eTinhThanh>("TinhThanh/DanhSach63TinhThanh");
+            IList<eTinhThanh> lstTinhThanh = await clsFunction.GetItemsAsync<eTinhThanh>("TinhThanh/DanhSach63TinhThanh");
             await RunMethodAsync(() => { slokTinhThanh.Properties.DataSource = lstTinhThanh; });
         }
-        public async override void LoadDataForm()
+        public  override void LoadDataForm()
         {
             _iEntry = _iEntry ?? new eNhaCungCap();
-            _aEntry = await clsFunction.GetByID<eNhaCungCap>("NhaCungCap", _iEntry.KeyID);
+            _aEntry =  clsFunction.GetItem<eNhaCungCap>("NhaCungCap", _iEntry.KeyID);
 
             SetControlValue();
         }
@@ -66,7 +66,7 @@ namespace Client.GUI.DanhMuc
         {
             return base.ValidationForm();
         }
-        public async override Task<bool> SaveData()
+        public override bool SaveData()
         {
             if (_aEntry.KeyID > 0)
             {
@@ -96,7 +96,7 @@ namespace Client.GUI.DanhMuc
             _aEntry.IDTinhThanh = tinhThanh.KeyID;
             _aEntry.TinhThanh = tinhThanh.Ten;
 
-            Tuple<bool, eNhaCungCap> Res = await (_aEntry.KeyID > 0 ?
+            Tuple<bool, eNhaCungCap> Res =  (_aEntry.KeyID > 0 ?
                 clsFunction.Put("NhaCungCap", _aEntry) :
                 clsFunction.Post("NhaCungCap", _aEntry));
             if (Res.Item1)

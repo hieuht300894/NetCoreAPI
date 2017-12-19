@@ -86,7 +86,7 @@ namespace Client.GUI.DanhMuc
         #region Methods
         public async void LoadData(int KeyID)
         {
-            lstDanhSach = new List<eTinhThanh>(await clsFunction.GetAll<eTinhThanh>("tinhthanh"));
+            lstDanhSach = new List<eTinhThanh>(await clsFunction.GetItemsAsync<eTinhThanh>("tinhthanh"));
             lstDanhSachLoai1 = new List<eTinhThanh>(lstDanhSach.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2));
             lstDanhSachLoai2 = new List<eTinhThanh>(lstDanhSach.Where(x => x.IDLoai >= 3 && x.IDLoai <= 6));
             lstDanhSachLoai3 = new List<eTinhThanh>(lstDanhSach.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9));

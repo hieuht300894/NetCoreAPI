@@ -32,7 +32,6 @@ namespace Client.GUI.NhapHang
             base.frmBase_Load(sender, e);
 
             LoadRepository();
-            LoadNhaCungCap(0);
             LoadDataForm();
             CustomForm();
         }
@@ -44,50 +43,33 @@ namespace Client.GUI.NhapHang
 
         async void LoadRepository()
         {
-            lstNhomSanPham = await clsFunction.GetAll<eNhomSanPham>("NhomSanPham");
-            lstSanPham = await clsFunction.GetAll<eSanPham>("SanPham");
-            lstKho = await clsFunction.GetAll<eKho>("Kho");
-
-            await RunMethodAsync(() =>
-            {
-                dteNgayNhap.DateTime = DateTime.Now.ServerNow();
-                slokNhomSanPham.Properties.DataSource = lstNhomSanPham;
-                rlokSanPham.DataSource = lstSanPham;
-                rlokKho.DataSource = lstKho;
-                gctSanPham.DataSource = lstSanPham;
-
-                var qSanPham = lstSanPham.Select(x => new { x.Ma, x.Ten });
-                foreach (var rSanPham in qSanPham)
-                {
-                    srcMaSanPham.Properties.Items.Add(rSanPham.Ma);
-                    srcTenSanPham.Properties.Items.Add(rSanPham.Ten);
-                }
-            });
+            lstNhomSanPham = await clsFunction.GetItemsAsync<eNhomSanPham>("NhomSanPham");
+            lstSanPham = await clsFunction.GetItemsAsync<eSanPham>("SanPham");
+            lstKho = await clsFunction.GetItemsAsync<eKho>("Kho");
         }
         async void LoadNhaCungCap(object KeyID)
         {
-            IList<eNhaCungCap> lstNhaCungCap = await clsFunction.GetAll<eNhaCungCap>("NhaCungCap");
-            await RunMethodAsync(() =>
-            {
-                slokNhaCungCap.Properties.DataSource = lstNhaCungCap;
-                slokNhaCungCap.EditValue = KeyID;
-            });
+            IList<eNhaCungCap> lstNhaCungCap = await clsFunction.GetItemsAsync<eNhaCungCap>("NhaCungCap");
+            await RunMethodAsync(() => { slokNhaCungCap.Properties.DataSource = lstNhaCungCap; });
+            slokNhaCungCap.EditValue = KeyID;
         }
-        public async override void LoadDataForm()
+        public override void LoadDataForm()
         {
             DisableEvents();
 
             lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
             _iEntry = _iEntry ?? new eNhapHangNhaCungCap();
-            _aEntry = await clsFunction.GetByID<eNhapHangNhaCungCap>("NhapHangNhaCungCap", _iEntry.KeyID);
+            _aEntry = clsFunction.GetItem<eNhapHangNhaCungCap>("NhapHangNhaCungCap", _iEntry.KeyID);
 
+            LoadNhaCungCap(_aEntry.IDNhaCungCap);
             SetControlValue();
             SetDataSource();
+
             EnableEvents();
         }
         public override void SetControlValue()
         {
-            slokNhaCungCap.EditValue = _aEntry.IDNhaCungCap;
+            slokNhaCungCap.EditValue = KeyID;
             txtMaPhieu.EditValue = _aEntry.Ma;
             txtSoLoHang.EditValue = _aEntry.MaLoHang;
             mmeGhiChu.EditValue = _aEntry.GhiChu;
@@ -118,6 +100,19 @@ namespace Client.GUI.NhapHang
         }
         public override void SetDataSource()
         {
+            dteNgayNhap.DateTime = DateTime.Now.ServerNow();
+            slokNhomSanPham.Properties.DataSource = lstNhomSanPham;
+            rlokSanPham.DataSource = lstSanPham;
+            rlokKho.DataSource = lstKho;
+            gctSanPham.DataSource = lstSanPham;
+
+            var qSanPham = lstSanPham.Select(x => new { x.Ma, x.Ten });
+            foreach (var rSanPham in qSanPham)
+            {
+                srcMaSanPham.Properties.Items.Add(rSanPham.Ma);
+                srcTenSanPham.Properties.Items.Add(rSanPham.Ten);
+            }
+
             lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>(_aEntry.eNhapHangNhaCungCapChiTiet.ToList());
             gctChiTiet.DataSource = lstDetail;
         }
@@ -125,7 +120,7 @@ namespace Client.GUI.NhapHang
         {
             return base.ValidationForm();
         }
-        public async override Task<bool> SaveData()
+        public override bool SaveData()
         {
             DateTime time = DateTime.Now.ServerNow();
 
@@ -191,9 +186,9 @@ namespace Client.GUI.NhapHang
                 _aEntry.eNhapHangNhaCungCapChiTiet.Add(item);
             }
 
-            Tuple<bool, eNhapHangNhaCungCap> Res = await (_aEntry.KeyID > 0 ?
+            Tuple<bool, eNhapHangNhaCungCap> Res = _aEntry.KeyID > 0 ?
                 clsFunction.Put("NhapHangNhaCungCap", _aEntry) :
-                clsFunction.Post("NhapHangNhaCungCap", _aEntry));
+                clsFunction.Post("NhapHangNhaCungCap", _aEntry);
             if (Res.Item1)
                 KeyID = Res.Item2.KeyID;
             return Res.Item1;
@@ -212,10 +207,9 @@ namespace Client.GUI.NhapHang
             base.CustomForm();
 
             grvChiTiet.OptionsView.ColumnAutoWidth = false;
-
-            DisableEvents();
-
-            EnableEvents();
+            grvChiTiet.ShowFooter(
+                grvChiTiet.Columns["SoLuongSi"], grvChiTiet.Columns["SoLuongLe"], grvChiTiet.Columns["SoLuong"],
+                grvChiTiet.Columns["ThanhTien"], grvChiTiet.Columns["TongTien"]);
 
             frmNhaCungCap frm = new frmNhaCungCap();
             frm.fType = Module.QuanLyBanHang.eFormType.Add;
@@ -232,6 +226,8 @@ namespace Client.GUI.NhapHang
             rbtnXoa.ButtonClick += RbtnXoa_ButtonClick;
             spnThanhToan.EditValueChanged += SpnThanhToan_EditValueChanged;
             grvSanPham.DoubleClick += GrvSanPham_DoubleClick;
+            slokNhaCungCap.EditValueChanged += SlokNhaCungCap_EditValueChanged;
+            dteNgayNhap.EditValueChanged += DteNgayNhap_EditValueChanged;
         }
         public override void DisableEvents()
         {
@@ -242,6 +238,8 @@ namespace Client.GUI.NhapHang
             rbtnXoa.ButtonClick -= RbtnXoa_ButtonClick;
             spnThanhToan.EditValueChanged -= SpnThanhToan_EditValueChanged;
             grvSanPham.DoubleClick -= GrvSanPham_DoubleClick;
+            slokNhaCungCap.EditValueChanged -= SlokNhaCungCap_EditValueChanged;
+            dteNgayNhap.EditValueChanged -= DteNgayNhap_EditValueChanged;
         }
         void TimKiemSanPham()
         {
@@ -269,6 +267,12 @@ namespace Client.GUI.NhapHang
                 spnTongNo.Value += item.TongTien;
             }
             spnConLai.Value = spnTongNo.Value - spnThanhToan.Value;
+        }
+        void CongNoHienTai()
+        {
+            eCongNoNhaCungCap congNo = clsFunction.GetItem<eCongNoNhaCungCap>("NhapHangNhaCungCap/CongNoHienTai", _aEntry.KeyID, slokNhaCungCap.ToInt32(), dteNgayNhap.DateTime.ToJson());
+            spnNoCu.Value = congNo.ConLai;
+            CapNhatSoTien();
         }
 
         private void SpnThanhToan_EditValueChanged(object sender, EventArgs e)
@@ -316,7 +320,6 @@ namespace Client.GUI.NhapHang
                 CapNhatSoTien();
             }
 
-            view.UpdateCurrentRow();
             view.CellValueChanged += GrvChiTiet_CellValueChanged;
         }
         private void SrcTenSanPham_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -356,6 +359,14 @@ namespace Client.GUI.NhapHang
                     lstDetail.Add(iDT);
                 }
             }
+        }
+        private void DteNgayNhap_EditValueChanged(object sender, EventArgs e)
+        {
+            CongNoHienTai();
+        }
+        private void SlokNhaCungCap_EditValueChanged(object sender, EventArgs e)
+        {
+            CongNoHienTai();
         }
     }
 }

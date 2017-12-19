@@ -250,6 +250,11 @@ namespace Client.Module
             catch { return DateTime.Now; }
 
         }
+
+        public static String ToJson(this DateTime time)
+        {
+            return time.ToString("yyyy-MM-dd");
+        }
         #endregion
 
         #region FormatControl
@@ -567,14 +572,14 @@ namespace Client.Module
             catch { }
         }
 
-        public static void ShowFooter(this GridView grvMain)
+        public static void ShowFooter(this GridView grvMain, params GridColumn[] columns)
         {
             grvMain.BeginSummaryUpdate();
             try
             {
                 grvMain.OptionsView.ShowFooter = true;
 
-                foreach (GridColumn col in grvMain.VisibleColumns)
+                foreach (GridColumn col in columns)
                 {
                     if (col.ColumnEdit is RepositoryItemSpinEdit)
                     {

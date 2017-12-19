@@ -32,13 +32,13 @@ namespace Client.GUI.DanhMuc
 
         async void LoadRepository()
         {
-            IList<eDonViTinh> lstDVT = await clsFunction.GetAll<eDonViTinh>("donvitinh");
+            IList<eDonViTinh> lstDVT = await clsFunction.GetItemsAsync<eDonViTinh>("donvitinh");
             await RunMethodAsync(() => { rlokDVT.DataSource = lstDVT; });
         }
         public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eSanPham>();
-            lstEntries = new BindingList<eSanPham>(await clsFunction.GetAll<eSanPham>("sanpham"));
+            lstEntries = new BindingList<eSanPham>(await clsFunction.GetItemsAsync<eSanPham>("sanpham"));
             //     lstEntries.ToList().ForEach(x => { x.Color = Color.FromArgb(x.ColorHex); });
 
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
@@ -49,7 +49,7 @@ namespace Client.GUI.DanhMuc
             grvDanhSach.UpdateCurrentRow();
             return base.ValidationForm();
         }
-        public async override Task<bool> SaveData()
+        public override bool SaveData()
         {
             DateTime time = DateTime.Now.ServerNow();
 
@@ -78,7 +78,7 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            Tuple<bool, List<eSanPham>> Res = await clsFunction.Post("sanpham", lstEdited.ToList());
+            Tuple<bool, List<eSanPham>> Res =  clsFunction.Post("sanpham", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

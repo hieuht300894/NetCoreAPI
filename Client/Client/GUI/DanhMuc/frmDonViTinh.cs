@@ -31,7 +31,7 @@ namespace Client.GUI.DanhMuc
         public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eDonViTinh>();
-            lstEntries = new BindingList<eDonViTinh>(await clsFunction.GetAll<eDonViTinh>("donvitinh"));
+            lstEntries = new BindingList<eDonViTinh>(await clsFunction.GetItemsAsync<eDonViTinh>("donvitinh"));
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -40,7 +40,7 @@ namespace Client.GUI.DanhMuc
             grvDanhSach.UpdateCurrentRow();
             return base.ValidationForm();
         }
-        public async override Task<bool> SaveData()
+        public override bool SaveData()
         {
             DateTime time = DateTime.Now.ServerNow();
 
@@ -62,7 +62,7 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            Tuple<bool, List<eDonViTinh>> Res = await clsFunction.Post("donvitinh", lstEdited.ToList());
+            Tuple<bool, List<eDonViTinh>> Res =  clsFunction.Post("donvitinh", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

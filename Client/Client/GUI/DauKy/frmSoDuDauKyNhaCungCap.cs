@@ -30,13 +30,13 @@ namespace Client.GUI.DauKy
 
         public async void LoadRepository()
         {
-            IList<eNhaCungCap> lstNhaCungCap = await clsFunction.GetAll<eNhaCungCap>("");
+            IList<eNhaCungCap> lstNhaCungCap = await clsFunction.GetItemsAsync<eNhaCungCap>("");
             await RunMethodAsync(() => { rlokNhaCungCap.DataSource = lstNhaCungCap; });
         }
         public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eSoDuDauKyNhaCungCap>();
-            lstEntries = new BindingList<eSoDuDauKyNhaCungCap>(await clsFunction.GetAll<eSoDuDauKyNhaCungCap>("sodudaukynhacungcap"));
+            lstEntries = new BindingList<eSoDuDauKyNhaCungCap>(await clsFunction.GetItemsAsync<eSoDuDauKyNhaCungCap>("sodudaukynhacungcap"));
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -45,7 +45,7 @@ namespace Client.GUI.DauKy
             grvDanhSach.UpdateCurrentRow();
             return base.ValidationForm();
         }
-        public async override Task<bool> SaveData()
+        public override bool SaveData()
         {
             lstEdited.ToList().ForEach(x =>
             {
@@ -54,7 +54,7 @@ namespace Client.GUI.DauKy
                 x.TenNhaCungCap = NhaCungCap.Ten;
             });
 
-            Tuple<bool, List<eSoDuDauKyNhaCungCap>> Res = await clsFunction.Post("sodudaukynhacungcap", lstEdited.ToList());
+            Tuple<bool, List<eSoDuDauKyNhaCungCap>> Res =  clsFunction.Post("sodudaukynhacungcap", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

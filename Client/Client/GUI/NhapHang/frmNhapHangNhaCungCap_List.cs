@@ -32,7 +32,7 @@ namespace Client.GUI.NhapHang
 
         public async override void LoadData(object KeyID)
         {
-            IList<eNhapHangNhaCungCap> lstMaster = await clsFunction.GetAll<eNhapHangNhaCungCap>("NhapHangNhaCungCap");
+            IList<eNhapHangNhaCungCap> lstMaster = await clsFunction.GetItemsAsync<eNhapHangNhaCungCap>("NhapHangNhaCungCap");
             IList<eNhapHangNhaCungCapChiTiet> lstDetail = new List<eNhapHangNhaCungCapChiTiet>();
             await RunMethodAsync(() =>
             {
@@ -93,6 +93,12 @@ namespace Client.GUI.NhapHang
             grvChiTiet.Columns["HanSuDung"].ColumnEdit = rdte;
 
             base.CustomForm();
+
+            grvDanhSach.ShowFooter(grvDanhSach.VisibleColumns.ToArray());
+
+            grvChiTiet.ShowFooter(
+                grvChiTiet.Columns["SoLuongSi"], grvChiTiet.Columns["SoLuongLe"], grvChiTiet.Columns["SoLuong"],
+                grvChiTiet.Columns["ThanhTien"], grvChiTiet.Columns["TongTien"]);
 
             DisableEvents();
             EnableEvents();

@@ -34,13 +34,13 @@ namespace Client.GUI.DanhMuc
         {
             rlokGioiTinh.DataSource = Loai.LoaiGioiTinh();
 
-            IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>(await clsFunction.GetAll<eTinhThanh>("tinhthanh"));
+            IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>(await clsFunction.GetItemsAsync<eTinhThanh>("tinhthanh"));
             await RunMethodAsync(() => { rlokTinhThanh.DataSource = lstTinhThanh; });
         }
         public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eKhachHang>();
-            lstEntries = new BindingList<eKhachHang>(await clsFunction.GetAll<eKhachHang>("khachhang"));
+            lstEntries = new BindingList<eKhachHang>(await clsFunction.GetItemsAsync<eKhachHang>("khachhang"));
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -49,7 +49,7 @@ namespace Client.GUI.DanhMuc
             grvDanhSach.UpdateCurrentRow();
             return base.ValidationForm();
         }
-        public async override Task<bool> SaveData()
+        public override bool SaveData()
         {
             DateTime time = DateTime.Now.ServerNow();
 
@@ -77,7 +77,7 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            Tuple<bool, List<eKhachHang>> Res = await clsFunction.Post("khachhang", lstEdited.ToList());
+            Tuple<bool, List<eKhachHang>> Res =  clsFunction.Post("khachhang", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

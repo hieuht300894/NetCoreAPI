@@ -30,16 +30,16 @@ namespace Client.GUI.DauKy
 
         public async void LoadRepository()
         {
-            IList<eSanPham> lstSanPham = await clsFunction.GetAll<eSanPham>("");
+            IList<eSanPham> lstSanPham = await clsFunction.GetItemsAsync<eSanPham>("");
             await RunMethodAsync(() => { rlokSanPham.DataSource = lstSanPham; });
 
-            IList<eKho> lstKho = await clsFunction.GetAll<eKho>("");
+            IList<eKho> lstKho = await clsFunction.GetItemsAsync<eKho>("");
             await RunMethodAsync(() => { rlokKho.DataSource = lstKho; });
         }
         public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eTonKhoDauKy>();
-            lstEntries = new BindingList<eTonKhoDauKy>(await clsFunction.GetAll<eTonKhoDauKy>("tonkhodauky"));
+            lstEntries = new BindingList<eTonKhoDauKy>(await clsFunction.GetItemsAsync<eTonKhoDauKy>("tonkhodauky"));
             await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
         }
         public override bool ValidationForm()
@@ -48,7 +48,7 @@ namespace Client.GUI.DauKy
             grvDanhSach.UpdateCurrentRow();
             return base.ValidationForm();
         }
-        public async override Task<bool> SaveData()
+        public override bool SaveData()
         {
             lstEdited.ToList().ForEach(x =>
             {
@@ -65,7 +65,7 @@ namespace Client.GUI.DauKy
                 x.TenKho = kho.Ten;
             });
 
-            Tuple<bool, List<eTonKhoDauKy>> Res = await clsFunction.Post("tonkhodauky", lstEdited.ToList());
+            Tuple<bool, List<eTonKhoDauKy>> Res =  clsFunction.Post("tonkhodauky", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()
