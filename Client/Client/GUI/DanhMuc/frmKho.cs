@@ -40,7 +40,7 @@ namespace Client.GUI.DanhMuc
         public override void LoadDataForm()
         {
             _iEntry = _iEntry ?? new eKho();
-            _aEntry = clsFunction.GetItem<eKho>("Kho", _iEntry.KeyID);
+            _aEntry = clsFunction.GetItem<eKho>("Kho/GetByID", _iEntry.KeyID);
 
             SetControlValue();
         }

@@ -15,7 +15,7 @@ namespace Client.BLL.Common
         /// Lấy danh sách dữ liệu
         /// </summary>
         /// <returns></returns>
-        public async static Task<List<T>> GetItemsAsync<T>(String api, params object[] Objs) where T : class, new()
+        public async static Task<List<T>> GetItemsAsync<T>(String api, params object[] Objs)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace Client.BLL.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="KeyID"></param>
         /// <returns></returns>
-        public static async Task<T> GetItemAsync<T>(String api, params object[] Objs) where T : class, new()
+        public static async Task<T> GetItemAsync<T>(String api, params object[] Objs)
         {
             try
             {
@@ -51,10 +51,14 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
                 IRestResponse response = await client.ExecuteTaskAsync(request);
-                T item = response.Content.DeserializeToObject<T>();
-                return item ?? new T();
+                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+
+                if (Item == null)
+                    Item = ReflectionPopulator.CreateObject<T>();
+
+                return Item;
             }
-            catch { return new T(); }
+            catch { return ReflectionPopulator.CreateObject<T>(); }
         }
 
         /// <summary>
@@ -64,7 +68,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static async Task<Tuple<bool, T>> PostAsync<T>(String api, T entity) where T : class, new()
+        public static async Task<Tuple<bool, T>> PostAsync<T>(String api, T entity)
         {
             try
             {
@@ -77,11 +81,14 @@ namespace Client.BLL.Common
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault() ?? new T();
+                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+
+                if (Item == null)
+                    Item = ReflectionPopulator.CreateObject<T>();
 
                 return Tuple.Create(Status, Item);
             }
-            catch { return Tuple.Create(false, new T()); }
+            catch { return Tuple.Create(false, ReflectionPopulator.CreateObject<T>()); }
         }
 
         /// <summary>
@@ -91,7 +98,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static async Task<Tuple<bool, List<T>>> PostAsync<T>(String api, List<T> entries) where T : class, new()
+        public static async Task<Tuple<bool, List<T>>> PostAsync<T>(String api, List<T> entries)
         {
             try
             {
@@ -118,7 +125,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static async Task<Tuple<bool, T>> PutAsync<T>(String api, T entity) where T : class, new()
+        public static async Task<Tuple<bool, T>> PutAsync<T>(String api, T entity)
         {
             try
             {
@@ -131,11 +138,14 @@ namespace Client.BLL.Common
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault() ?? new T();
+                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+
+                if (Item == null)
+                    Item = ReflectionPopulator.CreateObject<T>(); ;
 
                 return Tuple.Create(Status, Item);
             }
-            catch { return Tuple.Create(false, new T()); }
+            catch { return Tuple.Create(false, ReflectionPopulator.CreateObject<T>()); }
         }
 
         /// <summary>
@@ -145,7 +155,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static async Task<Tuple<bool, List<T>>> PutAsync<T>(String api, List<T> entries) where T : class, new()
+        public static async Task<Tuple<bool, List<T>>> PutAsync<T>(String api, List<T> entries)
         {
             try
             {
@@ -171,7 +181,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteAsync<T>(String api, T entity) where T : class, new()
+        public static async Task<bool> DeleteAsync<T>(String api, T entity)
         {
             try
             {
@@ -194,7 +204,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static async Task<bool> DeleteAsync<T>(String api, List<T> entries) where T : class, new()
+        public static async Task<bool> DeleteAsync<T>(String api, List<T> entries)
         {
             try
             {
@@ -217,7 +227,7 @@ namespace Client.BLL.Common
         /// Lấy danh sách dữ liệu
         /// </summary>
         /// <returns></returns>
-        public static List<T> GetItems<T>(String api, params object[] Objs) where T : class, new()
+        public static List<T> GetItems<T>(String api, params object[] Objs)
         {
             try
             {
@@ -241,7 +251,7 @@ namespace Client.BLL.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="KeyID"></param>
         /// <returns></returns>
-        public static T GetItem<T>(String api, params object[] Objs) where T : class, new()
+        public static T GetItem<T>(String api, params object[] Objs)
         {
             try
             {
@@ -253,10 +263,15 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
                 IRestResponse response = client.Execute(request);
-                T item = response.Content.DeserializeToObject<T>();
-                return item ?? new T();
+
+                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+
+                if (Item == null)
+                    Item = ReflectionPopulator.CreateObject<T>();
+
+                return Item;
             }
-            catch { return new T(); }
+            catch { return ReflectionPopulator.CreateObject<T>(); }
         }
 
         /// <summary>
@@ -266,7 +281,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static Tuple<bool, T> Post<T>(String api, T entity) where T : class, new()
+        public static Tuple<bool, T> Post<T>(String api, T entity)
         {
             try
             {
@@ -279,11 +294,14 @@ namespace Client.BLL.Common
                 IRestResponse response = client.Execute(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault() ?? new T();
+                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+
+                if (Item == null)
+                    Item = ReflectionPopulator.CreateObject<T>(); 
 
                 return Tuple.Create(Status, Item);
             }
-            catch { return Tuple.Create(false, new T()); }
+            catch { return Tuple.Create(false, ReflectionPopulator.CreateObject<T>()); }
         }
 
         /// <summary>
@@ -293,7 +311,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static Tuple<bool, List<T>> Post<T>(String api, List<T> entries) where T : class, new()
+        public static Tuple<bool, List<T>> Post<T>(String api, List<T> entries)
         {
             try
             {
@@ -320,7 +338,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static Tuple<bool, T> Put<T>(String api, T entity) where T : class, new()
+        public static Tuple<bool, T> Put<T>(String api, T entity)
         {
             try
             {
@@ -333,11 +351,14 @@ namespace Client.BLL.Common
                 IRestResponse response = client.Execute(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault() ?? new T();
+                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+
+                if (Item == null)
+                    Item = ReflectionPopulator.CreateObject<T>(); ;
 
                 return Tuple.Create(Status, Item);
             }
-            catch { return Tuple.Create(false, new T()); }
+            catch { return Tuple.Create(false, ReflectionPopulator.CreateObject<T>()); }
         }
 
         /// <summary>
@@ -347,7 +368,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static Tuple<bool, List<T>> Put<T>(String api, List<T> entries) where T : class, new()
+        public static Tuple<bool, List<T>> Put<T>(String api, List<T> entries)
         {
             try
             {
@@ -373,7 +394,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static bool Delete<T>(String api, T entity) where T : class, new()
+        public static bool Delete<T>(String api, T entity)
         {
             try
             {
@@ -396,7 +417,7 @@ namespace Client.BLL.Common
         /// <param name="api"></param>
         /// <param name="entries"></param>
         /// <returns></returns>
-        public static bool Delete<T>(String api, List<T> entries) where T : class, new()
+        public static bool Delete<T>(String api, List<T> entries)
         {
             try
             {

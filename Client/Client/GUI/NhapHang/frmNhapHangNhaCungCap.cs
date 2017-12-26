@@ -84,7 +84,7 @@ namespace Client.GUI.NhapHang
         {
             lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
             _iEntry = _iEntry ?? new eNhapHangNhaCungCap();
-            _aEntry = clsFunction.GetItem<eNhapHangNhaCungCap>("NhapHangNhaCungCap", _iEntry.KeyID);
+            _aEntry = clsFunction.GetItem<eNhapHangNhaCungCap>("NhapHangNhaCungCap/GetByID", _iEntry.KeyID);
 
             DisableEvents();
             SetDataSource();
@@ -110,6 +110,7 @@ namespace Client.GUI.NhapHang
             {
                 dteNgayNhap.DateTime = _aEntry.NgayNhap;
                 slokNhaCungCap.LockButton();
+                txtMaPhieu.Enabled = false;
 
                 lciSoTienCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
                 lciThanhToanCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
@@ -117,6 +118,7 @@ namespace Client.GUI.NhapHang
             else
             {
                 slokNhaCungCap.UnlockButton();
+                txtMaPhieu.GetCode("NhapHangNhaCungCap/GetCode", "NHNCC");
 
                 lciSoTienCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
                 lciThanhToanCu.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;

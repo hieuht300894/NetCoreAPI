@@ -1,4 +1,5 @@
 ﻿using Client.BLL.Common;
+using Client.Module;
 using DevExpress.LookAndFeel;
 using DevExpress.Utils;
 using DevExpress.Utils.Win;
@@ -13,7 +14,6 @@ using DevExpress.XtraGrid.Views.Grid.ViewInfo;
 using DevExpress.XtraLayout;
 using DevExpress.XtraLayout.Utils;
 using DevExpress.XtraTreeList;
-using DevExpress.XtraTreeList.Columns;
 using DevExpress.XtraTreeList.Nodes;
 using EntityModel.DataModel;
 using Newtonsoft.Json;
@@ -223,12 +223,6 @@ namespace Client.Module
         {
             return Convert.ToDecimal(Money).ToMoneyText(Tail);
         }
-
-        public static int MaxIndex<T>(this IEnumerable<T> source)
-        {
-            try { return source.LastOrDefault().GetInt32ByName("KeyID"); }
-            catch { return 0; }
-        }
         #endregion
 
         #region Language Display LayoutControl
@@ -303,6 +297,17 @@ namespace Client.Module
         {
             txtMain.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
             txtMain.Properties.LookAndFeel.Style = LookAndFeelStyle.Office2003;
+        }
+
+        public static void GetCode(this TextEdit txtMain, string Url, string Prefix)
+        {
+            txtMain.Properties.Mask.ShowPlaceHolders = false;
+            txtMain.Properties.Mask.UseMaskAsDisplayFormat = true;
+            txtMain.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
+            txtMain.Properties.Mask.EditMask = "([a-zA-Z]+)([0-9]{8})([0-9]+)";
+
+            txtMain.EditValue = clsFunction.GetItem<String>(Url, Prefix);
+            txtMain.Enabled = string.IsNullOrWhiteSpace(txtMain.Text.Trim());
         }
 
         public static void NotUnicode(this TextEdit txtMain, bool NoSpace = false, bool? AutoUperCase = null)
@@ -418,7 +423,7 @@ namespace Client.Module
             grvMain.OptionsCustomization.AllowFilter = true;
             grvMain.OptionsCustomization.AllowSort = true;
             //grvMain.OptionsView.ShowAutoFilterRow = true;
-            grvMain.OptionsSelection.MultiSelect = true;
+            //grvMain.OptionsSelection.MultiSelect = true;
             grvMain.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
             grvMain.OptionsFilter.AllowMultiSelectInCheckedFilterPopup = true;
             grvMain.OptionsFilter.ColumnFilterPopupMode = DevExpress.XtraGrid.Columns.ColumnFilterPopupMode.Excel;
@@ -1608,14 +1613,18 @@ namespace Client.Module
         /// <returns></returns>
         public static T Clone<T>(this T source)
         {
-            var serialized = JsonConvert.SerializeObject(
-                source,
-                Formatting.Indented,
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
-            return JsonConvert.DeserializeObject<T>(serialized);
+            try
+            {
+                var serialized = JsonConvert.SerializeObject(
+                    source,
+                    Formatting.Indented,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+                return JsonConvert.DeserializeObject<T>(serialized);
+            }
+            catch { return JsonConvert.DeserializeObject<T>("{}"); }
         }
 
         /// <summary>
@@ -1678,10 +1687,10 @@ namespace Client.Module
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static T DeserializeToObject<T>(this string source) where T : new()
+        public static T DeserializeToObject<T>(this string source)
         {
             try { return JsonConvert.DeserializeObject<T>(source); }
-            catch { return new T(); }
+            catch { return ReflectionPopulator.CreateObject<T>(); }
         }
 
         /// <summary>
@@ -1799,52 +1808,47 @@ namespace Client.Module
             }
             return null;
         }
+
+        public static T CreateObject<T>()
+        {
+            //Type type = typeof(T);
+            //if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            //    return (T)Convert.ChangeType(Activator.CreateInstance(type.GetGenericArguments()[0]), Nullable.GetUnderlyingType(type.GetGenericArguments()[0]));
+            //if (type.IsValueType && !type.IsPrimitive && !type.IsEnum) { return default(T); }
+            //else { return Activator.CreateInstance<T>(); }
+
+            Type type = typeof(T);
+            if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                return (T)Convert.ChangeType(Activator.CreateInstance(type), Nullable.GetUnderlyingType(type));
+            }
+            else if (type.IsValueType || type == typeof(String))
+            {
+                if (type.IsValueType)
+                {
+                    return default(T);
+                }
+                else
+                {
+                    return (T)Convert.ChangeType(String.Empty, type);
+                }
+            }
+            else
+            {
+                return Activator.CreateInstance<T>();
+            }
+        }
     }
 
     public static class Converter
     {
-        public static string GetStringByName(this object oSource, string pName)
-        {
-            if (oSource == null) return string.Empty;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? oRe.ToString() : string.Empty;
-        }
-
-        public static int GetInt16ByName(this object oSource, string pName)
-        {
-            if (oSource == null) return 0;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? Convert.ToInt16(oRe) : 0;
-        }
-
-        public static int GetInt32ByName(this object oSource, string pName)
-        {
-            if (oSource == null) return 0;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? Convert.ToInt32(oRe) : 0;
-        }
-
-        public static bool GetBooleanByName(this object oSource, string pName)
-        {
-            if (oSource == null) return false;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? Convert.ToBoolean(oRe) : false;
-        }
-
-        public static decimal GetDecimalByName(this object oSource, string pName)
-        {
-            if (oSource == null) return 0;
-            var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? Convert.ToDecimal(oRe) : 0;
-        }
-
         public static T GetObjectByName<T>(this object oSource, string pName)
         {
             Type convertTo = typeof(T);
-            if (oSource == null) return (T)Convert.ChangeType(Activator.CreateInstance(convertTo), convertTo);
+            if (oSource == null) return (T)Convert.ChangeType(ReflectionPopulator.CreateObject<T>(), convertTo);
             var properties = oSource.GetType().GetProperties();
             var oRe = oSource.GetType().GetProperty(pName).GetValue(oSource, null);
-            return oRe != null ? (T)Convert.ChangeType(oRe, convertTo) : (T)Convert.ChangeType(Activator.CreateInstance(convertTo), convertTo);
+            return oRe != null ? (T)Convert.ChangeType(oRe, convertTo) : (T)Convert.ChangeType(ReflectionPopulator.CreateObject<T>(), convertTo);
         }
 
         public static void SetValue(this object obj, string FieldName, object Value)
@@ -2095,7 +2099,7 @@ namespace Client.Module
                 return (TOut)Convert.ChangeType(List.DefaultIfEmpty().Sum(x => columnMapper(x)), convertTo);
             }
 
-            return (TOut)Convert.ChangeType(Activator.CreateInstance(convertTo), convertTo);
+            return (TOut)Convert.ChangeType(ReflectionPopulator.CreateObject<TOut>(), convertTo);
         }
         public static IEnumerable<TIn> OrderBy<TIn, TOut>(this IEnumerable<TIn> List, String Column)
         {
