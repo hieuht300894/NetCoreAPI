@@ -28,14 +28,25 @@ namespace Client.GUI.NhapHang
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadNhaCungCap(0); });
+            await RunMethodAsync(() => { LoadRepository(); });
+            await RunMethodAsync(() => { LoadDataForm(); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
 
-            LoadNhaCungCap(0);
-            LoadRepository();
-            LoadDataForm();
-            CustomForm();
+            //clsGeneral.CallWaitForm(this);
+
+            //base.frmBase_Load(sender, e);
+            //LoadNhaCungCap(0);
+            //LoadRepository();
+            //LoadDataForm();
+            //CustomForm();
+
+            //clsGeneral.CloseWaitForm();
         }
         protected override void frmBase_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -43,11 +54,11 @@ namespace Client.GUI.NhapHang
             _ReloadData?.Invoke(0);
         }
 
-        async void LoadRepository()
+        void LoadRepository()
         {
-            lstNhomSanPham = await clsFunction.GetItemsAsync<eNhomSanPham>("NhomSanPham");
-            lstSanPham = await clsFunction.GetItemsAsync<eSanPham>("SanPham");
-            lstKho = await clsFunction.GetItemsAsync<eKho>("Kho");
+            lstNhomSanPham = clsFunction.GetItems<eNhomSanPham>("NhomSanPham");
+            lstSanPham = clsFunction.GetItems<eSanPham>("SanPham");
+            lstKho = clsFunction.GetItems<eKho>("Kho");
 
             dteNgayNhap.DateTime = DateTime.Now.ServerNow();
             slokNhomSanPham.Properties.DataSource = lstNhomSanPham;
@@ -63,9 +74,9 @@ namespace Client.GUI.NhapHang
                 srcTenSanPham.Properties.Items.Add(rSanPham.Ten);
             }
         }
-        async void LoadNhaCungCap(object KeyID)
+        void LoadNhaCungCap(object KeyID)
         {
-            lstNhaCungCap = await clsFunction.GetItemsAsync<eNhaCungCap>("NhaCungCap");
+            lstNhaCungCap = clsFunction.GetItems<eNhaCungCap>("NhaCungCap");
             if (Convert.ToInt32(KeyID) > 0)
                 slokNhaCungCap.EditValue = KeyID;
         }
@@ -82,7 +93,7 @@ namespace Client.GUI.NhapHang
         }
         public override void SetControlValue()
         {
-            slokNhaCungCap.EditValue = KeyID;
+            slokNhaCungCap.EditValue = _aEntry.IDNhaCungCap;
             txtMaPhieu.EditValue = _aEntry.Ma;
             txtSoLoHang.EditValue = _aEntry.MaLoHang;
             mmeGhiChu.EditValue = _aEntry.GhiChu;
@@ -225,11 +236,11 @@ namespace Client.GUI.NhapHang
                 grvChiTiet.Columns["SoLuongSi"], grvChiTiet.Columns["SoLuongLe"], grvChiTiet.Columns["SoLuong"],
                 grvChiTiet.Columns["ThanhTien"], grvChiTiet.Columns["TongTien"]);
 
-            frmNhaCungCap frm = new frmNhaCungCap();
-            frm.fType = Module.QuanLyBanHang.eFormType.Add;
-            frm.Text = "Thêm mới nhà cung cấp";
-            frm._ReloadData = LoadNhaCungCap;
-            slokNhaCungCap.AddNewItem(frm);
+            //frmNhaCungCap frm = new frmNhaCungCap();
+            //frm.fType = Module.QuanLyBanHang.eFormType.Add;
+            //frm.Text = "Thêm mới nhà cung cấp";
+            //frm._ReloadData = LoadNhaCungCap;
+            //slokNhaCungCap.AddNewItem(frm); 
         }
         public override void EnableEvents()
         {

@@ -35,7 +35,7 @@ namespace Client.Module
             catch { }
         }
 
-        public static FormItem CreateNewForm(string bbiName)
+        public static FormItem FindForm(string bbiName)
         {
             return ModuleHelper.ListFormItem.Find(x => x.Name.Equals(bbiName));
         }

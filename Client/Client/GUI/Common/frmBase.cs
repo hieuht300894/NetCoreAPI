@@ -656,13 +656,10 @@ namespace Client.GUI.Common
         {
             if (!IsHandleCreated) return;
 
-            Task taskTemp = Task.Factory.StartNew(() => { });
-            await taskTemp;
-
             Acts = Acts ?? new Action[] { };
             foreach (Action act in Acts)
             {
-                Task task = Task.Factory.StartNew(() => { BeginInvoke(act); });
+                Task task = Task.Run(() => { BeginInvoke(act); });
                 await task;
             }
         }

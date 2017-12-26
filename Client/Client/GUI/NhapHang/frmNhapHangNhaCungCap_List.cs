@@ -18,33 +18,28 @@ namespace Client.GUI.NhapHang
 {
     public partial class frmNhapHangNhaCungCap_List : frmBase
     {
-        List<eNhapHangNhaCungCap> lstMaster = new List<eNhapHangNhaCungCap>();
-        List<eNhapHangNhaCungCapChiTiet> lstDetail = new List<eNhapHangNhaCungCapChiTiet>();
-
         public frmNhapHangNhaCungCap_List()
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadData(0); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
 
-            LoadData(0);
-            SetDataSource();
-            CustomForm();
+            //base.frmBase_Load(sender, e);
+
+            //LoadData(0);
+            //CustomForm();
         }
 
-        public async override void LoadData(object KeyID)
+        public override void LoadData(object KeyID)
         {
-            lstMaster = await clsFunction.GetItemsAsync<eNhapHangNhaCungCap>("NhapHangNhaCungCap");
-        }
-        public async override void SetDataSource()
-        {
-            await RunMethodAsync(() =>
-            {
-                gctDanhSach.DataSource = lstMaster;
-                gctChiTiet.DataSource = lstDetail;
-            });
+            gctDanhSach.DataSource = clsFunction.GetItems<eNhapHangNhaCungCap>("NhapHangNhaCungCap");
+            gctChiTiet.DataSource = ((eNhapHangNhaCungCap)grvDanhSach.GetFocusedRow() ?? new eNhapHangNhaCungCap()).eNhapHangNhaCungCapChiTiet.ToList();
         }
         public override void InsertEntry()
         {

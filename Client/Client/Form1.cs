@@ -1,53 +1,200 @@
-﻿using Client.Module;
-using DevExpress.XtraEditors;
-using DevExpress.XtraGrid.Views.Base;
+﻿using Client.BLL.Common;
+using Client.GUI.Common;
+using Client.GUI.DanhMuc;
+using Client.Module;
 using DevExpress.XtraGrid.Views.Grid;
-using DevExpress.XtraGrid.Views.Grid.ViewInfo;
+using EntityModel.DataModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DevExpress.XtraGrid.Columns;
-using System.Reflection;
-using EntityModel.DataModel;
-using Client.BLL.Common;
 
 namespace Client
 {
-    public partial class Form1 : XtraForm
+    public partial class Form1 : frmBase
     {
         public Form1()
         {
             InitializeComponent();
         }
-
-        private  void Form1_Load(object sender, EventArgs e)
+        protected override void frmBase_Load(object sender, EventArgs e)
         {
-            //List<Order> list = new List<Order>();
-            //int i = 1;
-            //int l = 5;
-            //for (i = 1; i <= l; i++)
-            //{
-            //    list.Add(new Order() { KeyID = i, Price = i, ID = i });
-            //}
+            base.frmBase_Load(sender, e);
 
-            //var r1 = list.Sum<Order, decimal>("ID");
-            //var r2 = list.OrderBy<Order, decimal>("ID");
-            //var r3 = list.OrderByDescending<Order, decimal>("ID");
-            //var r4 = list.Min<Order, decimal>("ID");
-            //var r5 = list.Max<Order, decimal>("ID");
+            LoadNhaCungCap(0);
+            LoadRepository();
+            LoadDataForm();
+            CustomForm();
         }
-    }
+        protected override void frmBase_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            base.frmBase_FormClosing(sender, e);
+            _ReloadData?.Invoke(0);
+        }
 
-    public class Order
-    {
-        public int KeyID { get; set; }
-        public decimal Price { get; set; }
-        public int? ID { get; set; }
+        void LoadRepository()
+        {
+        }
+        void LoadNhaCungCap(object KeyID)
+        {
+        }
+        public override void LoadDataForm()
+        {
+            DisableEvents();
+            SetDataSource();
+            SetControlValue();
+            EnableEvents();
+        }
+        public override void SetControlValue()
+        {
+        }
+        public override void SetDataSource()
+        {
+
+        }
+        public override bool ValidationForm()
+        {
+            return base.ValidationForm();
+        }
+        public override bool SaveData()
+        {
+            return base.SaveData();
+        }
+        public async override void CustomForm()
+        {
+            await Task.Run(() =>
+            {
+                Invoke(new Action(() =>
+                {
+                    slokNhaCungCap.Properties.ValueMember = "KeyID";
+                    slokNhaCungCap.Properties.DisplayMember = "Ten";
+                    slokNhomSanPham.Properties.ValueMember = "KeyID";
+                    slokNhomSanPham.Properties.DisplayMember = "Ten";
+                    rlokKho.ValueMember = "KeyID";
+                    rlokKho.DisplayMember = "Ten";
+                    rlokSanPham.ValueMember = "KeyID";
+                    rlokSanPham.DisplayMember = "Ten";
+
+                    base.CustomForm();
+
+                    grvChiTiet.OptionsView.ColumnAutoWidth = false;
+                    grvChiTiet.ShowFooter(
+                        grvChiTiet.Columns["SoLuongSi"], grvChiTiet.Columns["SoLuongLe"], grvChiTiet.Columns["SoLuong"],
+                        grvChiTiet.Columns["ThanhTien"], grvChiTiet.Columns["TongTien"]);
+
+                    frmNhaCungCap frm = new frmNhaCungCap();
+                    frm.fType = Module.QuanLyBanHang.eFormType.Add;
+                    frm.Text = "Thêm mới nhà cung cấp";
+                    frm._ReloadData = LoadNhaCungCap;
+                    slokNhaCungCap.AddNewItem(frm);
+                }));
+            });
+        }
+        public override void EnableEvents()
+        {
+            slokNhomSanPham.PreviewKeyDown += LokNhomSanPham_PreviewKeyDown;
+            srcMaSanPham.PreviewKeyDown += SrcMaSanPham_PreviewKeyDown;
+            srcTenSanPham.PreviewKeyDown += SrcTenSanPham_PreviewKeyDown;
+            grvChiTiet.CellValueChanged += GrvChiTiet_CellValueChanged;
+            rbtnXoa.ButtonClick += RbtnXoa_ButtonClick;
+            spnThanhToan.EditValueChanged += SpnThanhToan_EditValueChanged;
+            grvSanPham.DoubleClick += GrvSanPham_DoubleClick;
+            slokNhaCungCap.EditValueChanged += SlokNhaCungCap_EditValueChanged;
+            dteNgayNhap.EditValueChanged += DteNgayNhap_EditValueChanged;
+        }
+        public override void DisableEvents()
+        {
+            slokNhomSanPham.PreviewKeyDown -= LokNhomSanPham_PreviewKeyDown;
+            srcMaSanPham.PreviewKeyDown -= SrcMaSanPham_PreviewKeyDown;
+            srcTenSanPham.PreviewKeyDown -= SrcTenSanPham_PreviewKeyDown;
+            grvChiTiet.CellValueChanged -= GrvChiTiet_CellValueChanged;
+            rbtnXoa.ButtonClick -= RbtnXoa_ButtonClick;
+            spnThanhToan.EditValueChanged -= SpnThanhToan_EditValueChanged;
+            grvSanPham.DoubleClick -= GrvSanPham_DoubleClick;
+            slokNhaCungCap.EditValueChanged -= SlokNhaCungCap_EditValueChanged;
+            dteNgayNhap.EditValueChanged -= DteNgayNhap_EditValueChanged;
+        }
+        void TimKiemSanPham()
+        {
+
+        }
+        void CapNhatSoTien()
+        {
+
+        }
+        void CongNoHienTai()
+        {
+
+        }
+
+        private void SpnThanhToan_EditValueChanged(object sender, EventArgs e)
+        {
+            spnConLai.Value = spnTongNo.Value - spnThanhToan.Value;
+        }
+        private void RbtnXoa_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
+        {
+
+        }
+        private void GrvChiTiet_CellValueChanged(object sender, DevExpress.XtraGrid.Views.Base.CellValueChangedEventArgs e)
+        {
+            GridView view = (GridView)sender;
+            eNhapHangNhaCungCapChiTiet item = (eNhapHangNhaCungCapChiTiet)view.GetFocusedRow();
+            if (item == null) return;
+
+            view.CellValueChanged -= GrvChiTiet_CellValueChanged;
+            if (e.Column.FieldName.Equals("SoLuongSi") || e.Column.FieldName.Equals("SoLuongLe"))
+            {
+                item.SoLuong = item.SoLuongSi + item.SoLuongLe;
+                item.ThanhTien = item.SoLuong * item.DonGia;
+                item.TienChietKhau = item.ThanhTien * (item.ChietKhau / 100);
+                item.TongTien = item.ThanhTien - item.TienChietKhau;
+                //item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
+                CapNhatSoTien();
+            }
+            if (e.Column.FieldName.Equals("DonGia"))
+            {
+                item.ThanhTien = item.SoLuong * item.DonGia;
+                item.TienChietKhau = item.ThanhTien * (item.ChietKhau / 100);
+                item.TongTien = item.ThanhTien - item.TienChietKhau;
+                //item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
+                CapNhatSoTien();
+            }
+            if (e.Column.FieldName.Equals("ChietKhau"))
+            {
+                item.TienChietKhau = item.ThanhTien * (item.ChietKhau / 100);
+                item.TongTien = item.ThanhTien - item.TienChietKhau;
+                //item.TongTien = item.ThanhTien * ((100 - item.ChietKhau) / 100);
+                CapNhatSoTien();
+            }
+
+            view.CellValueChanged += GrvChiTiet_CellValueChanged;
+        }
+        private void SrcTenSanPham_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab) { TimKiemSanPham(); }
+        }
+        private void SrcMaSanPham_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab) { TimKiemSanPham(); }
+        }
+        private void LokNhomSanPham_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Tab) { TimKiemSanPham(); }
+        }
+        private void GrvSanPham_DoubleClick(object sender, EventArgs e)
+        {
+
+        }
+        private void DteNgayNhap_EditValueChanged(object sender, EventArgs e)
+        {
+            CongNoHienTai();
+        }
+        private void SlokNhaCungCap_EditValueChanged(object sender, EventArgs e)
+        {
+            CongNoHienTai();
+        }
     }
 }

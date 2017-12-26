@@ -44,28 +44,80 @@ namespace Client.GUI.Common
                 clsGeneral.CloseWaitForm();
             });
         }
-        async void AddDocument(XtraForm _xtrForm)
+        void AddDocument(string bbiName)
         {
-            await Task.Factory.StartNew(() =>
-            {
+            //FormItem fi = clsCallForm.FindForm(bbiName);
+            //if (fi != null)
+            //{
+            //    XtraForm _xtraForm = fi.xForm;
+            //    BaseDocument document = tbvMain.Documents.FirstOrDefault(x => x.Control.Name.Equals(_xtraForm.Name));
 
-                BaseDocument document = tbvMain.Documents.FirstOrDefault(x => x.Control.Name.Equals(_xtrForm.Name));
+            //    if (document != null)
+            //        tbvMain.Controller.Activate(document);
+            //    else
+            //    {
+            //        Action<XtraForm, XtraForm> act1 = async (f1, f2) =>
+            //        {
+            //            Action<XtraForm, XtraForm> act2 = (f3, f4) =>
+            //            {
+            //                try
+            //                {
+            //                    Action<XtraForm, XtraForm> act3 = (f5, f6) =>
+            //                    {
+            //                        clsGeneral.CallWaitForm(f5);
+            //                        f6.MdiParent = f5;
+            //                        f6.Show();
+            //                        clsGeneral.CloseWaitForm();
+            //                    };
+            //                    f3.Invoke(act3, f3, f4);
+            //                }
+            //                catch (Exception ex)
+            //                {
+            //                    clsGeneral.CloseWaitForm();
+            //                    clsGeneral.showErrorException(ex);
+            //                }
+            //            };
+            //            await Task.Factory.StartNew(() => act2(f1, f2));
+            //        };
+            //        Invoke(new Action(() => act1(this, _xtraForm)));
+            //    }
+            //}
+
+
+            //BaseDocument document = tbvMain.Documents.FirstOrDefault(x => x.Control.Name.Equals(_xtrForm.Name));
+
+            //if (document != null)
+            //    tbvMain.Controller.Activate(document);
+            //else
+            //{
+            //    _xtrForm.MdiParent = this;
+            //    _xtrForm.Show();
+            //}
+
+            clsGeneral.CallWaitForm(this);
+            FormItem fi = clsCallForm.FindForm(bbiName);
+            if (fi != null)
+            {
+                XtraForm _xtraForm = fi.xForm;
+                BaseDocument document = tbvMain.Documents.FirstOrDefault(x => x.Control.Name.Equals(_xtraForm.Name));
 
                 if (document != null)
                     tbvMain.Controller.Activate(document);
                 else
                 {
-                    Invoke(new Action(() =>
+                    try
                     {
-                        _xtrForm.Invoke(new Action(() =>
-                        {
-                            _xtrForm.MdiParent = this;
-                            _xtrForm.Show();
-                        }));
-                    }));
+                        _xtraForm.MdiParent = this;
+                        _xtraForm.Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        clsGeneral.CloseWaitForm();
+                        clsGeneral.showErrorException(ex);
+                    }
                 }
-
-            });
+            }
+            clsGeneral.CloseWaitForm();
         }
         async void AddItemClick()
         {
@@ -103,15 +155,9 @@ namespace Client.GUI.Common
         {
             LoadDataForm();
         }
-        async void bbi_ItemClick(object sender, ItemClickEventArgs e)
+        void bbi_ItemClick(object sender, ItemClickEventArgs e)
         {
-            await Task.Factory.StartNew(() =>
-            {
-                clsGeneral.CallWaitForm(this);
-                FormItem fi = clsCallForm.CreateNewForm(e.Item.Name);
-                if (fi != null) AddDocument(fi.xForm);
-                clsGeneral.CloseWaitForm();
-            });
+            AddDocument(e.Item.Name);
         }
         #endregion
     }

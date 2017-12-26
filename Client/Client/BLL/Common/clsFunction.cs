@@ -217,7 +217,7 @@ namespace Client.BLL.Common
         /// Lấy danh sách dữ liệu
         /// </summary>
         /// <returns></returns>
-        public static List<T> GetAll<T>(String api, params object[] Objs) where T : class, new()
+        public static List<T> GetItems<T>(String api, params object[] Objs) where T : class, new()
         {
             try
             {
