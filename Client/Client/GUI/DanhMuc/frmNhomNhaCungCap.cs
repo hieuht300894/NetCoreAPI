@@ -21,18 +21,24 @@ namespace Client.GUI.DanhMuc
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
-            LoadDataForm();
-            CustomForm();
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadDataForm(); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
+
+            //base.frmBase_Load(sender, e);
+            //LoadDataForm();
+            //CustomForm();
         }
 
-        public async override void LoadDataForm()
+        public override void LoadDataForm()
         {
             lstEdited = new BindingList<eNhomNhaCungCap>();
-            lstEntries = new BindingList<eNhomNhaCungCap>(await clsFunction.GetItemsAsync<eNhomNhaCungCap>("nhomnhacungcap"));
-            await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
+            lstEntries = new BindingList<eNhomNhaCungCap>(clsFunction.GetItems<eNhomNhaCungCap>("nhomnhacungcap"));
+            gctDanhSach.DataSource = lstEntries;
         }
         public override bool ValidationForm()
         {
@@ -62,7 +68,7 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            Tuple<bool, List<eNhomNhaCungCap>> Res =  clsFunction.Post("nhomnhacungcap", lstEdited.ToList());
+            Tuple<bool, List<eNhomNhaCungCap>> Res = clsFunction.Post("nhomnhacungcap", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

@@ -21,8 +21,14 @@ namespace Client.GUI.DanhMuc
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadDataForm(); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
+
             base.frmBase_Load(sender, e);
             LoadDataForm();
             CustomForm();
@@ -31,8 +37,8 @@ namespace Client.GUI.DanhMuc
         public async override void LoadDataForm()
         {
             lstEdited = new BindingList<eNhomDonViTinh>();
-            lstEntries = new BindingList<eNhomDonViTinh>(await clsFunction.GetItemsAsync<eNhomDonViTinh>("nhomdonvitinh"));
-            await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
+            lstEntries = new BindingList<eNhomDonViTinh>( clsFunction.GetItems<eNhomDonViTinh>("nhomdonvitinh"));
+           gctDanhSach.DataSource = lstEntries;
         }
         public override bool ValidationForm()
         {

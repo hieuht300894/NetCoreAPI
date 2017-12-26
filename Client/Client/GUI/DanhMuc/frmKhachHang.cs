@@ -22,26 +22,33 @@ namespace Client.GUI.DanhMuc
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
-            LoadRepository();
-            LoadDataForm();
-            CustomForm();
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadRepository(); });
+            await RunMethodAsync(() => { LoadDataForm(); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
+
+            //base.frmBase_Load(sender, e);
+            //LoadRepository();
+            //LoadDataForm();
+            //CustomForm();
         }
 
-        async void LoadRepository()
+         void LoadRepository()
         {
             rlokGioiTinh.DataSource = Loai.LoaiGioiTinh();
 
-            IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>(await clsFunction.GetItemsAsync<eTinhThanh>("tinhthanh"));
-            await RunMethodAsync(() => { rlokTinhThanh.DataSource = lstTinhThanh; });
+            IList<eTinhThanh> lstTinhThanh = new List<eTinhThanh>( clsFunction.GetItems<eTinhThanh>("tinhthanh"));
+           rlokTinhThanh.DataSource = lstTinhThanh; 
         }
-        public async override void LoadDataForm()
+        public  override void LoadDataForm()
         {
             lstEdited = new BindingList<eKhachHang>();
-            lstEntries = new BindingList<eKhachHang>(await clsFunction.GetItemsAsync<eKhachHang>("khachhang"));
-            await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
+            lstEntries = new BindingList<eKhachHang>( clsFunction.GetItems<eKhachHang>("khachhang"));
+            gctDanhSach.DataSource = lstEntries;
         }
         public override bool ValidationForm()
         {

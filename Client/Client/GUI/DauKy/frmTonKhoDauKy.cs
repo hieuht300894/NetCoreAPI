@@ -1,5 +1,6 @@
 ﻿using Client.BLL.Common;
 using Client.GUI.Common;
+using Client.Module;
 using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
 using System;
@@ -20,27 +21,34 @@ namespace Client.GUI.DauKy
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
-            LoadRepository();
-            LoadDataForm();
-            CustomForm();
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadRepository(); });
+            await RunMethodAsync(() => { LoadDataForm(); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
+
+            //base.frmBase_Load(sender, e);
+            //LoadRepository();
+            //LoadDataForm();
+            //CustomForm();
         }
 
-        public async void LoadRepository()
+        public void LoadRepository()
         {
-            IList<eSanPham> lstSanPham = await clsFunction.GetItemsAsync<eSanPham>("");
-            await RunMethodAsync(() => { rlokSanPham.DataSource = lstSanPham; });
+            IList<eSanPham> lstSanPham = clsFunction.GetItems<eSanPham>("SanPham");
+            rlokSanPham.DataSource = lstSanPham;
 
-            IList<eKho> lstKho = await clsFunction.GetItemsAsync<eKho>("");
-            await RunMethodAsync(() => { rlokKho.DataSource = lstKho; });
+            IList<eKho> lstKho = clsFunction.GetItems<eKho>("Kho");
+            rlokKho.DataSource = lstKho;
         }
-        public async override void LoadDataForm()
+        public  override void LoadDataForm()
         {
             lstEdited = new BindingList<eTonKhoDauKy>();
-            lstEntries = new BindingList<eTonKhoDauKy>(await clsFunction.GetItemsAsync<eTonKhoDauKy>("tonkhodauky"));
-            await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
+            lstEntries = new BindingList<eTonKhoDauKy>( clsFunction.GetItems<eTonKhoDauKy>("tonkhodauky"));
+            gctDanhSach.DataSource = lstEntries;
         }
         public override bool ValidationForm()
         {
@@ -65,7 +73,7 @@ namespace Client.GUI.DauKy
                 x.TenKho = kho.Ten;
             });
 
-            Tuple<bool, List<eTonKhoDauKy>> Res =  clsFunction.Post("tonkhodauky", lstEdited.ToList());
+            Tuple<bool, List<eTonKhoDauKy>> Res = clsFunction.Post("tonkhodauky", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

@@ -22,24 +22,31 @@ namespace Client.GUI.DanhMuc
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadRepository(); });
+            await RunMethodAsync(() => { LoadDataForm(); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
 
-            LoadRepository();
-            LoadDataForm();
-            CustomForm();
+            //base.frmBase_Load(sender, e);
+
+            //LoadRepository();
+            //LoadDataForm();
+            //CustomForm();
         }
 
-        async void LoadRepository()
+        void LoadRepository()
         {
-            IList<eTinhThanh> lstTinhThanh = await clsFunction.GetItemsAsync<eTinhThanh>("TinhThanh/DanhSach63TinhThanh");
-            await RunMethodAsync(() => { slokTinhThanh.Properties.DataSource = lstTinhThanh; });
+            IList<eTinhThanh> lstTinhThanh = clsFunction.GetItems<eTinhThanh>("TinhThanh/DanhSach63TinhThanh");
+            slokTinhThanh.Properties.DataSource = lstTinhThanh;
         }
-        public  override void LoadDataForm()
+        public override void LoadDataForm()
         {
             _iEntry = _iEntry ?? new eNhaCungCap();
-            _aEntry =  clsFunction.GetItem<eNhaCungCap>("NhaCungCap", _iEntry.KeyID);
+            _aEntry = clsFunction.GetItem<eNhaCungCap>("NhaCungCap", _iEntry.KeyID);
 
             SetControlValue();
         }
@@ -96,7 +103,7 @@ namespace Client.GUI.DanhMuc
             _aEntry.IDTinhThanh = tinhThanh.KeyID;
             _aEntry.TinhThanh = tinhThanh.Ten;
 
-            Tuple<bool, eNhaCungCap> Res =  (_aEntry.KeyID > 0 ?
+            Tuple<bool, eNhaCungCap> Res = (_aEntry.KeyID > 0 ?
                 clsFunction.Put("NhaCungCap", _aEntry) :
                 clsFunction.Post("NhaCungCap", _aEntry));
             if (Res.Item1)

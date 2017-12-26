@@ -22,12 +22,19 @@ namespace Client.GUI.DanhMuc
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
-            LoadRepository();
-            LoadDataForm();
-            CustomForm();
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadRepository(); });
+            await RunMethodAsync(() => { LoadDataForm(); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
+
+            //base.frmBase_Load(sender, e);
+            //LoadRepository();
+            //LoadDataForm();
+            //CustomForm();
         }
 
         async void LoadRepository()
@@ -35,13 +42,13 @@ namespace Client.GUI.DanhMuc
             IList<eDonViTinh> lstDVT = await clsFunction.GetItemsAsync<eDonViTinh>("donvitinh");
             await RunMethodAsync(() => { rlokDVT.DataSource = lstDVT; });
         }
-        public async override void LoadDataForm()
+        public override void LoadDataForm()
         {
             lstEdited = new BindingList<eSanPham>();
-            lstEntries = new BindingList<eSanPham>(await clsFunction.GetItemsAsync<eSanPham>("sanpham"));
+            lstEntries = new BindingList<eSanPham>(clsFunction.GetItems<eSanPham>("sanpham"));
             //     lstEntries.ToList().ForEach(x => { x.Color = Color.FromArgb(x.ColorHex); });
 
-            await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
+            gctDanhSach.DataSource = lstEntries;
         }
         public override bool ValidationForm()
         {
@@ -78,7 +85,7 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            Tuple<bool, List<eSanPham>> Res =  clsFunction.Post("sanpham", lstEdited.ToList());
+            Tuple<bool, List<eSanPham>> Res = clsFunction.Post("sanpham", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

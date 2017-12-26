@@ -29,77 +29,37 @@ namespace Client.GUI.DanhMuc
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadData(0); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
 
-            LoadData(0);
-            CustomForm();
-        }
-        #endregion
+            //base.frmBase_Load(sender, e);
 
-        #region Grid Events
-        #endregion
-
-        #region Base Button Events
-        protected override void btnAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            InsertEntry();
-        }
-
-        protected override void btnRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            RefreshEntry();
-        }
-
-        protected override void btnEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            UpdateEntry();
-        }
-
-        protected override void btnDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            DeleteEntry();
-        }
-
-        protected override void bbpAdd_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            InsertEntry();
-        }
-
-        protected override void bbpEdit_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            UpdateEntry();
-        }
-
-        protected override void bbpDelete_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            DeleteEntry();
-        }
-
-        protected override void bbpRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {
-            RefreshEntry();
+            //LoadData(0);
+            //CustomForm();
         }
         #endregion
 
         #region Methods
-        public async void LoadData(int KeyID)
+        public void LoadData(int KeyID)
         {
-            lstDanhSach = new List<eTinhThanh>(await clsFunction.GetItemsAsync<eTinhThanh>("tinhthanh"));
+            lstDanhSach = new List<eTinhThanh>(clsFunction.GetItems<eTinhThanh>("tinhthanh"));
             lstDanhSachLoai1 = new List<eTinhThanh>(lstDanhSach.Where(x => x.IDLoai >= 1 && x.IDLoai <= 2));
             lstDanhSachLoai2 = new List<eTinhThanh>(lstDanhSach.Where(x => x.IDLoai >= 3 && x.IDLoai <= 6));
             lstDanhSachLoai3 = new List<eTinhThanh>(lstDanhSach.Where(x => x.IDLoai >= 7 && x.IDLoai <= 9));
 
-            await RunMethodAsync(() => { lokLoai1.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID >= 1 && x.KeyID <= 2).ToList(); });
-            await RunMethodAsync(() => { lokLoai2.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID >= 3 && x.KeyID <= 6).ToList(); });
-            await RunMethodAsync(() => { lokLoai3.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID >= 7 && x.KeyID <= 9).ToList(); });
-            await RunMethodAsync(() => { lokTen1.Properties.DataSource = lstDanhSachLoai1; });
-            await RunMethodAsync(() => { lokTen2.Properties.DataSource = lstDanhSachLoai2; });
-            await RunMethodAsync(() => { lokTen3.Properties.DataSource = lstDanhSachLoai3; });
-            await RunMethodAsync(() => { trlDanhSach.DataSource = lstDanhSach; });
+            lokLoai1.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID >= 1 && x.KeyID <= 2).ToList();
+            lokLoai2.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID >= 3 && x.KeyID <= 6).ToList();
+            lokLoai3.Properties.DataSource = Loai.LoaiDonViHanhChinh().Where(x => x.KeyID >= 7 && x.KeyID <= 9).ToList();
+            lokTen1.Properties.DataSource = lstDanhSachLoai1;
+            lokTen2.Properties.DataSource = lstDanhSachLoai2;
+            lokTen3.Properties.DataSource = lstDanhSachLoai3;
+            trlDanhSach.DataSource = lstDanhSach;
         }
-
         public override void InsertEntry()
         {
             //using (frmPermission _frm = new frmPermission())
@@ -110,7 +70,6 @@ namespace Client.GUI.DanhMuc
             //    _frm.ShowDialog();
             //}
         }
-
         public override void UpdateEntry()
         {
             //if (grvPermission.RowCount > 0 && grvPermission.FocusedRowHandle >= 0)
@@ -133,16 +92,13 @@ namespace Client.GUI.DanhMuc
             //    }
             //}
         }
-
         public override void DeleteEntry()
         {
         }
-
         public override void RefreshEntry()
         {
             LoadData(0);
         }
-
         public override void CustomForm()
         {
             lokLoai1.Properties.ValueMember = "KeyID";
@@ -178,7 +134,9 @@ namespace Client.GUI.DanhMuc
 
             btnTimKiem.Click += btnTimKiem_Click;
         }
+        #endregion
 
+        #region Event
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
             lokTen1.EditValueChanged -= lokTen_EditValueChanged;
@@ -214,7 +172,6 @@ namespace Client.GUI.DanhMuc
             lokTen2.EditValueChanged += lokTen_EditValueChanged;
             lokTen3.EditValueChanged += lokTen_EditValueChanged;
         }
-
         private void lokTen_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -248,7 +205,6 @@ namespace Client.GUI.DanhMuc
                 trlDanhSach.DataSource = lstResult;
             }
         }
-
         private void lokLoai_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -287,7 +243,6 @@ namespace Client.GUI.DanhMuc
                 lokTen3.EditValueChanged += lokTen_EditValueChanged;
             }
         }
-
         private void lokLoai_EditValueChanged(object sender, EventArgs e)
         {
             lokTen1.EditValueChanged -= lokTen_EditValueChanged;
@@ -323,7 +278,6 @@ namespace Client.GUI.DanhMuc
             lokTen2.EditValueChanged += lokTen_EditValueChanged;
             lokTen3.EditValueChanged += lokTen_EditValueChanged;
         }
-
         private void lokTen_EditValueChanged(object sender, EventArgs e)
         {
             var q1 = new List<eTinhThanh>(lstDanhSachLoai1);

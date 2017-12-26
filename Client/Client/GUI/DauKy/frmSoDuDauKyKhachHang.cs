@@ -1,5 +1,6 @@
 ﻿using Client.BLL.Common;
 using Client.GUI.Common;
+using Client.Module;
 using DevExpress.XtraGrid.Views.Grid;
 using EntityModel.DataModel;
 using System;
@@ -20,24 +21,31 @@ namespace Client.GUI.DauKy
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
-            LoadRepository();
-            LoadDataForm();
-            CustomForm();
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadRepository(); });
+            await RunMethodAsync(() => { LoadDataForm(); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
+
+            //base.frmBase_Load(sender, e);
+            //LoadRepository();
+            //LoadDataForm();
+            //CustomForm();
         }
 
-        public async void LoadRepository()
+        public void LoadRepository()
         {
-            IList<eKhachHang> lstKhachHang = await clsFunction.GetItemsAsync<eKhachHang>("khachhang");
-            await RunMethodAsync(() => { rlokKhachHang.DataSource = lstKhachHang; });
+            IList<eKhachHang> lstKhachHang = clsFunction.GetItems<eKhachHang>("khachhang");
+            rlokKhachHang.DataSource = lstKhachHang;
         }
-        public async override void LoadDataForm()
+        public override void LoadDataForm()
         {
             lstEdited = new BindingList<eSoDuDauKyKhachHang>();
-            lstEntries = new BindingList<eSoDuDauKyKhachHang>(await clsFunction.GetItemsAsync<eSoDuDauKyKhachHang>("sodudaukykhachhang"));
-            await RunMethodAsync(() => { gctDanhSach.DataSource = lstEntries; });
+            lstEntries = new BindingList<eSoDuDauKyKhachHang>(clsFunction.GetItems<eSoDuDauKyKhachHang>("sodudaukykhachhang"));
+            gctDanhSach.DataSource = lstEntries;
         }
         public override bool ValidationForm()
         {
@@ -54,7 +62,7 @@ namespace Client.GUI.DauKy
                 x.TenKhachHang = khachHang.Ten;
             });
 
-            Tuple<bool, List<eSoDuDauKyKhachHang>> Res =  clsFunction.Post("sodudaukykhachhang", lstEdited.ToList());
+            Tuple<bool, List<eSoDuDauKyKhachHang>> Res = clsFunction.Post("sodudaukykhachhang", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

@@ -23,18 +23,24 @@ namespace Client.GUI.DanhMuc
         {
             InitializeComponent();
         }
-        protected override void frmBase_Load(object sender, EventArgs e)
+        protected async override void frmBase_Load(object sender, EventArgs e)
         {
-            base.frmBase_Load(sender, e);
+            await RunMethodAsync(() => { clsGeneral.CallWaitForm(this); });
+            await RunMethodAsync(() => { base.frmBase_Load(sender, e); });
+            await RunMethodAsync(() => { LoadDataForm(); });
+            await RunMethodAsync(() => { CustomForm(); });
+            await RunMethodAsync(() => { clsGeneral.CloseWaitForm(); });
 
-            LoadDataForm();
-            CustomForm();
+            //base.frmBase_Load(sender, e);
+
+            //LoadDataForm();
+            //CustomForm();
         }
 
-        public  override void LoadDataForm()
+        public override void LoadDataForm()
         {
             _iEntry = _iEntry ?? new eKho();
-            _aEntry =  clsFunction.GetItem<eKho>("Kho", _iEntry.KeyID);
+            _aEntry = clsFunction.GetItem<eKho>("Kho", _iEntry.KeyID);
 
             SetControlValue();
         }
@@ -81,8 +87,8 @@ namespace Client.GUI.DanhMuc
             _aEntry.Ten = txtTen.Text.Trim();
             _aEntry.GhiChu = mmeGhiChu.Text.Trim();
 
-            Tuple<bool, eKho> Res =  (_aEntry.KeyID > 0 ? 
-                clsFunction.Put("Kho", _aEntry) : 
+            Tuple<bool, eKho> Res = (_aEntry.KeyID > 0 ?
+                clsFunction.Put("Kho", _aEntry) :
                 clsFunction.Post("Kho", _aEntry));
             if (Res.Item1)
                 KeyID = Res.Item2.KeyID;
