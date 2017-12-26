@@ -34,11 +34,11 @@ namespace Client.GUI.DanhMuc
             CustomForm();
         }
 
-        public async override void LoadDataForm()
+        public override void LoadDataForm()
         {
             lstEdited = new BindingList<eNhomDonViTinh>();
-            lstEntries = new BindingList<eNhomDonViTinh>( clsFunction.GetItems<eNhomDonViTinh>("nhomdonvitinh"));
-           gctDanhSach.DataSource = lstEntries;
+            lstEntries = new BindingList<eNhomDonViTinh>(clsFunction.GetItems<eNhomDonViTinh>("nhomdonvitinh"));
+            gctDanhSach.DataSource = lstEntries;
         }
         public override bool ValidationForm()
         {
@@ -68,7 +68,7 @@ namespace Client.GUI.DanhMuc
                 }
             });
 
-            Tuple<bool, List<eNhomDonViTinh>> Res =  clsFunction.Post("nhomdonvitinh", lstEdited.ToList());
+            Tuple<bool, List<eNhomDonViTinh>> Res = clsFunction.Post("nhomdonvitinh", lstEdited.ToList());
             return Res.Item1;
         }
         public override void CustomForm()

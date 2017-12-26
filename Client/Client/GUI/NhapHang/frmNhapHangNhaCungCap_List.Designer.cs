@@ -31,8 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.gctChiTiet = new DevExpress.XtraGrid.GridControl();
-            this.eNhapHangNhaCungCapChiTietBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.quanLyBanHangModelDataSet = new Client.QuanLyBanHangModelDataSet();
             this.grvChiTiet = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn12 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -47,7 +45,6 @@
             this.gridColumn21 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn23 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gctDanhSach = new DevExpress.XtraGrid.GridControl();
-            this.eNhapHangNhaCungCapBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.grvDanhSach = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -63,17 +60,12 @@
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.eNhapHangNhaCungCapTableAdapter = new Client.QuanLyBanHangModelDataSetTableAdapters.eNhapHangNhaCungCapTableAdapter();
-            this.eNhapHangNhaCungCapChiTietTableAdapter = new Client.QuanLyBanHangModelDataSetTableAdapters.eNhapHangNhaCungCapChiTietTableAdapter();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gctChiTiet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eNhapHangNhaCungCapChiTietBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.quanLyBanHangModelDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvChiTiet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eNhapHangNhaCungCapBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
@@ -94,7 +86,6 @@
             // 
             // gctChiTiet
             // 
-            this.gctChiTiet.DataSource = this.eNhapHangNhaCungCapChiTietBindingSource;
             this.gctChiTiet.Location = new System.Drawing.Point(12, 184);
             this.gctChiTiet.MainView = this.grvChiTiet;
             this.gctChiTiet.MenuManager = this.barMenu;
@@ -103,16 +94,6 @@
             this.gctChiTiet.TabIndex = 5;
             this.gctChiTiet.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvChiTiet});
-            // 
-            // eNhapHangNhaCungCapChiTietBindingSource
-            // 
-            this.eNhapHangNhaCungCapChiTietBindingSource.DataMember = "eNhapHangNhaCungCapChiTiet";
-            this.eNhapHangNhaCungCapChiTietBindingSource.DataSource = this.quanLyBanHangModelDataSet;
-            // 
-            // quanLyBanHangModelDataSet
-            // 
-            this.quanLyBanHangModelDataSet.DataSetName = "QuanLyBanHangModelDataSet";
-            this.quanLyBanHangModelDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // grvChiTiet
             // 
@@ -245,7 +226,6 @@
             // 
             // gctDanhSach
             // 
-            this.gctDanhSach.DataSource = this.eNhapHangNhaCungCapBindingSource;
             this.gctDanhSach.Location = new System.Drawing.Point(12, 12);
             this.gctDanhSach.MainView = this.grvDanhSach;
             this.gctDanhSach.MenuManager = this.barMenu;
@@ -254,11 +234,6 @@
             this.gctDanhSach.TabIndex = 4;
             this.gctDanhSach.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvDanhSach});
-            // 
-            // eNhapHangNhaCungCapBindingSource
-            // 
-            this.eNhapHangNhaCungCapBindingSource.DataMember = "eNhapHangNhaCungCap";
-            this.eNhapHangNhaCungCapBindingSource.DataSource = this.quanLyBanHangModelDataSet;
             // 
             // grvDanhSach
             // 
@@ -410,14 +385,6 @@
             this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem2.TextVisible = false;
             // 
-            // eNhapHangNhaCungCapTableAdapter
-            // 
-            this.eNhapHangNhaCungCapTableAdapter.ClearBeforeFill = true;
-            // 
-            // eNhapHangNhaCungCapChiTietTableAdapter
-            // 
-            this.eNhapHangNhaCungCapChiTietTableAdapter.ClearBeforeFill = true;
-            // 
             // frmNhapHangNhaCungCap_List
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -431,11 +398,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gctChiTiet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eNhapHangNhaCungCapChiTietBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.quanLyBanHangModelDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvChiTiet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gctDanhSach)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eNhapHangNhaCungCapBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlGroup1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
@@ -455,11 +419,7 @@
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem2;
-        private QuanLyBanHangModelDataSet quanLyBanHangModelDataSet;
-        private System.Windows.Forms.BindingSource eNhapHangNhaCungCapBindingSource;
-        private QuanLyBanHangModelDataSetTableAdapters.eNhapHangNhaCungCapTableAdapter eNhapHangNhaCungCapTableAdapter;
-        private System.Windows.Forms.BindingSource eNhapHangNhaCungCapChiTietBindingSource;
-        private QuanLyBanHangModelDataSetTableAdapters.eNhapHangNhaCungCapChiTietTableAdapter eNhapHangNhaCungCapChiTietTableAdapter;
+
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn11;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn12;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn13;
