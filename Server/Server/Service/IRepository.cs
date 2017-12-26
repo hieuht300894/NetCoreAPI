@@ -8,6 +8,7 @@ namespace Server.Service
 {
     public interface IRepository<T> where T : class, new()
     {
+        Task<String> GetCode(String Prefix);
         Task<IEnumerable<T>> GetAll();
         Task<T> GetByID(object id);
         Task<bool> AddEntry(T item);

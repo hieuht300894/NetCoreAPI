@@ -20,6 +20,37 @@ namespace Server.Service
             Context = db;
         }
 
+        public async Task<String> GetCode(String Prefix)
+        {
+            String bRe = Prefix + DateTime.Now.ToString("yyyyMMdd");
+
+            try
+            {
+                DateTime time = DateTime.Now;
+
+                IEnumerable<T> lstTemp = await Context.Set<T>().ToListAsync();
+                T Item = lstTemp.OrderByDescending<T, T>("KeyID").FirstOrDefault();
+                if (Item == null)
+                {
+                    bRe += "0001";
+                }
+                else
+                {
+                    String Code = Item.GetObjectByName<String>("Ma");
+                    if (Code.StartsWith(bRe))
+                    {
+                        Int32 number = Int32.Parse(Code.Replace(bRe, String.Empty));
+                        ++number;
+                        bRe = String.Format("{0}{1:0000}", bRe, number);
+                    }
+                    else
+                        bRe += "0001";
+                }
+                return bRe;
+            }
+            catch { return bRe += "0001"; }
+        }
+
         public async Task<IEnumerable<T>> GetAll()
         {
             try
@@ -32,7 +63,7 @@ namespace Server.Service
             catch { return new List<T>(); }
         }
 
-        public async Task<T> GetByID(object id)
+        public async Task<T> GetByID(Object id)
         {
             try
             {
@@ -43,7 +74,7 @@ namespace Server.Service
             catch { return new T(); }
         }
 
-        public async Task<bool> AddEntry(T Item)
+        public async Task<Boolean> AddEntry(T Item)
         {
             try
             {
@@ -61,7 +92,7 @@ namespace Server.Service
             }
         }
 
-        public async Task<bool> AddEntries(T[] Items)
+        public async Task<Boolean> AddEntries(T[] Items)
         {
             try
             {
@@ -80,7 +111,7 @@ namespace Server.Service
             }
         }
 
-        public async Task<bool> UpdateEntry(T Item)
+        public async Task<Boolean> UpdateEntry(T Item)
         {
             try
             {
@@ -98,7 +129,7 @@ namespace Server.Service
             }
         }
 
-        public async Task<bool> UpdateEntries(T[] Items)
+        public async Task<Boolean> UpdateEntries(T[] Items)
         {
             try
             {
@@ -117,7 +148,7 @@ namespace Server.Service
             }
         }
 
-        public async Task<bool> DeleteEntry(object id)
+        public async Task<Boolean> DeleteEntry(Object id)
         {
             try
             {
@@ -136,7 +167,7 @@ namespace Server.Service
             }
         }
 
-        public async Task<bool> DeleteEntry(T Item)
+        public async Task<Boolean> DeleteEntry(T Item)
         {
             try
             {
@@ -155,7 +186,7 @@ namespace Server.Service
             }
         }
 
-        public async Task<bool> DeleteEntries(object[] ids)
+        public async Task<Boolean> DeleteEntries(Object[] ids)
         {
             try
             {
@@ -178,7 +209,7 @@ namespace Server.Service
             }
         }
 
-        public async Task<bool> DeleteEntries(T[] Items)
+        public async Task<Boolean> DeleteEntries(T[] Items)
         {
             try
             {

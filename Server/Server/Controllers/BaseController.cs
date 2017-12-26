@@ -20,6 +20,12 @@ namespace Server.Controllers
             Instance = Collection.GetRepository<T>();
         }
 
+        [HttpGet("GetCode/{Prefix}")]
+        public virtual async Task<String> GetCode(String Prefix)
+        {
+            return await Instance.GetCode(Prefix); 
+        }
+
         [HttpGet]
         public virtual async Task<IEnumerable<T>> GetAll()
         {
@@ -27,7 +33,7 @@ namespace Server.Controllers
             return Items;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetByID/{id}")]
         public virtual async Task<T> GetByID(String id)
         {
             T Item = await Instance.GetByID(id);
