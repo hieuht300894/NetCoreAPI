@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Server.Service;
 using Server.Model;
+using Server.Middleware;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Server.Controllers
 {
+    [ServiceFilter(typeof(Filter))]
     [Route("API/[controller]")]
     public class BaseController<T> : Controller where T : class, new()
     {

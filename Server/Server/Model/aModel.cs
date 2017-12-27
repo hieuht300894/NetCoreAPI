@@ -156,7 +156,7 @@ namespace Server.Model
                     await db.SaveChangesAsync();
                 }
             }
-            catch (Exception ex)
+            catch 
             {
             }
         }

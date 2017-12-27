@@ -9,6 +9,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 using EntityModel.DataModel;
+using Server.Middleware;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,6 +18,7 @@ namespace Server.Controllers
     [Route("API/[controller]")]
     public class ModuleController : Controller
     {
+        [ServiceFilter(typeof(Filter))]
         [Route("DataSeed")]
         public async Task<IEnumerable<IActionResult>> DataSeed()
         {
@@ -33,7 +35,9 @@ namespace Server.Controllers
         [Route("TimeServer")]
         public async Task<DateTime> TimeServer()
         {
-            return await Task.Factory.StartNew(() => { return DateTime.Now; });
+            try { return await Task.Factory.StartNew(() => { return DateTime.Now; }); }
+            catch { return DateTime.Now; }
+
         }
 
         async Task<IActionResult> InitAgency()

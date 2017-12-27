@@ -98,7 +98,7 @@ namespace Server.Controllers
 
                 return Ok(Items);
             }
-            catch (Exception ex)
+            catch
             {
                 Instance.RollbackTransaction();
                 return BadRequest();
@@ -144,7 +144,7 @@ namespace Server.Controllers
 
                 return Ok(Items);
             }
-            catch (Exception ex)
+            catch
             {
                 Instance.RollbackTransaction();
                 return BadRequest();

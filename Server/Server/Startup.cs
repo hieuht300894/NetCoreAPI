@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Server.Utils;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Server.Middleware;
+using Microsoft.AspNetCore.Http;
 
 namespace Server
 {
@@ -34,9 +35,10 @@ namespace Server
             ModuleHelper.ServiceCollection = services;
             ModuleHelper.ConnectionString = Configuration.GetConnectionString("QuanLyBanHangModel");
 
-            services.AddMvc();
             services.AddDbContext<aModel>(options => options.UseSqlServer(ModuleHelper.ConnectionString));
             services.AddScoped(typeof(IRepositoryCollection), typeof(RepositoryCollection));
+            services.AddScoped<Filter>();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,11 +46,14 @@ namespace Server
         {
             ModuleHelper.ApplicationBuilder = app;
             ModuleHelper.HostingEnvironment = env;
-            ModuleHelper.ServiceScope= app.ApplicationServices.CreateScope();
+            ModuleHelper.ServiceScope = app.ApplicationServices.CreateScope();
 
             GetPrimaryKey();
 
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            app.UseMiddleware<ErrorLoggingMiddleware>();
+            app.UseMiddleware<LoggingMiddleware>();
+            app.UseMiddleware<AdminWhiteListMiddleware>();
+
             app.UseStaticFiles();
             app.UseMvc();
         }
