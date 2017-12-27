@@ -16,10 +16,11 @@ namespace Client.GUI.NhapHang
 {
     public partial class frmNhapHangNhaCungCap : frmBase
     {
-        IList<eSanPham> lstSanPham = new List<eSanPham>();
-        IList<eKho> lstKho = new List<eKho>();
-        IList<eNhomSanPham> lstNhomSanPham = new List<eNhomSanPham>();
-        IList<eNhaCungCap> lstNhaCungCap = new List<eNhaCungCap>();
+        List<eSanPham> lstSanPham = new List<eSanPham>();
+        List<eKho> lstKho = new List<eKho>();
+        List<eTonKho> lstTonKho = new List<eTonKho>();
+        List<eNhomSanPham> lstNhomSanPham = new List<eNhomSanPham>();
+        List<eNhaCungCap> lstNhaCungCap = new List<eNhaCungCap>();
         public eNhapHangNhaCungCap _iEntry;
         eNhapHangNhaCungCap _aEntry;
         BindingList<eNhapHangNhaCungCapChiTiet> lstDetail = new BindingList<eNhapHangNhaCungCapChiTiet>();
@@ -59,6 +60,7 @@ namespace Client.GUI.NhapHang
             lstNhomSanPham = clsFunction.GetItems<eNhomSanPham>("NhomSanPham");
             lstSanPham = clsFunction.GetItems<eSanPham>("SanPham");
             lstKho = clsFunction.GetItems<eKho>("Kho");
+            lstTonKho = clsFunction.GetItems<eTonKho>("TonKho");
 
             dteNgayNhap.DateTime = DateTime.Now.ServerNow();
             slokNhomSanPham.Properties.DataSource = lstNhomSanPham;

@@ -1,4 +1,5 @@
 ﻿using Client.Module;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,8 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
                 IRestResponse response = await client.ExecuteTaskAsync(request);
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+
+                T Item = response.Content.DeserializeToObject<T>();
 
                 if (Item == null)
                     Item = ReflectionPopulator.CreateObject<T>();
@@ -264,7 +266,7 @@ namespace Client.BLL.Common
                 request.Method = Method.GET;
                 IRestResponse response = client.Execute(request);
 
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+                T Item = response.Content.DeserializeToObject<T>();
 
                 if (Item == null)
                     Item = ReflectionPopulator.CreateObject<T>();

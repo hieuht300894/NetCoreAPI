@@ -304,7 +304,7 @@ namespace Client.Module
             txtMain.Properties.Mask.ShowPlaceHolders = false;
             txtMain.Properties.Mask.UseMaskAsDisplayFormat = true;
             txtMain.Properties.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
-            txtMain.Properties.Mask.EditMask = "([a-zA-Z]+)([0-9]{8})([0-9]+)";
+            txtMain.Properties.Mask.EditMask = @"([A-Z]+)(19|20\d\d)(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])([0-9]+)";
 
             txtMain.EditValue = clsFunction.GetItem<String>(Url, Prefix);
             txtMain.Enabled = string.IsNullOrWhiteSpace(txtMain.Text.Trim());
@@ -1702,7 +1702,7 @@ namespace Client.Module
         public static List<T> DeserializeToList<T>(this string source)
         {
             try { return JsonConvert.DeserializeObject<List<T>>(source); }
-            catch { return new List<T>(); }
+            catch(Exception ex) { return new List<T>(); }
         }
     }
 
@@ -1811,20 +1811,15 @@ namespace Client.Module
 
         public static T CreateObject<T>()
         {
-            //Type type = typeof(T);
-            //if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-            //    return (T)Convert.ChangeType(Activator.CreateInstance(type.GetGenericArguments()[0]), Nullable.GetUnderlyingType(type.GetGenericArguments()[0]));
-            //if (type.IsValueType && !type.IsPrimitive && !type.IsEnum) { return default(T); }
-            //else { return Activator.CreateInstance<T>(); }
-
             Type type = typeof(T);
-            if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
+
+            if (type.IsValueType || type == typeof(String))
             {
-                return (T)Convert.ChangeType(Activator.CreateInstance(type), Nullable.GetUnderlyingType(type));
-            }
-            else if (type.IsValueType || type == typeof(String))
-            {
-                if (type.IsValueType)
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    return (T)Convert.ChangeType(Activator.CreateInstance(type.GetGenericArguments()[0]), Nullable.GetUnderlyingType(type));
+                }
+                else if (type.IsValueType)
                 {
                     return default(T);
                 }
