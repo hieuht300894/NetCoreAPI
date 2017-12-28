@@ -17,5 +17,10 @@ namespace EntityModel.DataModel
         //public bool IsEnable { get; set; }
         //public int ItemCount { get; set; }
         //public int Level { get; set; }
+
+        public string Controller { get; set; }
+        public string Action { get; set; }
+        public string Method { get; set; }
+        public string Template { get; set; }
     }
 }
