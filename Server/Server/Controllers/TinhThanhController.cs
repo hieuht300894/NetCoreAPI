@@ -16,7 +16,7 @@ namespace Server.Controllers
         {
         }
 
-        [Route("DanhSach63TinhThanh")]
+        [HttpGet("DanhSach63TinhThanh")]
         public IList<eTinhThanh> DanhSach63TinhThanh()
         {
             try

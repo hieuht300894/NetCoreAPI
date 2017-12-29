@@ -16,21 +16,5 @@ namespace Server.Controllers
         public PersonnelController(IRepositoryCollection Collection) : base(Collection)
         {
         }
-
-        //[Route("Test")]
-        //public async Task<IEnumerable<eTinhThanh>> Test()
-        //{
-        //    Instance.Context = new zModel();
-        //    Task<List<eTinhThanh>> task = Instance.Context.eTinhThanh.ToListAsync();
-        //    return await task;
-        //}
-
-        //[Route("Test1")]
-        //public async Task<IEnumerable<eTinhThanh>> Test1()
-        //{
-        //    Instance.Context = new zModel();
-        //    IList<eTinhThanh> lstResult = await Instance.Context.eTinhThanh.ToListAsync();
-        //    return lstResult;
-        //}
     }
 }

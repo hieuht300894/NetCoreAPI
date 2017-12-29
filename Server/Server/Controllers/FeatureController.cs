@@ -19,7 +19,7 @@ namespace Server.Controllers
         {
         }
 
-        [Route("GetController")]
+        [HttpPost("GetController")]
         public async Task<IActionResult> GetController()
         {
             List<xFeature> lstFeatures = new List<xFeature>();
@@ -119,12 +119,6 @@ namespace Server.Controllers
                 ModelState.AddModelError("Exception", ex.Message);
                 return BadRequest(ModelState);
             }
-        }
-
-        [Route("Test")]
-        public IActionResult Test()
-        {
-            return Ok();
         }
     }
 }

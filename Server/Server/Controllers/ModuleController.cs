@@ -19,7 +19,7 @@ namespace Server.Controllers
     public class ModuleController : Controller
     {
         [ServiceFilter(typeof(Filter))]
-        [Route("DataSeed")]
+        [HttpPost("DataSeed")]
         public async Task<IEnumerable<IActionResult>> DataSeed()
         {
             IList<IActionResult> lstResult = new List<IActionResult>();
@@ -32,12 +32,87 @@ namespace Server.Controllers
             return lstResult;
         }
 
-        [Route("TimeServer")]
+        [HttpGet("TimeServer")]
         public async Task<DateTime> TimeServer()
         {
             try { return await Task.Factory.StartNew(() => { return DateTime.Now; }); }
             catch { return DateTime.Now; }
 
+        }
+
+        [HttpPost("InitUser")]
+        public async Task<IActionResult> InitUser()
+        {
+            aModel db = new aModel();
+            DateTime time = DateTime.Now;
+
+            try
+            {
+                await db.Database.BeginTransactionAsync();
+
+                xPermission permission = new xPermission()
+                {
+                    KeyID = 0,
+                    Ma = "ADMIN",
+                    Ten = "ADMIN",
+                    NgayTao = time
+                };
+                await db.xPermission.AddAsync(permission);
+                await db.SaveChangesAsync();
+
+                xPersonnel personnel = new xPersonnel()
+                {
+                    KeyID = 0,
+                    Ma = "NV0001",
+                    Ten = "Nhân viên 0001",
+                    NgayTao = time
+                };
+                await db.xPersonnel.AddAsync(personnel);
+                await db.SaveChangesAsync();
+
+                xAccount account = new xAccount()
+                {
+                    KeyID = personnel.KeyID,
+                    NgayTao = time,
+                    PersonelName = personnel.Ten,
+                    UserName = "admin",
+                    Password = "admin",
+                    IDPermission = permission.KeyID,
+                    PermissionName = permission.Ten
+                };
+                await db.xAccount.AddAsync(account);
+                await db.SaveChangesAsync();
+
+                List<xFeature> features = await db.xFeature.ToListAsync();
+                List<xUserFeature> userFeatures = new List<xUserFeature>();
+                foreach (xFeature f in features)
+                {
+                    userFeatures.Add(new xUserFeature()
+                    {
+                        KeyID = 0,
+                        IDPermission = permission.KeyID,
+                        PermissionName = permission.Ten,
+                        IDFeature = f.KeyID,
+                        Controller = f.Controller,
+                        Action = f.Action,
+                        Method = f.Method,
+                        Template = f.Template,
+                        NgayTao = time
+                    });
+                }
+                await db.xUserFeature.AddRangeAsync(userFeatures.ToArray());
+                await db.SaveChangesAsync();
+
+                db.Database.CommitTransaction();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                db.Database.RollbackTransaction();
+                ModelState.AddModelError("Exception_Message", ex.Message);
+                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         async Task<IActionResult> InitAgency()

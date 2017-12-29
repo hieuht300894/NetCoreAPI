@@ -193,7 +193,7 @@ namespace Server.Controllers
             }
         }
 
-        [Route("CongNoHienTai/{IDMaster}/{IDNhaCungCap}/{NgayHienTai}")]
+        [HttpGet("CongNoHienTai/{IDMaster}/{IDNhaCungCap}/{NgayHienTai}")]
         public eCongNoNhaCungCap CongNoHienTai(int IDMaster, int IDNhaCungCap, DateTime NgayHienTai)
         {
             try

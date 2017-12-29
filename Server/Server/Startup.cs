@@ -50,10 +50,6 @@ namespace Server
 
             GetPrimaryKey();
 
-            app.UseMiddleware<ErrorLoggingMiddleware>();
-            app.UseMiddleware<LoggingMiddleware>();
-            app.UseMiddleware<AdminWhiteListMiddleware>();
-
             app.UseStaticFiles();
             app.UseMvc();
         }

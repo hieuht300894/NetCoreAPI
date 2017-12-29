@@ -1,4 +1,5 @@
 ﻿using EntityModel.DataModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -49,34 +50,40 @@ namespace Server.Middleware
         {
             try
             {
+                Controller controller = (Controller)context.Controller;
+
                 //IPAddress address = context.HttpContext.Connection.RemoteIpAddress;
 
                 //ControllerActionDescriptor descriptor = (ControllerActionDescriptor)context.ActionDescriptor;
-                //string Method = context.HttpContext.Request.Method.ToLower();
-                //string Controller = descriptor.ControllerName.ToLower();
-                //string Action = descriptor.ActionName.ToLower();
-                //string Template = descriptor.AttributeRouteInfo.Template.ToLower();
+                //string MethodName = context.HttpContext.Request.Method.ToLower();
+                //string ControllerName = descriptor.ControllerName.ToLower();
+                //string ActionName = descriptor.ActionName.ToLower();
+                //string TemplateName = descriptor.AttributeRouteInfo.Template.ToLower();
 
-                //IDictionary<string, object> dParams = context.ActionArguments;
+                ControllerActionDescriptor descriptor = (ControllerActionDescriptor)context.ActionDescriptor;
+                string MethodName = context.HttpContext.Request.Method.ToLower();
+                string ControllerName = descriptor.ControllerName.ToLower();
+                string ActionName = descriptor.ActionName.ToLower();
+                string TemplateName = descriptor.AttributeRouteInfo.Template.ToLower();
+          
+                aModel db = new aModel();
 
-                //aModel db = new aModel();
+                xAccount account = db.xAccount.Find(Convert.ToInt32(controller.Request.Headers["IDAccount"].ToList()[0]));
+                if (account == null)
+                    return HttpStatusCode.BadRequest;
 
-                //xAccount account = db.xAccount.Find(dParams["IDAccount"]);
-                //if (account == null)
-                //    return HttpStatusCode.BadRequest;
+                xUserFeature userFeature = db.xUserFeature
+                    .FirstOrDefault(x =>
+                        x.IDPermission == account.IDPermission &&
+                        x.Controller.Equals(ControllerName) &&
+                        x.Action.Equals(ActionName) &&
+                        x.Method.Equals(MethodName) &&
+                        x.Template.Equals(TemplateName));
+                if (userFeature == null)
+                    return HttpStatusCode.BadRequest;
 
-                //xUserFeature userFeature = db.xUserFeature
-                //    .FirstOrDefault(x =>
-                //        x.IDPermission == account.IDPermission &&
-                //        x.Controller.Equals(Controller) &&
-                //        x.Action.Equals(Action) &&
-                //        x.Method.Equals(Method) &&
-                //        x.Template.Equals(Template));
-                //if (userFeature == null)
-                //    return HttpStatusCode.BadRequest;
-
-                //if (userFeature.TrangThai == 3)
-                //    return HttpStatusCode.BadRequest;
+                if (userFeature.TrangThai == 3)
+                    return HttpStatusCode.BadRequest;
 
                 return HttpStatusCode.OK;
             }

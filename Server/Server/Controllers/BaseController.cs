@@ -11,7 +11,7 @@ using Server.Middleware;
 
 namespace Server.Controllers
 {
-    //[ServiceFilter(typeof(Filter))]
+    [ServiceFilter(typeof(Filter))]
     [Route("API/[controller]")]
     public class BaseController<T> : Controller where T : class, new()
     {
@@ -56,10 +56,12 @@ namespace Server.Controllers
                 Instance.Context.Database.CommitTransaction();
                 return Ok(Items);
             }
-            catch
+            catch(Exception ex)
             {
                 Instance.Context.Database.RollbackTransaction();
-                return BadRequest();
+                ModelState.AddModelError("Exception_Message", ex.Message);
+                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
+                return BadRequest(ModelState);
             }
         }
 
@@ -76,10 +78,12 @@ namespace Server.Controllers
                 Instance.Context.Database.CommitTransaction();
                 return Ok(Items);
             }
-            catch
+            catch (Exception ex)
             {
                 Instance.Context.Database.RollbackTransaction();
-                return BadRequest();
+                ModelState.AddModelError("Exception_Message", ex.Message);
+                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
+                return BadRequest(ModelState);
             }
         }
 
@@ -100,10 +104,12 @@ namespace Server.Controllers
                 Instance.Context.Database.CommitTransaction();
                 return NoContent();
             }
-            catch
+            catch (Exception ex)
             {
                 Instance.Context.Database.RollbackTransaction();
-                return BadRequest();
+                ModelState.AddModelError("Exception_Message", ex.Message);
+                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
+                return BadRequest(ModelState);
             }
         }
     }
