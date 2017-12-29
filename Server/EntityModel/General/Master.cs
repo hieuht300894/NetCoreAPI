@@ -11,31 +11,18 @@ namespace EntityModel.General
         private static Int32 _keyID = 0;
         public static Int32 _KeyID { get { return _keyID--; } }
 
-        public Master()
-        {
-            KeyID = _KeyID;
-            Ma = string.Empty;
-            Ten = string.Empty;
-            MaNguoiTao = string.Empty;
-            TenNguoiTao = string.Empty;
-            MaNguoiCapNhat = string.Empty;
-            TenNguoiCapNhat = string.Empty;
-            GhiChu = string.Empty;
-            TrangThai = 1;
-        }
-
-        public Int32 KeyID { get; set; }
-        public String Ma { get; set; }
-        public String Ten { get; set; }
-        public DateTime NgayTao { get; set; }
-        public Int32 NguoiTao { get; set; }
-        public String MaNguoiTao { get; set; }
-        public String TenNguoiTao { get; set; }
-        public DateTime? NgayCapNhat { get; set; }
-        public Int32? NguoiCapNhat { get; set; }
-        public String MaNguoiCapNhat { get; set; }
-        public String TenNguoiCapNhat { get; set; }
-        public String GhiChu { get; set; }
-        public Int32 TrangThai { get; set; }
+        public Int32 KeyID { get; set; } = _KeyID;
+        public String Ma { get; set; } = string.Empty;
+        public String Ten { get; set; } = string.Empty;
+        public DateTime NgayTao { get; set; } = DateTime.Now;
+        public Int32 NguoiTao { get; set; } 
+        public String MaNguoiTao { get; set; } = string.Empty;
+        public String TenNguoiTao { get; set; } = string.Empty;
+        public DateTime? NgayCapNhat { get; set; } 
+        public Int32? NguoiCapNhat { get; set; } 
+        public String MaNguoiCapNhat { get; set; } = string.Empty;
+        public String TenNguoiCapNhat { get; set; } = string.Empty;
+        public String GhiChu { get; set; } = string.Empty;
+        public Int32 TrangThai { get; set; } = 1;
     }
 }

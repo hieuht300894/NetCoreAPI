@@ -4,14 +4,6 @@ namespace EntityModel.DataModel
 {
     public partial class xFeature : Master
     {
-        public xFeature()
-        {
-            Controller = string.Empty;
-            Action = string.Empty;
-            Method = string.Empty;
-            Template = string.Empty;
-        }
-
         //public string KeyID { get; set; }
         //public string IDGroup { get; set; }
         //public string VN { get; set; }
@@ -27,9 +19,9 @@ namespace EntityModel.DataModel
         //public int Level { get; set; }
 
 
-        public string Controller { get; set; }
-        public string Action { get; set; }
-        public string Method { get; set; }
-        public string Template { get; set; }
+        public string Controller { get; set; } = string.Empty;
+        public string Action { get; set; } = string.Empty;
+        public string Method { get; set; } = string.Empty;
+        public string Template { get; set; } = string.Empty;
     }
 }
