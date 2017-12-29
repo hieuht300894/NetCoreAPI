@@ -12,7 +12,7 @@ namespace Server.Model
     public class zModel : DbContext
     {
         /*
-         * Add-Migration "Name not exist" -context zModel
+         * Add-Migration db1 -context zModel
          * Update-Database -context zModel
          * Remove-Migration -context zModel
          */

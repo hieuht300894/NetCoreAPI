@@ -23,5 +23,6 @@ namespace EntityModel.DataModel
         public string Action { get; set; } = string.Empty;
         public string Method { get; set; } = string.Empty;
         public string Template { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
     }
 }

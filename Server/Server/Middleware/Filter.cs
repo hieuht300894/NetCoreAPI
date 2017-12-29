@@ -65,7 +65,7 @@ namespace Server.Middleware
                 string ControllerName = descriptor.ControllerName.ToLower();
                 string ActionName = descriptor.ActionName.ToLower();
                 string TemplateName = descriptor.AttributeRouteInfo.Template.ToLower();
-          
+
                 aModel db = new aModel();
 
                 xAccount account = db.xAccount.Find(Convert.ToInt32(controller.Request.Headers["IDAccount"].ToList()[0]));
@@ -78,7 +78,8 @@ namespace Server.Middleware
                         x.Controller.Equals(ControllerName) &&
                         x.Action.Equals(ActionName) &&
                         x.Method.Equals(MethodName) &&
-                        x.Template.Equals(TemplateName));
+                        x.Path.Equals(TemplateName));
+
                 if (userFeature == null)
                     return HttpStatusCode.BadRequest;
 

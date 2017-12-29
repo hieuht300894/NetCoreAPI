@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 using EntityModel.DataModel;
 using Server.Middleware;
+using System.Reflection;
+using Microsoft.AspNetCore.Http;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,6 +32,71 @@ namespace Server.Controllers
             lstResult.Add(await InitDonViTinh());
 
             return lstResult;
+        }
+        async Task<IActionResult> InitAgency()
+        {
+            aModel db = new aModel();
+
+            if (db.xAgency.Count() == 0)
+            {
+                try
+                {
+                    string Query = System.IO.File.ReadAllText($@"{Directory.GetCurrentDirectory()}\wwwroot\InitData\DATA_xAgency.sql");
+                    await db.Database.ExecuteSqlCommandAsync(Query, new SqlParameter[] { });
+                    return Ok($"Init data {(typeof(xAgency).Name)} success.");
+                }
+                catch (Exception ex) { return BadRequest($"Init data {(typeof(xAgency).Name)} fail: {ex}"); }
+            }
+
+            return Ok($"No init {(typeof(xAgency).Name)} data");
+        }
+        async Task<IActionResult> InitTienTe()
+        {
+            aModel db = new aModel();
+
+            if (db.eTienTe.Count() == 0)
+            {
+                try
+                {
+                    string Query = System.IO.File.ReadAllText($@"{Directory.GetCurrentDirectory()}\wwwroot\InitData\DATA_eTienTe.sql");
+                    await db.Database.ExecuteSqlCommandAsync(Query, new SqlParameter[] { });
+                    return Ok($"Init data {(typeof(eTienTe).Name)} success.");
+                }
+                catch (Exception ex) { return BadRequest($"Init data {(typeof(eTienTe).Name)} fail: {ex}"); }
+            }
+            return Ok($"No init {(typeof(eTienTe).Name)} data");
+        }
+        async Task<IActionResult> InitTinhThanh()
+        {
+            aModel db = new aModel();
+
+            if (db.eTinhThanh.Count() == 0)
+            {
+                try
+                {
+                    string Query = System.IO.File.ReadAllText($@"{Directory.GetCurrentDirectory()}\wwwroot\InitData\DATA_eTinhThanh.sql");
+                    await db.Database.ExecuteSqlCommandAsync(Query, new SqlParameter[] { });
+                    return Ok($"Init data {(typeof(eTinhThanh).Name)} success.");
+                }
+                catch (Exception ex) { return BadRequest($"Init data {(typeof(eTinhThanh).Name)} fail: {ex}"); }
+            }
+            return Ok($"No init {(typeof(eTinhThanh).Name)} data");
+        }
+        async Task<IActionResult> InitDonViTinh()
+        {
+            aModel db = new aModel();
+
+            if (db.eDonViTinh.Count() == 0)
+            {
+                try
+                {
+                    string Query = System.IO.File.ReadAllText($@"{Directory.GetCurrentDirectory()}\wwwroot\InitData\DATA_eDonViTinh.sql");
+                    await db.Database.ExecuteSqlCommandAsync(Query, new SqlParameter[] { });
+                    return Ok($"Init data {(typeof(eDonViTinh).Name)} success.");
+                }
+                catch (Exception ex) { return BadRequest($"Init data {(typeof(eDonViTinh).Name)} fail: {ex}"); }
+            }
+            return Ok($"No init {(typeof(eDonViTinh).Name)} data");
         }
 
         [HttpGet("TimeServer")]
@@ -97,6 +164,7 @@ namespace Server.Controllers
                         Action = f.Action,
                         Method = f.Method,
                         Template = f.Template,
+                        Path = f.Path,
                         NgayTao = time
                     });
                 }
@@ -104,7 +172,7 @@ namespace Server.Controllers
                 await db.SaveChangesAsync();
 
                 db.Database.CommitTransaction();
-                return Ok();
+                return Ok(userFeatures);
             }
             catch (Exception ex)
             {
@@ -115,70 +183,108 @@ namespace Server.Controllers
             }
         }
 
-        async Task<IActionResult> InitAgency()
+        [HttpPost("GetController")]
+        public async Task<IActionResult> GetController()
         {
-            aModel db = new aModel();
+            List<xFeature> lstFeatures = new List<xFeature>();
 
-            if (db.xAgency.Count() == 0)
-            {
-                try
+            Assembly asm = Assembly.GetExecutingAssembly();
+
+            var Controllers = asm.GetExportedTypes()
+                .Where(x => typeof(ControllerBase).IsAssignableFrom(x) && !x.Name.Equals(typeof(BaseController<>).Name))
+                .Select(x => new
                 {
-                    string Query = System.IO.File.ReadAllText($@"{Directory.GetCurrentDirectory()}\wwwroot\InitData\DATA_xAgency.sql");
-                    await db.Database.ExecuteSqlCommandAsync(Query, new SqlParameter[] { });
-                    return Ok($"Init data {(typeof(xAgency).Name)} success.");
+                    Controller = x.Name,
+                    Methods = x.GetMethods().Where(y => y.DeclaringType.IsSubclassOf(typeof(ControllerBase)) && y.IsPublic && !y.IsStatic).ToList()
+                })
+                .Select(x => new
+                {
+                    Controller = x.Controller.ToLower().Replace("controller", string.Empty),
+                    Actions = x.Methods.Select(y => new { Action = y.Name.ToLower(), Attributes = y.GetCustomAttributes(true).ToList() })
+                });
+
+            DateTime time = DateTime.Now;
+
+            foreach (var controller in Controllers)
+            {
+                List<xFeature> lstTemps = new List<xFeature>();
+
+                foreach (var action in controller.Actions)
+                {
+                    xFeature f = new xFeature();
+
+                    HttpGetAttribute attr_Get = (HttpGetAttribute)action.Attributes.FirstOrDefault(x => x.GetType() == typeof(HttpGetAttribute));
+                    if (attr_Get != null)
+                    {
+                        f.Method = HttpMethods.Get.ToLower();
+                        f.Template = string.IsNullOrWhiteSpace(attr_Get.Template) ? string.Empty : attr_Get.Template.ToLower();
+                        lstTemps.Add(f);
+                    }
+
+                    HttpPostAttribute attr_Post = (HttpPostAttribute)action.Attributes.FirstOrDefault(x => x.GetType() == typeof(HttpPostAttribute));
+                    if (attr_Post != null)
+                    {
+                        f.Method = HttpMethods.Post.ToLower();
+                        f.Template = string.IsNullOrWhiteSpace(attr_Post.Template) ? string.Empty : attr_Post.Template.ToLower();
+                        lstTemps.Add(f);
+                    }
+
+                    HttpPutAttribute attr_Put = (HttpPutAttribute)action.Attributes.FirstOrDefault(x => x.GetType() == typeof(HttpPutAttribute));
+                    if (attr_Put != null)
+                    {
+                        f.Method = HttpMethods.Put.ToLower();
+                        f.Template = string.IsNullOrWhiteSpace(attr_Put.Template) ? string.Empty : attr_Put.Template.ToLower();
+                        lstTemps.Add(f);
+                    }
+
+                    HttpDeleteAttribute attr_Delete = (HttpDeleteAttribute)action.Attributes.FirstOrDefault(x => x.GetType() == typeof(HttpDeleteAttribute));
+                    if (attr_Delete != null)
+                    {
+                        f.Method = HttpMethods.Delete.ToLower();
+                        f.Template = string.IsNullOrWhiteSpace(attr_Delete.Template) ? string.Empty : attr_Delete.Template.ToLower();
+                        lstTemps.Add(f);
+                    }
+
+                    RouteAttribute attr_Route = (RouteAttribute)action.Attributes.FirstOrDefault(x => x.GetType() == typeof(RouteAttribute));
+                    if (attr_Route != null)
+                    {
+                        f.Method = string.IsNullOrWhiteSpace(f.Method) ? HttpMethods.Get.ToLower() : f.Method;
+                        f.Template = string.IsNullOrWhiteSpace(attr_Route.Template) ? string.Empty : attr_Route.Template.ToLower();
+                        lstTemps.Add(f);
+                    }
+
+                    f.KeyID = 0;
+                    f.NgayTao = time;
+                    f.Controller = controller.Controller;
+                    f.Action = action.Action;
+                    f.Path = string.Join('/', "api", f.Controller, f.Template).TrimEnd('/');
                 }
-                catch (Exception ex) { return BadRequest($"Init data {(typeof(xAgency).Name)} fail: {ex}"); }
+
+                lstFeatures.AddRange(lstTemps);
             }
 
-            return Ok($"No init {(typeof(xAgency).Name)} data");
+            return await SaveData(lstFeatures.ToArray());
         }
-        async Task<IActionResult> InitTienTe()
+        async Task<IActionResult> SaveData(xFeature[] features)
         {
             aModel db = new aModel();
-
-            if (db.eTienTe.Count() == 0)
+            try
             {
-                try
-                {
-                    string Query = System.IO.File.ReadAllText($@"{Directory.GetCurrentDirectory()}\wwwroot\InitData\DATA_eTienTe.sql");
-                    await db.Database.ExecuteSqlCommandAsync(Query, new SqlParameter[] { });
-                    return Ok($"Init data {(typeof(eTienTe).Name)} success.");
-                }
-                catch (Exception ex) { return BadRequest($"Init data {(typeof(eTienTe).Name)} fail: {ex}"); }
+                await db.Database.BeginTransactionAsync();
+                IEnumerable<xFeature> lstRemoves = await db.xFeature.ToListAsync();
+                db.xFeature.RemoveRange(lstRemoves.ToArray());
+                await db.AddRangeAsync(features.ToArray());
+                await db.SaveChangesAsync();
+                db.Database.CommitTransaction();
+                return Ok(features);
             }
-            return Ok($"No init {(typeof(eTienTe).Name)} data");
-        }
-        async Task<IActionResult> InitTinhThanh()
-        {
-            aModel db = new aModel();
-
-            if (db.eTinhThanh.Count() == 0)
+            catch (Exception ex)
             {
-                try
-                {
-                    string Query = System.IO.File.ReadAllText($@"{Directory.GetCurrentDirectory()}\wwwroot\InitData\DATA_eTinhThanh.sql");
-                    await db.Database.ExecuteSqlCommandAsync(Query, new SqlParameter[] { });
-                    return Ok($"Init data {(typeof(eTinhThanh).Name)} success.");
-                }
-                catch (Exception ex) { return BadRequest($"Init data {(typeof(eTinhThanh).Name)} fail: {ex}"); }
+                db.Database.RollbackTransaction();
+                ModelState.AddModelError("Exception_Message", ex.Message);
+                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
+                return BadRequest(ModelState);
             }
-            return Ok($"No init {(typeof(eTinhThanh).Name)} data");
-        }
-        async Task<IActionResult> InitDonViTinh()
-        {
-            aModel db = new aModel();
-
-            if (db.eDonViTinh.Count() == 0)
-            {
-                try
-                {
-                    string Query = System.IO.File.ReadAllText($@"{Directory.GetCurrentDirectory()}\wwwroot\InitData\DATA_eDonViTinh.sql");
-                    await db.Database.ExecuteSqlCommandAsync(Query, new SqlParameter[] { });
-                    return Ok($"Init data {(typeof(eDonViTinh).Name)} success.");
-                }
-                catch (Exception ex) { return BadRequest($"Init data {(typeof(eDonViTinh).Name)} fail: {ex}"); }
-            }
-            return Ok($"No init {(typeof(eDonViTinh).Name)} data");
         }
     }
 }
