@@ -4,6 +4,14 @@ namespace EntityModel.DataModel
 {
     public partial class xFeature : Master
     {
+        public xFeature()
+        {
+            Controller = string.Empty;
+            Action = string.Empty;
+            Method = string.Empty;
+            Template = string.Empty;
+        }
+
         //public string KeyID { get; set; }
         //public string IDGroup { get; set; }
         //public string VN { get; set; }
@@ -17,6 +25,7 @@ namespace EntityModel.DataModel
         //public bool IsEnable { get; set; }
         //public int ItemCount { get; set; }
         //public int Level { get; set; }
+
 
         public string Controller { get; set; }
         public string Action { get; set; }

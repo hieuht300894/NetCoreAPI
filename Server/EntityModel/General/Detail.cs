@@ -13,7 +13,9 @@ namespace EntityModel.General
 
         public Detail()
         {
+
             KeyID = _KeyID;
+            GhiChu = string.Empty;
             TrangThai = 1;
         }
 

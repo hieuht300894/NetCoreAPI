@@ -7,6 +7,7 @@ using EntityModel.DataModel;
 using Server.Service;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
+using Server.Model;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,7 +20,7 @@ namespace Server.Controllers
         }
 
         [Route("GetController")]
-        public IActionResult GetController()
+        public async Task<IActionResult> GetController()
         {
             List<xFeature> lstFeatures = new List<xFeature>();
 
@@ -38,6 +39,8 @@ namespace Server.Controllers
                     Actions = x.Methods.Select(y => new { Action = y.Name, Attributes = y.GetCustomAttributes(true).ToList() })
                 });
 
+            DateTime time = DateTime.Now;
+
             foreach (var controller in Controllers)
             {
                 List<xFeature> lstTemps = new List<xFeature>();
@@ -45,14 +48,16 @@ namespace Server.Controllers
                 foreach (var action in controller.Actions)
                 {
                     xFeature f = new xFeature();
-                    f.Controller = controller.Controller;
-                    f.Action = action.Action;
+                    f.KeyID = 0;
+                    f.NgayTao = time;
+                    f.Controller = controller.Controller.ToLower();
+                    f.Action = action.Action.ToLower();
 
                     HttpGetAttribute attr_Get = (HttpGetAttribute)action.Attributes.FirstOrDefault(x => x.GetType() == typeof(HttpGetAttribute));
                     if (attr_Get != null)
                     {
                         f.Method = HttpMethods.Get.ToLower();
-                        f.Template = string.IsNullOrWhiteSpace(attr_Get.Template) ? string.Empty : attr_Get.Template;
+                        f.Template = string.IsNullOrWhiteSpace(attr_Get.Template) ? string.Empty : attr_Get.Template.ToLower();
                         lstTemps.Add(f);
                     }
 
@@ -60,7 +65,7 @@ namespace Server.Controllers
                     if (attr_Post != null)
                     {
                         f.Method = HttpMethods.Post.ToLower();
-                        f.Template = string.IsNullOrWhiteSpace(attr_Post.Template) ? string.Empty : attr_Post.Template;
+                        f.Template = string.IsNullOrWhiteSpace(attr_Post.Template) ? string.Empty : attr_Post.Template.ToLower();
                         lstTemps.Add(f);
                     }
 
@@ -68,7 +73,7 @@ namespace Server.Controllers
                     if (attr_Put != null)
                     {
                         f.Method = HttpMethods.Put.ToLower();
-                        f.Template = string.IsNullOrWhiteSpace(attr_Put.Template) ? string.Empty : attr_Put.Template;
+                        f.Template = string.IsNullOrWhiteSpace(attr_Put.Template) ? string.Empty : attr_Put.Template.ToLower();
                         lstTemps.Add(f);
                     }
 
@@ -76,7 +81,7 @@ namespace Server.Controllers
                     if (attr_Delete != null)
                     {
                         f.Method = HttpMethods.Delete.ToLower();
-                        f.Template = string.IsNullOrWhiteSpace(attr_Delete.Template) ? string.Empty : attr_Delete.Template;
+                        f.Template = string.IsNullOrWhiteSpace(attr_Delete.Template) ? string.Empty : attr_Delete.Template.ToLower();
                         lstTemps.Add(f);
                     }
 
@@ -84,7 +89,7 @@ namespace Server.Controllers
                     if (attr_Route != null)
                     {
                         f.Method = string.IsNullOrWhiteSpace(f.Method) ? HttpMethods.Get.ToLower() : f.Method;
-                        f.Template = string.IsNullOrWhiteSpace(attr_Route.Template) ? string.Empty : attr_Route.Template;
+                        f.Template = string.IsNullOrWhiteSpace(attr_Route.Template) ? string.Empty : attr_Route.Template.ToLower();
                         lstTemps.Add(f);
                     }
                 }
@@ -92,13 +97,34 @@ namespace Server.Controllers
                 lstFeatures.AddRange(lstTemps);
             }
 
-            return Ok(lstFeatures.Select(x => new
+            return await SaveData(lstFeatures.ToArray());
+        }
+
+        async Task<IActionResult> SaveData(xFeature[] features)
+        {
+            try
             {
-                Controller = x.Controller,
-                Action = x.Action,
-                Method = x.Method,
-                Template = x.Template
-            }).ToList());
+                Instance.Context = new aModel();
+                await Instance.BeginTransaction();
+                IEnumerable<xFeature> lstRemoves = Instance.Context.xFeature.ToList();
+                Instance.Context.xFeature.RemoveRange(lstRemoves.ToArray());
+                await Instance.Context.AddRangeAsync(features.ToArray());
+                await Instance.SaveChanges();
+                Instance.CommitTransaction();
+                return Ok(features);
+            }
+            catch (Exception ex)
+            {
+                Instance.RollbackTransaction();
+                ModelState.AddModelError("Exception", ex.Message);
+                return BadRequest(ModelState);
+            }
+        }
+
+        [Route("Test")]
+        public IActionResult Test()
+        {
+            return Ok();
         }
     }
 }

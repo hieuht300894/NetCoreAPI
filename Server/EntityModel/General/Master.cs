@@ -14,6 +14,13 @@ namespace EntityModel.General
         public Master()
         {
             KeyID = _KeyID;
+            Ma = string.Empty;
+            Ten = string.Empty;
+            MaNguoiTao = string.Empty;
+            TenNguoiTao = string.Empty;
+            MaNguoiCapNhat = string.Empty;
+            TenNguoiCapNhat = string.Empty;
+            GhiChu = string.Empty;
             TrangThai = 1;
         }
 

@@ -1,33 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using EntityModel.DataModel;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using Server.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Server.Middleware
 {
     public class Filter : ActionFilterAttribute
     {
-        private readonly ILogger _logger;
-
-        public Filter(ILoggerFactory loggerFactory)
-        {
-            _logger = loggerFactory.CreateLogger("ClassConsoleLogActionOneFilter");
-        }
-
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            _logger.LogInformation($"Remote IpAddress: {context.HttpContext.Connection.RemoteIpAddress}");
-
-            string Method = context.HttpContext.Request.Method;
-            string Controller = context.ActionDescriptor.RouteValues["controller"].ToString();
-            string Action = context.ActionDescriptor.RouteValues["action"].ToString();
-            ParameterDescriptor[] paramaters = context.ActionDescriptor.Parameters.ToArray();
-
-            base.OnActionExecuting(context);
+            if (CheckRole(context) == HttpStatusCode.BadRequest)
+            {
+                UnauthorizedResult unauthorized = new UnauthorizedResult();
+                context.Result = unauthorized;
+            }
+            else
+            {
+                base.OnActionExecuting(context);
+            }
 
             //// TODO implement some business logic for this...
             //if (context.HttpContext.Request.Method.Equals("GET"))
@@ -44,6 +43,47 @@ namespace Server.Middleware
             //{
             //    base.OnActionExecuting(context);
             //}
+        }
+
+        HttpStatusCode CheckRole(ActionExecutingContext context)
+        {
+            try
+            {
+                //IPAddress address = context.HttpContext.Connection.RemoteIpAddress;
+
+                //ControllerActionDescriptor descriptor = (ControllerActionDescriptor)context.ActionDescriptor;
+                //string Method = context.HttpContext.Request.Method.ToLower();
+                //string Controller = descriptor.ControllerName.ToLower();
+                //string Action = descriptor.ActionName.ToLower();
+                //string Template = descriptor.AttributeRouteInfo.Template.ToLower();
+
+                //IDictionary<string, object> dParams = context.ActionArguments;
+
+                //aModel db = new aModel();
+
+                //xAccount account = db.xAccount.Find(dParams["IDAccount"]);
+                //if (account == null)
+                //    return HttpStatusCode.BadRequest;
+
+                //xUserFeature userFeature = db.xUserFeature
+                //    .FirstOrDefault(x =>
+                //        x.IDPermission == account.IDPermission &&
+                //        x.Controller.Equals(Controller) &&
+                //        x.Action.Equals(Action) &&
+                //        x.Method.Equals(Method) &&
+                //        x.Template.Equals(Template));
+                //if (userFeature == null)
+                //    return HttpStatusCode.BadRequest;
+
+                //if (userFeature.TrangThai == 3)
+                //    return HttpStatusCode.BadRequest;
+
+                return HttpStatusCode.OK;
+            }
+            catch
+            {
+                return HttpStatusCode.BadRequest;
+            }
         }
     }
 }

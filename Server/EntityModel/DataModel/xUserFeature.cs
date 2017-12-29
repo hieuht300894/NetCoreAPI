@@ -4,15 +4,21 @@ namespace EntityModel.DataModel
 {
     public class xUserFeature : Master
     {
-        //public int KeyID { get; set; }
-        //public int IDPermission { get; set; }
-        //public string IDFeature { get; set; }
-        //public bool IsAdd { get; set; }
-        //public bool IsEdit { get; set; }
-        //public bool IsDelete { get; set; }
-        //public bool IsPrintPreview { get; set; }
-        //public bool IsExportExcel { get; set; }
-        //public bool IsSave { get; set; }
-        //public bool IsEnable { get; set; }
+        public xUserFeature()
+        {
+            PermissionName = string.Empty;
+            Controller = string.Empty;
+            Action = string.Empty;
+            Method = string.Empty;
+            Template = string.Empty;
+        }
+
+        public int IDPermission { get; set; }
+        public string PermissionName { get; set; }
+        public int IDFeature { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
+        public string Method { get; set; }
+        public string Template { get; set; }
     }
 }

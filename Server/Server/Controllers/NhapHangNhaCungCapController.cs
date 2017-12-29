@@ -55,7 +55,7 @@ namespace Server.Controllers
             catch { return new List<eNhapHangNhaCungCap>(); }
         }
 
-        public async override Task<eNhapHangNhaCungCap> GetByID(string id)
+        public async override Task<eNhapHangNhaCungCap> GetByID(Int32 id)
         {
             try
             {

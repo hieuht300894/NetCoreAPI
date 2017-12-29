@@ -11,7 +11,7 @@ using Server.Middleware;
 
 namespace Server.Controllers
 {
-    [ServiceFilter(typeof(Filter))]
+    //[ServiceFilter(typeof(Filter))]
     [Route("API/[controller]")]
     public class BaseController<T> : Controller where T : class, new()
     {
@@ -36,7 +36,7 @@ namespace Server.Controllers
         }
 
         [HttpGet("GetByID/{id}")]
-        public virtual async Task<T> GetByID(String id)
+        public virtual async Task<T> GetByID(Int32 id)
         {
             T Item = await Instance.GetByID(id);
             return Item;

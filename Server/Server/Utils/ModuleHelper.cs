@@ -14,7 +14,7 @@ namespace Server.Utils
 {
     public class ModuleHelper
     {
-        public static String ConnectionString { get; set; }
+        public static String ConnectionString { get; set; } = "Data Source=.;Initial Catalog=QuanLyBanHangModel;Integrated Security=True;MultipleActiveResultSets=True";
         public static IConfiguration Configuration { get; set; }
         public static IServiceCollection ServiceCollection { get; set; }
         public static IApplicationBuilder ApplicationBuilder { get; set; }
