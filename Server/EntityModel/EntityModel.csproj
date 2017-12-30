@@ -78,6 +78,8 @@
     <Compile Include="DataModel\xPermission.cs" />
     <Compile Include="DataModel\xPersonnel.cs" />
     <Compile Include="DataModel\xUserFeature.cs" />
+    <Compile Include="Model\LoginInfo.cs" />
+    <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

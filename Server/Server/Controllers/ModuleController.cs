@@ -12,15 +12,17 @@ using EntityModel.DataModel;
 using Server.Middleware;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
+using EntityModel.Model;
+using Newtonsoft.Json.Linq;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Server.Controllers
 {
+
     [Route("API/[controller]")]
     public class ModuleController : Controller
     {
-        [ServiceFilter(typeof(Filter))]
         [HttpPost("DataSeed")]
         public async Task<IEnumerable<IActionResult>> DataSeed()
         {
@@ -178,7 +180,6 @@ namespace Server.Controllers
             {
                 db.Database.RollbackTransaction();
                 ModelState.AddModelError("Exception_Message", ex.Message);
-                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
                 return BadRequest(ModelState);
             }
         }
@@ -282,7 +283,38 @@ namespace Server.Controllers
             {
                 db.Database.RollbackTransaction();
                 ModelState.AddModelError("Exception_Message", ex.Message);
-                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
+                return BadRequest(ModelState);
+            }
+        }
+
+        [HttpGet("Login")]
+        public async Task<IActionResult> Login([FromHeader] string Username, [FromHeader] string Password)
+        {
+            aModel db = new aModel();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+                    throw new Exception("Username hoặc Password không hợp lệ");
+
+                xAccount account = await db.xAccount.FirstOrDefaultAsync(x => x.UserName.ToLower().Equals(Username.ToLower()) && x.Password.ToLower().Equals(Password.ToLower()));
+                if (account == null)
+                    throw new Exception("Tài khoản không tồn tại");
+
+                xPersonnel personnel = await db.xPersonnel.FindAsync(account.KeyID);
+                if (personnel == null)
+                    throw new Exception("Nhân viên không tồn tại");
+
+                UserInfo user = new UserInfo()
+                {
+                    xPersonnel = personnel,
+                    xAccount = account
+                };
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Exception_Message", ex.Message);
                 return BadRequest(ModelState);
             }
         }

@@ -60,7 +60,6 @@ namespace Server.Controllers
             {
                 Instance.Context.Database.RollbackTransaction();
                 ModelState.AddModelError("Exception_Message", ex.Message);
-                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
                 return BadRequest(ModelState);
             }
         }
@@ -82,7 +81,6 @@ namespace Server.Controllers
             {
                 Instance.Context.Database.RollbackTransaction();
                 ModelState.AddModelError("Exception_Message", ex.Message);
-                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
                 return BadRequest(ModelState);
             }
         }
@@ -108,7 +106,6 @@ namespace Server.Controllers
             {
                 Instance.Context.Database.RollbackTransaction();
                 ModelState.AddModelError("Exception_Message", ex.Message);
-                ModelState.AddModelError("Exception_InnerException_Message", ex.InnerException.Message);
                 return BadRequest(ModelState);
             }
         }
