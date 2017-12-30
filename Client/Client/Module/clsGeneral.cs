@@ -412,37 +412,6 @@ namespace Client.Module
             catch { }
         }
         #endregion
-
-        #region XMl
-        public static XmlDocument StringToXml(this string oSource)
-        {
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(oSource);
-            return xml;
-        }
-        public static string SerializeXML<T>(this List<T> oSource)
-        {
-            if (oSource == null) return string.Empty;
-
-            XmlSerializer xmlSerial = new XmlSerializer(typeof(List<T>));
-            using (StringWriter strWriter = new StringWriter())
-            {
-                xmlSerial.Serialize(strWriter, oSource);
-                return strWriter.ToString();
-            }
-
-        }
-        public static List<T> DeserializeXML<T>(this string strXML) where T : class, new()
-        {
-            if (string.IsNullOrEmpty(strXML)) return new List<T>();
-
-            XmlSerializer xmlSerial = new XmlSerializer(typeof(List<T>));
-            using (StringReader strReader = new StringReader(strXML))
-            {
-                return (List<T>)xmlSerial.Deserialize(strReader);
-            }
-        }
-        #endregion
     }
 
     namespace QuanLyBanHang

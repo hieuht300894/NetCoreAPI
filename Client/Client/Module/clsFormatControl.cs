@@ -32,6 +32,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Client.Module
 {
@@ -238,7 +240,7 @@ namespace Client.Module
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
                 IRestResponse response = client.Execute(request);
-                IList<DateTime> lstResult = response.Content.DeserializeToList<DateTime>() ?? new List<DateTime>();
+                IList<DateTime> lstResult = response.Content.DeserializeJsonToListObject<DateTime>() ?? new List<DateTime>();
                 return lstResult.Count > 0 ? lstResult.Single() : DateTime.Now;
             }
             catch { return DateTime.Now; }
@@ -535,7 +537,7 @@ namespace Client.Module
                 }
 
                 StreamWriter sw = new StreamWriter(path);
-                sw.Write(lstDisplays.SerializeXML());
+                sw.Write(lstDisplays.SerializeListObjectToXML());
                 sw.Close();
             }
             catch { }
@@ -1603,109 +1605,6 @@ namespace Client.Module
         #endregion
     }
 
-    public static class ObjectCopier
-    {
-        /// <summary>
-        /// Clone a object
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static T Clone<T>(this T source)
-        {
-            try
-            {
-                var serialized = JsonConvert.SerializeObject(
-                    source,
-                    Formatting.Indented,
-                    new JsonSerializerSettings()
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
-                return JsonConvert.DeserializeObject<T>(serialized);
-            }
-            catch { return JsonConvert.DeserializeObject<T>("{}"); }
-        }
-
-        /// <summary>
-        /// Clone a list object
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static List<T> Clone<T>(this List<T> source)
-        {
-            var serialized = JsonConvert.SerializeObject(
-                source,
-                Formatting.Indented,
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
-            return JsonConvert.DeserializeObject<List<T>>(serialized);
-        }
-
-        /// <summary>
-        /// Object to json
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static string SerializeToString<T>(this T source)
-        {
-            var serialized = JsonConvert.SerializeObject(
-                source,
-                Formatting.Indented,
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
-            return serialized;
-        }
-
-        /// <summary>
-        /// List object to json
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static string SerializeToString<T>(this List<T> source)
-        {
-            var serialized = JsonConvert.SerializeObject(
-                source,
-                Formatting.Indented,
-                new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
-            return serialized;
-        }
-
-        /// <summary>
-        /// Json to object
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static T DeserializeToObject<T>(this string source)
-        {
-            try { return JsonConvert.DeserializeObject<T>(source); }
-            catch { return ReflectionPopulator.CreateObject<T>(); }
-        }
-
-        /// <summary>
-        /// Json to list object
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static List<T> DeserializeToList<T>(this string source)
-        {
-            try { return JsonConvert.DeserializeObject<List<T>>(source); }
-            catch(Exception ex) { return new List<T>(); }
-        }
-    }
-
     public static class ReflectionPopulator
     {
         public static List<Dictionary<string, object>> CreateObjects(this SqlDataReader reader, Type type)
@@ -1837,6 +1736,7 @@ namespace Client.Module
 
     public static class Converter
     {
+        #region Other
         public static T GetObjectByName<T>(this object oSource, string pName)
         {
             Type convertTo = typeof(T);
@@ -1882,6 +1782,7 @@ namespace Client.Module
             }
             return dic;
         }
+        #endregion
 
         #region ToDataTable
         public class ObjectShredder<T>
@@ -2115,6 +2016,159 @@ namespace Client.Module
         {
             Func<TIn, TOut> columnMapper = new Func<TIn, TOut>((TIn item) => { return item.GetObjectByName<TOut>(Column); });
             return List.DefaultIfEmpty().Max(x => columnMapper(x));
+        }
+        #endregion
+
+        #region XMl
+        public static XmlDocument StringToXml(this string oSource)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(oSource);
+            return xml;
+        }
+        public static string SerializeObjectToXML<T>(this T oSource)
+        {
+            if (oSource == null) return string.Empty;
+
+            XmlSerializer xmlSerial = new XmlSerializer(typeof(T));
+            using (StringWriter strWriter = new StringWriter())
+            {
+                xmlSerial.Serialize(strWriter, oSource);
+                return strWriter.ToString();
+            }
+        }
+        public static string SerializeListObjectToXML<T>(this List<T> oSource)
+        {
+            if (oSource == null) return string.Empty;
+
+            XmlSerializer xmlSerial = new XmlSerializer(typeof(List<T>));
+            using (StringWriter strWriter = new StringWriter())
+            {
+                xmlSerial.Serialize(strWriter, oSource);
+                return strWriter.ToString();
+            }
+        }
+        public static T DeserializeXMLToObject<T>(this string strXML)
+        {
+            if (string.IsNullOrWhiteSpace(strXML)) return ReflectionPopulator.CreateObject<T>();
+
+            XmlSerializer xmlSerial = new XmlSerializer(typeof(T));
+            using (StringReader strReader = new StringReader(strXML))
+            {
+                return (T)xmlSerial.Deserialize(strReader);
+            }
+        }
+        public static List<T> DeserializeXMLToListObject<T>(this string strXML)
+        {
+            if (string.IsNullOrEmpty(strXML)) return new List<T>();
+
+            XmlSerializer xmlSerial = new XmlSerializer(typeof(List<T>));
+            using (StringReader strReader = new StringReader(strXML))
+            {
+                return (List<T>)xmlSerial.Deserialize(strReader);
+            }
+        }
+        #endregion
+
+        #region Json
+        /// <summary>
+        /// Clone a object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static T Clone<T>(this T source)
+        {
+            try
+            {
+                var serialized = JsonConvert.SerializeObject(
+                    source,
+                    Newtonsoft.Json.Formatting.Indented,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+                return JsonConvert.DeserializeObject<T>(serialized);
+            }
+            catch { return JsonConvert.DeserializeObject<T>("{}"); }
+        }
+
+        /// <summary>
+        /// Clone a list object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static List<T> Clone<T>(this List<T> source)
+        {
+            var serialized = JsonConvert.SerializeObject(
+                source,
+                Newtonsoft.Json.Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+            return JsonConvert.DeserializeObject<List<T>>(serialized);
+        }
+
+        /// <summary>
+        /// Object to json
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static string SerializeObjectToJson<T>(this T source)
+        {
+            var serialized = JsonConvert.SerializeObject(
+                source,
+                Newtonsoft.Json.Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+            return serialized;
+        }
+
+        /// <summary>
+        /// List object to json
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static string SerializeListObjectToJson<T>(this List<T> source)
+        {
+            var serialized = JsonConvert.SerializeObject(
+                source,
+                Newtonsoft.Json.Formatting.Indented,
+                new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+            return serialized;
+        }
+
+        /// <summary>
+        /// Json to object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static T DeserializeJsonToObject<T>(this string source)
+        {
+            try { return JsonConvert.DeserializeObject<T>(source); }
+            catch { return ReflectionPopulator.CreateObject<T>(); }
+        }
+
+        /// <summary>
+        /// Json to list object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static List<T> DeserializeJsonToListObject<T>(this string source)
+        {
+            try { return JsonConvert.DeserializeObject<List<T>>(source); }
+            catch { return new List<T>(); }
         }
         #endregion
     }

@@ -19,6 +19,7 @@ namespace Client.GUI.Common
     public partial class frmMain : XtraForm
     {
         #region Variable
+        bool IsLogin = false;
         #endregion
 
         #region Form
@@ -42,6 +43,9 @@ namespace Client.GUI.Common
                 AddItemClick();
 
                 clsGeneral.CloseWaitForm();
+
+                ShowLogin();
+
             });
         }
         void AddDocument(string bbiName)
@@ -126,6 +130,11 @@ namespace Client.GUI.Common
             {
                 await Task.Factory.StartNew(() =>
                 {
+                    BeginInvoke(new Action(() =>
+                    {
+                        rcMain.Hide();
+                    }));
+
                     foreach (RibbonPage page in rcMain.Pages)
                     {
                         foreach (RibbonPageGroup group in page.Groups)
@@ -147,6 +156,22 @@ namespace Client.GUI.Common
                 });
             }
             catch { }
+        }
+        void ShowLogin()
+        {
+            frmLogin frm = new frmLogin();
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    rcMain.Show();
+                    IsLogin = true;
+                }));
+            }
+            else if (!IsLogin)
+            {
+                Application.Exit();
+            }
         }
         #endregion
 

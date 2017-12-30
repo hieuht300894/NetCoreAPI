@@ -11,6 +11,31 @@ namespace Client.BLL.Common
 {
     public class clsFunction
     {
+        #region Login
+        public static Tuple<bool, T> Login<T>(String api, string Username, string Password)
+        {
+            try
+            {
+                IRestClient client = new RestClient(ModuleHelper.Url + "/" + api.TrimStart('/'));
+                IRestRequest request = new RestRequest();
+                request.Method = Method.GET;
+                request.AddHeader("Accept", "application/json");
+                request.AddHeader("Username", Username);
+                request.AddHeader("Password", Password);
+                IRestResponse response = client.Execute(request);
+
+                bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
+                T Item = response.Content.DeserializeJsonToObject<T>();
+
+                if (Item == null)
+                    Item = ReflectionPopulator.CreateObject<T>();
+
+                return Tuple.Create(Status, Item);
+            }
+            catch { return Tuple.Create(false, ReflectionPopulator.CreateObject<T>()); }
+        }
+        #endregion
+
         #region Base Method Async
         /// <summary>
         /// Lấy danh sách dữ liệu
@@ -28,7 +53,7 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
                 IRestResponse response = await client.ExecuteTaskAsync(request);
-                List<T> lstResult = response.Content.DeserializeToList<T>();
+                List<T> lstResult = response.Content.DeserializeJsonToListObject<T>();
                 return lstResult ?? new List<T>();
             }
             catch { return new List<T>(); }
@@ -53,7 +78,7 @@ namespace Client.BLL.Common
                 request.Method = Method.GET;
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
-                T Item = response.Content.DeserializeToObject<T>();
+                T Item = response.Content.DeserializeJsonToObject<T>();
 
                 if (Item == null)
                     Item = ReflectionPopulator.CreateObject<T>();
@@ -78,12 +103,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.POST;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+                T Item = response.Content.DeserializeJsonToListObject<T>().FirstOrDefault();
 
                 if (Item == null)
                     Item = ReflectionPopulator.CreateObject<T>();
@@ -108,12 +132,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.POST;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                List<T> Items = response.Content.DeserializeToList<T>() ?? new List<T>();
+                List<T> Items = response.Content.DeserializeJsonToListObject<T>() ?? new List<T>();
 
                 return Tuple.Create(Status, Items);
             }
@@ -135,12 +158,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.PUT;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+                T Item = response.Content.DeserializeJsonToListObject<T>().FirstOrDefault();
 
                 if (Item == null)
                     Item = ReflectionPopulator.CreateObject<T>(); ;
@@ -165,11 +187,10 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.PUT;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                List<T> Items = response.Content.DeserializeToList<T>() ?? new List<T>();
+                List<T> Items = response.Content.DeserializeJsonToListObject<T>() ?? new List<T>();
 
                 return Tuple.Create(Status, Items);
             }
@@ -191,8 +212,7 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.DELETE;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
                 return response.StatusCode == System.Net.HttpStatusCode.NoContent;
             }
@@ -214,8 +234,7 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.DELETE;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = await client.ExecuteTaskAsync(request);
                 return response.StatusCode == System.Net.HttpStatusCode.NoContent;
             }
@@ -241,7 +260,7 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
                 IRestResponse response = client.Execute(request);
-                List<T> lstResult = response.Content.DeserializeToList<T>();
+                List<T> lstResult = response.Content.DeserializeJsonToListObject<T>();
                 return lstResult ?? new List<T>();
             }
             catch { return new List<T>(); }
@@ -266,7 +285,7 @@ namespace Client.BLL.Common
                 request.Method = Method.GET;
                 IRestResponse response = client.Execute(request);
 
-                T Item = response.Content.DeserializeToObject<T>();
+                T Item = response.Content.DeserializeJsonToObject<T>();
 
                 if (Item == null)
                     Item = ReflectionPopulator.CreateObject<T>();
@@ -291,15 +310,14 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.POST;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+                T Item = response.Content.DeserializeJsonToListObject<T>().FirstOrDefault();
 
                 if (Item == null)
-                    Item = ReflectionPopulator.CreateObject<T>(); 
+                    Item = ReflectionPopulator.CreateObject<T>();
 
                 return Tuple.Create(Status, Item);
             }
@@ -321,12 +339,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.POST;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                List<T> Items = response.Content.DeserializeToList<T>() ?? new List<T>();
+                List<T> Items = response.Content.DeserializeJsonToListObject<T>() ?? new List<T>();
 
                 return Tuple.Create(Status, Items);
             }
@@ -348,12 +365,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.PUT;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                T Item = response.Content.DeserializeToList<T>().FirstOrDefault();
+                T Item = response.Content.DeserializeJsonToListObject<T>().FirstOrDefault();
 
                 if (Item == null)
                     Item = ReflectionPopulator.CreateObject<T>(); ;
@@ -378,11 +394,10 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.PUT;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
-                List<T> Items = response.Content.DeserializeToList<T>() ?? new List<T>();
+                List<T> Items = response.Content.DeserializeJsonToListObject<T>() ?? new List<T>();
 
                 return Tuple.Create(Status, Items);
             }
@@ -404,8 +419,7 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.DELETE;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", (new List<T>() { entity }).SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
                 return response.StatusCode == System.Net.HttpStatusCode.NoContent;
             }
@@ -427,8 +441,7 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.DELETE;
                 request.AddHeader("Accept", "application/json");
-                request.Parameters.Clear();
-                request.AddParameter("application/json", entries.SerializeToString(), ParameterType.RequestBody);
+                request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
                 return response.StatusCode == System.Net.HttpStatusCode.NoContent;
             }
