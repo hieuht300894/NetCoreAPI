@@ -52,7 +52,10 @@ namespace Client.BLL.Common
                 IRestClient client = new RestClient(Url);
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
+
                 IRestResponse response = await client.ExecuteTaskAsync(request);
+
                 List<T> lstResult = response.Content.DeserializeJsonToListObject<T>();
                 return lstResult ?? new List<T>();
             }
@@ -76,6 +79,8 @@ namespace Client.BLL.Common
                 IRestClient client = new RestClient(Url);
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
+
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 T Item = response.Content.DeserializeJsonToObject<T>();
@@ -103,7 +108,9 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.POST;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
@@ -132,7 +139,9 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.POST;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
@@ -158,7 +167,9 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.PUT;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = await client.ExecuteTaskAsync(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
@@ -187,8 +198,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.PUT;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = await client.ExecuteTaskAsync(request);
+
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
                 List<T> Items = response.Content.DeserializeJsonToListObject<T>() ?? new List<T>();
 
@@ -212,8 +226,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.DELETE;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = await client.ExecuteTaskAsync(request);
+
                 return response.StatusCode == System.Net.HttpStatusCode.NoContent;
             }
             catch { return false; }
@@ -234,8 +251,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.DELETE;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = await client.ExecuteTaskAsync(request);
+
                 return response.StatusCode == System.Net.HttpStatusCode.NoContent;
             }
             catch { return false; }
@@ -259,7 +279,10 @@ namespace Client.BLL.Common
                 IRestClient client = new RestClient(Url);
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
+
                 IRestResponse response = client.Execute(request);
+
                 List<T> lstResult = response.Content.DeserializeJsonToListObject<T>();
                 return lstResult ?? new List<T>();
             }
@@ -283,6 +306,8 @@ namespace Client.BLL.Common
                 IRestClient client = new RestClient(Url);
                 IRestRequest request = new RestRequest();
                 request.Method = Method.GET;
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
+
                 IRestResponse response = client.Execute(request);
 
                 T Item = response.Content.DeserializeJsonToObject<T>();
@@ -310,7 +335,9 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.POST;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = client.Execute(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
@@ -339,7 +366,9 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.POST;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = client.Execute(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
@@ -365,7 +394,9 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.PUT;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = client.Execute(request);
 
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
@@ -394,8 +425,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.PUT;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = client.Execute(request);
+
                 bool Status = response.StatusCode == System.Net.HttpStatusCode.OK;
                 List<T> Items = response.Content.DeserializeJsonToListObject<T>() ?? new List<T>();
 
@@ -419,8 +453,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.DELETE;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", (new List<T>() { entity }).SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = client.Execute(request);
+
                 return response.StatusCode == System.Net.HttpStatusCode.NoContent;
             }
             catch { return false; }
@@ -441,8 +478,11 @@ namespace Client.BLL.Common
                 IRestRequest request = new RestRequest();
                 request.Method = Method.DELETE;
                 request.AddHeader("Accept", "application/json");
+                request.AddHeader("IDAccount", clsGeneral.curAccount.KeyID.ToString());
                 request.AddParameter("application/json", entries.SerializeListObjectToJson(), ParameterType.RequestBody);
+
                 IRestResponse response = client.Execute(request);
+
                 return response.StatusCode == System.Net.HttpStatusCode.NoContent;
             }
             catch { return false; }
